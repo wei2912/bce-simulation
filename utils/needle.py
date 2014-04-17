@@ -1,6 +1,6 @@
 import random, math
 
-class NeedleSim:
+class Simulation:
 	def __init__(self, length, gap, angle, trials):
 		self.length = length
 		self.gap = gap

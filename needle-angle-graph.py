@@ -23,8 +23,8 @@ ax = fig.add_subplot(111)
 xs = stepvals.get_range(math.pi, args.step)
 
 for angle in xs:
-	needlesim = needle.NeedleSim(args.length, args.gap, angle, args.trials)
-	expprob = float(needlesim.run_trials())/args.trials
+	sim = needle.Simulation(args.length, args.gap, angle, args.trials)
+	expprob = float(sim.run_trials())/args.trials
 
 	print("length = %f, gap = %f, angle=%f: %f" % (args.length, args.gap, angle, expprob))
 	ax.scatter(angle, expprob)

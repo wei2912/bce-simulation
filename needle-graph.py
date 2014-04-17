@@ -25,8 +25,8 @@ ys = stepvals.get_range(args.gap, args.step)
 
 for length in xs:
 	for gap in ys:
-		needlesim = needle.NeedleSim(length, gap, None, args.trials)
-		expprob = float(needlesim.run_trials())/args.trials
+		sim = needle.Simulation(length, gap, None, args.trials)
+		expprob = float(sim.run_trials())/args.trials
 
 		print("length = %f, gap = %f: %f" % (length, gap, expprob))
 		ax.scatter(length, gap, expprob)

@@ -25,8 +25,8 @@ ys = stepvals.get_range(args.gap, args.step)
 
 for radius in xs:
 	for gap in ys:
-		coinsim = coin.CoinSim(radius, gap, args.trials)
-		expprob = float(coinsim.run_trials())/args.trials
+		sim = coin.Simulation(radius, gap, args.trials)
+		expprob = float(sim.run_trials())/args.trials
 
 		print("radius = %f, gap = %f: %f" % (radius, gap, expprob))
 		ax.scatter(radius, gap, expprob)

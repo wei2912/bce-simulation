@@ -1,6 +1,6 @@
 import random
 
-class CoinSim:
+class Simulation:
 	def __init__(self, radius, gap, trials):
 		self.radius = radius
 		self.gap = gap

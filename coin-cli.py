@@ -9,6 +9,6 @@ parser.add_argument('-g', '--gap', type=float, required=True, help='length of ga
 parser.add_argument('-t', '--trials', type=int, default=10000000, help='number of trials to run')
 
 args = parser.parse_args()
-coinsim = coin.CoinSim(args.radius, args.gap, args.trials)
+sim = coin.Simulation(args.radius, args.gap, args.trials)
 
-print(coinsim.run_trials())
+print(sim.run_trials())

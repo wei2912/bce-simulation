@@ -10,6 +10,6 @@ parser.add_argument('-a', '--angle', type=float, help='angle of needle. if not s
 parser.add_argument('-t', '--trials', type=int, default=10000000, help='number of trials to run')
 
 args = parser.parse_args()
-needlesim = needle.NeedleSim(args.length, args.gap, args.angle, args.trials)
+sim = needle.Simulation(args.length, args.gap, args.angle, args.trials)
 
-print(needlesim.run_trials())
+print(sim.run_trials())
