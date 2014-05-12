@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf8">
+  <title>Buffon's Coin Simulation</title>
+  <meta name="viewport" content="width=device-width">
+  <link rel="stylesheet" href="main.css">
+</head>
+<body>
+  <hgroup>
+   <h1><a href="http://wei2912.github.io/bce-simulation/">Buffon's Coin Simulation</a></h1>
+   <h2>Web Builder</h2>
+  </hgroup>
+
+  <form type="get" action="/build">
+    <table>
+    <tbody>
+      <tr>
+        <th>
+          <label for="type">Type of Graph</label>
+        </th>
+        <td>
+          <select name="type">
+            <option value="coin" selected>Coin</option>
+            <option value="needle">needle</option>
+            <option value="needle-angle">needle-angle</option>
+          </select>
+        </td>
+      </tr>
+
+      <tr>
+        <th>
+          <label for="trials">Number of Trials to run</label>
+        </th>
+        <td>
+          <input name="trials" type="number" placeholder="10000">
+        </td>
+      </tr>
+
+      <tr>
+        <th>
+          <label for="gap">Length of Gap between 2 lines</label>
+        </th>
+        <td>
+          <input name="gap" type="number" placeholder="10">
+        </td>
+      </tr>
+
+      <tr>
+        <th>
+          <label for="radius">Radius of coin (only for coin experiment)</label>
+        </th>
+        <td>
+          <input name="radius" type="number" placeholder="2">
+        </td>
+      </tr>
+
+      <tr>
+        <th>
+          <label for="length">Length of needle (only for needle experiments)</label>
+        </th>
+        <td>
+          <input name="length" type="number" placeholder="3">
+        </td>
+      </tr>
+
+      <tr>
+        <th>
+          <label for="step">Step to take when increasing radius/gap</label>
+        </th>
+        <td>
+          <input name="step" type="number" placeholder="0.1">
+        </td>
+      </tr>
+    </tbody>
+    </table>
+
+    <div>
+      <input type="submit">
+    </div>
+  </form>
+  
+  <footer>
+    <p>
+      Web Builder by <a href="https://d10.github.io/">Benjamin Tan</a>
+    </p>
+  </footer>
+
+</body>
+</html>
