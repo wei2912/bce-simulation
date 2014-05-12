@@ -12,6 +12,7 @@ parser.add_argument('-g', '--gap', type=float, required=True, help='length of ga
 parser.add_argument('-t', '--trials', type=int, default=10000, help='number of trials to run')
 parser.add_argument('-s', '--step', type=float, default=0.1, help='step to take when increasing radius/gap')
 parser.add_argument('-o', '--output', help='filename to output graph to')
+parser.add_argument('-v', '--verbose', action='store_true', help='enable verbose output')
 
 args = parser.parse_args()
 
@@ -29,7 +30,8 @@ for length in xs:
 		sim = needle.Simulation(length, gap, None, args.trials)
 		expprob = float(sim.run_trials())/args.trials
 
-		print("length = %f, gap = %f: %f" % (length, gap, expprob))
+		if args.verbose:
+			print("length = %f, gap = %f: %f" % (length, gap, expprob))
 		ax.scatter(length, gap, expprob)
 
 ax.set_xlabel("Length")
