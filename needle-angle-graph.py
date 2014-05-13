@@ -4,7 +4,7 @@ import argparse, math
 import matplotlib.pyplot as plt
 from mpl_toolkits.mplot3d import Axes3D
 
-from utils import needle, stepvals
+from utils import sims, stepvals
 
 parser = argparse.ArgumentParser(description="Buffon's Needle Experiment - Needle Angle Graph")
 parser.add_argument('-l', '--length', type=float, required=True, help='length of needle')
@@ -21,11 +21,10 @@ ax = fig.add_subplot(111)
 
 ## increasing angle - 2D cross plot ##
 
-# truncate 0
 xs = stepvals.get_range(math.pi, args.step)
 
 for angle in xs:
-	sim = needle.Simulation(args.length, args.gap, angle, args.trials)
+	sim = sims.NeedleAngleSim(args.length, args.gap, angle, args.trials)
 	expprob = float(sim.run_trials())/args.trials
 
 	if args.verbose:

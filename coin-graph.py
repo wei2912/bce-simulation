@@ -6,7 +6,7 @@ import argparse, math
 import matplotlib.pyplot as plt
 from mpl_toolkits.mplot3d import Axes3D
 
-from utils import coin, stepvals
+from utils import sims, stepvals
 
 parser = argparse.ArgumentParser(description="Buffon's Coin Experiment - Coin Graph")
 parser.add_argument('-r', '--radius', type=float, required=True, help='max radius of coin')
@@ -21,15 +21,14 @@ args = parser.parse_args()
 fig = plt.figure()
 ax = fig.add_subplot(111, projection='3d')
 
-# increasing radius and gap - 3D scatter plot
+## increasing radius and gap - 3D scatter plot ##
 
-# truncate 0
 xs = stepvals.get_range(args.radius, args.step)
 ys = stepvals.get_range(args.gap, args.step)
 
 for radius in xs:
 	for gap in ys:
-		sim = coin.Simulation(radius, gap, args.trials)
+		sim = sims.CoinSim(radius, gap, args.trials)
 		expprob = float(sim.run_trials())/args.trials
 
 		if args.verbose:
