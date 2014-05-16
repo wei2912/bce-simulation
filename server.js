@@ -48,7 +48,7 @@
     }
     var fileName = path.join(
       __dirname,
-      'output' + type + '.' + query.trials + '.' + query.gap + '.'
+      'output/' + type + '.' + query.trials + '.' + query.gap + '.'
       + (type == 'coin' ? query.radius : query.length) + '.' + query.step + '.png'
     );
     var fileToExec = path.join(__dirname, type + '-graph.py');
