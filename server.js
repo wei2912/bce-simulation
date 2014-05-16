@@ -52,9 +52,8 @@
       + (type == 'coin' ? query.radius : query.length) + '.' + query.step + '.png'
     );
     var fileToExec = path.join(__dirname, type + '-graph.py');
-    var args = ['python', '-o', fileName, '-t', query.trials, '-g', query.gap, '-s', query.step];
+    var args = ['python', fileToExec, '-o', fileName, '-t', query.trials, '-g', query.gap, '-s', query.step];
     args.push(type == 'coin' ? '-r' : '-l', type == 'coin' ? query.radius : query.length);
-    args.unshift(fileToExec);
     console.log(args = args.join(' '));
     exec(args, function(err, stderr, stdout) {
       if (err || stderr) {
