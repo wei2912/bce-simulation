@@ -5,7 +5,7 @@
   var fs = require('fs'),
       path = require('path'),
       parseURL = require('url').parse,
-      spawn = require('child_process').spawn,
+      exec = require('child_process').exec,
       http = require('http');
 
   /** Load other modules */
@@ -15,8 +15,6 @@
   var port = +process.env.PORT || 8080;
 
   var root = path.join(__dirname, 'public');
-
-  var executable = process.platform == 'win32' ? path.normalize('C:\\Python27\\python.exe') : 'python';
 
   function reqListener(req, res) {
     console.log(req.url);
@@ -54,17 +52,21 @@
       + (type == 'coin' ? query.radius : query.length) + '.' + query.step + '.png'
     );
     var fileToExec = path.join(__dirname, type + '-graph.py');
-    var args = ['-o', fileName, '-t', query.trials, '-g', query.gap, '-s', query.step];
+    var args = ['python', '-o', fileName, '-t', query.trials, '-g', query.gap, '-s', query.step];
     args.push(type == 'coin' ? '-r' : '-l', type == 'coin' ? query.radius : query.length);
     args.unshift(fileToExec);
-    console.log(args);
-    spawn(executable, args, function(err) {
-      if (err) {
-        return res.end(err + '');
+    console.log(args = args.join(' '));
+    exec(args, function(err, stderr, stdout) {
+      if (err || stderr) {
+        return res.end((err || stderr).toString());
       }
       res.setHeader('content-type', 'image/png');
       fs.createReadStream(fileName).pipe(res).on('finish', function() {
-        fs.unlink(fileName, function(){})
+        fs.unlink(fileName, function(err) {
+          if (err) {
+            console.error(err);
+          }
+        });
       });
     });
   }
