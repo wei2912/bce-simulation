@@ -15,4 +15,4 @@ deploy:
   api_key:
     secure: hHFVh5+TA5U1iyFgqQuzLSjRrN4BFWEyUerUUtn589NiMDJFtE3SA1okJIQTlq2w/iAhBqjgMoDG0rMB6NVM/i7oobMdlQJfSOEt3FlCFGl+0r2RaHxF4YaCDMEjCv/+y6Of0ifjAHwYF/p0mu9WwM86Yhc4ajfiYI602i3i4Xs=
   app:
-    master: bce-simulation
+    heroku: bce-simulation
