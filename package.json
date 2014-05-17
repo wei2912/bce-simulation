@@ -1,0 +1,19 @@
+{
+  "name": "bce-simulation",
+  "private": true,
+  "description": "A set of simulations of Buffon's Coin Experiments.",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 0",
+    "start": "node server.js"
+  },
+  "repository": "wei2912/bce-simulation",
+  "author": "Ng Wei En",
+  "bugs": {
+    "url": "https://github.com/wei2912/bce-simulation/issues"
+  },
+  "homepage": "https://wei2912.github.io/bce-simulation",
+  "dependencies": {
+    "send": "0.3.0"
+  }
+}
