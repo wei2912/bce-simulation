@@ -1,4 +1,6 @@
-from collections import namedtuple
+#!/usr/bin/env python
+# coding=utf-8
+
 import argparse
 
 from utils import sims

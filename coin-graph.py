@@ -1,6 +1,6 @@
 #!/usr/bin/env python
+# coding=utf-8
 
-from collections import namedtuple
 import argparse, math
 
 import matplotlib.pyplot as plt
