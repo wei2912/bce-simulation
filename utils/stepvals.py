@@ -1,7 +1,7 @@
 import math
 
 def get_range(val, step):
-	if args.step >= val:
+	if step >= val:
 		raise Exception("Step value is too large! Must be smaller than value.")
 
 	stepvals = [i*step for i in xrange(int(math.ceil(val/step)))][1:]
