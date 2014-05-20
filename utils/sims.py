@@ -12,8 +12,27 @@ class CoinSim:
 
 		for _ in xrange(self.trials):
 			x = random.uniform(0.0, self.gap) # location of coin after drop
-			
+
 			if self.gap - x < self.radius or x < self.radius:
+				hits += 1
+
+		return hits
+
+class CoinGridSim:
+	def __init__(self, radius, gap_x, gap_y, trials):
+		self.radius = radius  # Radius of the coin
+		self.gap_x = gap_x    # Horizontal gap between the two lines that the coin might fall on
+		self.gap_y = gap_y    # Vertical gap between the two lines that the coin might fall on
+		self.trials = trials  # Number of times to test the coin drop
+
+	def run_trials(self):
+		hits = 0
+
+		for _ in xrange(self.trials):
+			x = random.uniform(0.0, self.gap_x) # location of coin along x-axis after drop
+			y = random.uniform(0.0, self.gap_y) # location of coin along y-axis after drop
+
+			if (self.gap_x - x < self.radius or x < self.radius) or (self.gap_y - y < self.radius or y < self.radius):
 				hits += 1
 
 		return hits
