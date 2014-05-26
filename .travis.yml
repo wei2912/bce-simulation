@@ -3,8 +3,7 @@ python:
   - "2.7"
 
 install: true
-
-script: true
+script: npm test
 
 deploy:
   provider: heroku

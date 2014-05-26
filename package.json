@@ -4,7 +4,7 @@
   "description": "A set of simulations of Buffon's Coin Experiments.",
   "main": "server.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 0",
+    "test": "python -m unittest utils.test_sims && exit 0",
     "start": "node server.js"
   },
   "repository": "wei2912/bce-simulation",
