@@ -10,7 +10,8 @@ from utils import sims, stepvals
 
 parser = argparse.ArgumentParser(description="Buffon's Coin Experiment - Coin Graph")
 parser.add_argument('-r', '--radius', type=float, required=True, help='max radius of coin')
-parser.add_argument('-g', '--gap', type=float, required=True, help='max length of gap between two lines')
+parser.add_argument('-gx', '--gap_x', type=float, required=True, help='max length of horizontal gap between two lines')
+parser.add_argument('-gy', '--gap_y', type=float, required=True, help='max length of vertical gap between two lines')
 parser.add_argument('-t', '--trials', type=int, default=10000, help='number of trials to run')
 parser.add_argument('-s', '--step', type=float, default=0.5, help='step to take when increasing radius/gap')
 parser.add_argument('-o', '--output', help='filename to output graph to')
@@ -28,7 +29,7 @@ ys = stepvals.get_range(args.gap, args.step)
 
 for radius in xs:
 	for gap in ys:
-		sim = sims.CoinSim(radius, gap, args.trials)
+		sim = sims.CoinSim(args.radius, args.gap_x, args.gap_y, args.trials)
 		expprob = float(sim.run_trials())/args.trials
 
 		if args.verbose:
