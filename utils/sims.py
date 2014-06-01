@@ -90,7 +90,7 @@ class NeedleAngleSim:
 
 	def run_trials(self, trials):
 		if trials <= 0:
-			raise InvalidInput("trials")
+			raise InvalidInput("trials", "<= 0")
 
 		# since the angle is specified, precompute the opposite
 		opp = self.length/2 * math.sin(self.angle)
