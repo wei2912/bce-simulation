@@ -2,8 +2,6 @@ import unittest
 import math
 import random
 
-from scipy.stats.mstats import chisquare
-
 import sims
 
 TRIALS = 10000 # number of trials to run per test case
