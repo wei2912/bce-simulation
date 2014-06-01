@@ -75,7 +75,7 @@ class NeedleAngleSim:
 		self.gap = gap        # Gap between the two lines where the needle falls
 		self.angle = angle    # Angle of needle
 
-	def run_trials(self):
+	def run_trials(self, trials):
 		if trials <= 0:
 			raise InvalidInput("trials")
 
