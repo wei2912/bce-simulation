@@ -17,9 +17,9 @@ class CoinSim:
 		if gap_y <= 0:
 			raise InvalidInput("gap_y", "<= 0")
 
-		self.radius = radius  # Radius of the coin
-		self.gap_x = gap_x    # Horizontal gap between the two lines that the coin might fall on
-		self.gap_y = gap_y    # Vertical gap between the two lines that the coin might fall on
+		self.radius = float(radius)  # Radius of the coin
+		self.gap_x = float(gap_x)    # Horizontal gap between the two lines that the coin might fall on
+		self.gap_y = float(gap_y)    # Vertical gap between the two lines that the coin might fall on
 
 	def run_trials(self, trials):
 		if trials <= 0:
@@ -55,8 +55,8 @@ class NeedleSim:
 		if gap <= 0:
 			raise InvalidInput("gap", "<= 0")
 
-		self.length = length  # Length of the needle
-		self.gap = gap        # Gap between the two lines where the needle falls
+		self.length = float(length)  # Length of the needle
+		self.gap = float(gap)        # Gap between the two lines where the needle falls
 
 	def run_trials(self, trials):
 		if trials <= 0:
@@ -84,9 +84,9 @@ class NeedleAngleSim:
 		if angle <= 0 or angle >= math.pi:
 			raise InvalidInput("angle", "<= 0 or >= math.pi")
 
-		self.length = length  # Length of the needle
-		self.gap = gap        # Gap between the two lines where the needle falls
-		self.angle = angle    # Angle of needle
+		self.length = float(length)  # Length of the needle
+		self.gap = float(gap)        # Gap between the two lines where the needle falls
+		self.angle = float(angle)    # Angle of needle
 
 	def run_trials(self, trials):
 		if trials <= 0:

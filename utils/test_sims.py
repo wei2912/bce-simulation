@@ -1,11 +1,13 @@
 import unittest
-import random
 import math
+import random
+
+from scipy.stats.mstats import chisquare
 
 import sims
 
 TRIALS = 10000 # number of trials to run per test case
-MAX_STAT = 3.841 # 0.05 level of significance, 1 degree of freedom
+MAX_STAT = 3.841
 
 # random function without zero
 def non_zero_rand():
@@ -18,7 +20,7 @@ class TestCoinSim(unittest.TestCase):
 		# for programmer, if something goes wrong here
 		# add "print(i)" to see which variable it is
 		############
-		
+
 		for i in range(3):
 			vals = [1, 1, 1]
 
@@ -68,8 +70,19 @@ class TestCoinSim(unittest.TestCase):
 			hits = sim.run_trials(TRIALS)
 			pred_hits = sim.predict_hits(TRIALS)
 
-			chi_squared = ((hits - pred_hits)**2)/pred_hits
-			self.assertTrue(chi_squared < MAX_STAT, "chi^2 stat is %f >= %f" % (chi_squared, MAX_STAT))
+			stats = [
+				(hits-pred_hits)**2/pred_hits,
+				(pred_hits-hits)**2/(TRIALS-pred_hits)
+			]
+			chi2 = sum(stats)/len(stats)
+
+			print("")
+			print("hits:       %d ~ %f: %f" % (hits, pred_hits, stats[0]))
+			print("non-hits:   %d ~ %f: %f" % (TRIALS-hits, TRIALS-pred_hits, stats[1]))
+			print("sum:        %f" % sum(stats))
+			print("chi-square: %f" % chi2)
+			
+			self.assertTrue(chi2 < MAX_STAT, "chi-square = %f >= %f" % (chi2, MAX_STAT))
 
 	def runTest(self):
 		self.bad_input_test()
@@ -158,8 +171,19 @@ class TestNeedleAngleSim(unittest.TestCase):
 			hits = sim.run_trials(TRIALS)
 			pred_hits = sim.predict_hits(TRIALS)
 
-			chi_squared = ((hits - pred_hits)**2)/pred_hits
-			self.assertTrue(chi_squared < MAX_STAT, "chi^2 stat is %f >= %f" % (chi_squared, MAX_STAT))
+			stats = [
+				(hits-pred_hits)**2/pred_hits,
+				(pred_hits-hits)**2/(TRIALS-pred_hits)
+			]
+			chi2 = sum(stats)/len(stats)
+
+			print("")
+			print("hits:       %d ~ %f: %f" % (hits, pred_hits, stats[0]))
+			print("non-hits:   %d ~ %f: %f" % (TRIALS-hits, TRIALS-pred_hits, stats[1]))
+			print("sum:        %f" % sum(stats))
+			print("chi-square: %f" % chi2)
+			
+			self.assertTrue(chi2 < MAX_STAT, "chi-square = %f >= %f" % (chi2, MAX_STAT))
 
 	def runTest(self):
 		self.bad_input_test()
