@@ -2,19 +2,20 @@ import random
 import math
 
 class InvalidInput(Exception):
-	def __init__(self, input_var):
+	def __init__(self, input_var, condition):
 		self.input_var = input_var
+		self.condition = condition
 	def __str__(self):
-		return "%s must not be <= 0." % self.input_var
+		return "%s must not be %s." % (self.input_var, self.condition)
 
 class CoinSim:
 	def __init__(self, radius, gap_x, gap_y):
 		if radius <= 0:
-			raise InvalidInput("radius")
+			raise InvalidInput("radius", "<= 0")
 		if gap_x <= 0:
-			raise InvalidInput("gap_x")
+			raise InvalidInput("gap_x", "<= 0")
 		if gap_y <= 0:
-			raise InvalidInput("gap_y")
+			raise InvalidInput("gap_y", "<= 0")
 
 		self.radius = radius  # Radius of the coin
 		self.gap_x = gap_x    # Horizontal gap between the two lines that the coin might fall on
@@ -22,7 +23,7 @@ class CoinSim:
 
 	def run_trials(self, trials):
 		if trials <= 0:
-			raise InvalidInput("trials")
+			raise InvalidInput("trials", "<= 0")
 
 		hits = 0
 
@@ -35,19 +36,31 @@ class CoinSim:
 
 		return hits
 
+	def predict_prob(self):
+		diameter = self.radius*2
+		if diameter >= self.gap_x or diameter >= self.gap_y:
+			return 1.0 # will always touch
+
+		# area of region which coin would be on if it hit
+		region = self.gap_x*self.gap_y - (self.gap_x-diameter)*(self.gap_y-diameter)
+		return region/(self.gap_x * self.gap_y)
+
+	def predict_hits(self, trials):
+		return self.predict_prob()*trials
+
 class NeedleSim:
 	def __init__(self, length, gap):
 		if length <= 0:
-			raise InvalidInput("length")
+			raise InvalidInput("length", "<= 0")
 		if gap <= 0:
-			raise InvalidInput("gap")
+			raise InvalidInput("gap", "<= 0")
 
 		self.length = length  # Length of the needle
 		self.gap = gap        # Gap between the two lines where the needle falls
 
 	def run_trials(self, trials):
 		if trials <= 0:
-			raise InvalidInput("trials")
+			raise InvalidInput("trials", "<= 0")
 
 		hits = 0
 
@@ -65,11 +78,11 @@ class NeedleSim:
 class NeedleAngleSim:
 	def __init__(self, length, gap, angle):
 		if length <= 0:
-			raise InvalidInput("length")
+			raise InvalidInput("length", "<= 0")
 		if gap <= 0:
-			raise InvalidInput("gap")
-		if angle <= 0:
-			raise InvalidInput("angle")
+			raise InvalidInput("gap", "<= 0")
+		if angle <= 0 or angle >= math.pi:
+			raise InvalidInput("angle", "<= 0 or >= math.pi")
 
 		self.length = length  # Length of the needle
 		self.gap = gap        # Gap between the two lines where the needle falls
@@ -91,3 +104,14 @@ class NeedleAngleSim:
 				hits += 1
 
 		return hits
+
+	def predict_prob(self):
+		opp = self.length/2 * math.sin(self.angle)
+		if opp*2 >= self.gap:
+			return 1.0 # will always touch
+
+		# area of region which needle would be on if it hit
+		return opp*2/self.gap
+
+	def predict_hits(self, trials):
+		return self.predict_prob()*trials
