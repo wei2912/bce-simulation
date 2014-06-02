@@ -77,7 +77,6 @@ class TestCoinSim(unittest.TestCase):
 			print("")
 			print("hits:       %d ~ %f: %f" % (hits, pred_hits, stats[0]))
 			print("non-hits:   %d ~ %f: %f" % (TRIALS-hits, TRIALS-pred_hits, stats[1]))
-			print("sum:        %f" % sum(stats))
 			print("chi-square: %f" % chi2)
 			
 			self.assertTrue(chi2 < MAX_STAT, "chi-square = %f >= %f" % (chi2, MAX_STAT))
@@ -178,7 +177,6 @@ class TestNeedleAngleSim(unittest.TestCase):
 			print("")
 			print("hits:       %d ~ %f: %f" % (hits, pred_hits, stats[0]))
 			print("non-hits:   %d ~ %f: %f" % (TRIALS-hits, TRIALS-pred_hits, stats[1]))
-			print("sum:        %f" % sum(stats))
 			print("chi-square: %f" % chi2)
 			
 			self.assertTrue(chi2 < MAX_STAT, "chi-square = %f >= %f" % (chi2, MAX_STAT))
