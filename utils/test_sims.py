@@ -73,12 +73,6 @@ class TestCoinSim(unittest.TestCase):
 				(pred_hits-hits)**2/(TRIALS-pred_hits)
 			]
 			chi2 = sum(stats)/len(stats)
-
-			print("")
-			print("hits:       %d ~ %f: %f" % (hits, pred_hits, stats[0]))
-			print("non-hits:   %d ~ %f: %f" % (TRIALS-hits, TRIALS-pred_hits, stats[1]))
-			print("chi-square: %f" % chi2)
-			
 			self.assertTrue(chi2 < MAX_STAT, "chi-square = %f >= %f" % (chi2, MAX_STAT))
 
 	def runTest(self):
@@ -173,12 +167,6 @@ class TestNeedleAngleSim(unittest.TestCase):
 				(pred_hits-hits)**2/(TRIALS-pred_hits)
 			]
 			chi2 = sum(stats)/len(stats)
-
-			print("")
-			print("hits:       %d ~ %f: %f" % (hits, pred_hits, stats[0]))
-			print("non-hits:   %d ~ %f: %f" % (TRIALS-hits, TRIALS-pred_hits, stats[1]))
-			print("chi-square: %f" % chi2)
-			
 			self.assertTrue(chi2 < MAX_STAT, "chi-square = %f >= %f" % (chi2, MAX_STAT))
 
 	def runTest(self):
