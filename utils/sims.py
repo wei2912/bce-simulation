@@ -1,117 +1,170 @@
+"""
+This module contains all simulations used in `bce-simulation`.
+"""
+
 import random
 import math
 
 class InvalidInput(Exception):
-	def __init__(self, input_var, condition):
-		self.input_var = input_var
-		self.condition = condition
-	def __str__(self):
-		return "%s must not be %s." % (self.input_var, self.condition)
+    """
+    Exception for invalid input passed to the below classes.
+    """
+    pass
 
-class CoinSim:
-	def __init__(self, radius, gap_x, gap_y):
-		if radius <= 0:
-			raise InvalidInput("radius", "<= 0")
-		if gap_x <= 0:
-			raise InvalidInput("gap_x", "<= 0")
-		if gap_y <= 0:
-			raise InvalidInput("gap_y", "<= 0")
+class CoinSim(object):
+    """
+    Simulation of Buffon's Coin Experiment.
+    """
+    def __init__(self, radius, gap_x, gap_y):
+        if radius <= 0:
+            raise InvalidInput("radius must not be <= 0")
+        if gap_x <= 0:
+            raise InvalidInput("gap_x must not be <= 0")
+        if gap_y <= 0:
+            raise InvalidInput("gap_y must not be <= 0")
 
-		self.radius = float(radius)  # Radius of the coin
-		self.gap_x = float(gap_x)    # Horizontal gap between the two lines that the coin might fall on
-		self.gap_y = float(gap_y)    # Vertical gap between the two lines that the coin might fall on
+        self.radius = float(radius)
+        self.gap_x = float(gap_x)
+        self.gap_y = float(gap_y)
 
-	def run_trials(self, trials):
-		if trials <= 0:
-			raise InvalidInput("trials", "<= 0")
+    def run_trials(self, trials):
+        """
+        Run the simulation a specified number of times.
+        """
+        if trials <= 0:
+            raise InvalidInput("trials must not be<= 0")
 
-		hits = 0
+        hits = 0
 
-		for _ in xrange(trials):
-			x = random.uniform(0.0, self.gap_x) # location of coin along x-axis after drop
-			y = random.uniform(0.0, self.gap_y) # location of coin along y-axis after drop
+        for _ in xrange(trials):
+            x_pos = random.uniform(0.0, self.gap_x)
+            y_pos = random.uniform(0.0, self.gap_y)
 
-			if (self.gap_x - x < self.radius or x < self.radius) or (self.gap_y - y < self.radius or y < self.radius):
-				hits += 1
+            if (self.gap_x - x_pos < self.radius or x_pos < self.radius or
+                self.gap_y - y_pos < self.radius or y_pos < self.radius):
+                hits += 1
 
-		return hits
+        return hits
 
-	def predict_prob(self):
-		diameter = self.radius*2
-		if diameter >= self.gap_x or diameter >= self.gap_y:
-			return 1.0 # will always touch
+    def predict_prob(self):
+        """
+        For the variables passed into the simulation,
+        predict the probability that the coin will hit
+        the grid.
+        """
+        diameter = self.radius*2
 
-		# area of region which coin would be on if it hit
-		region = self.gap_x*self.gap_y - (self.gap_x-diameter)*(self.gap_y-diameter)
-		return region/(self.gap_x * self.gap_y)
+        # will always touch
+        if diameter >= self.gap_x or diameter >= self.gap_y:
+            return 1.0
 
-	def predict_hits(self, trials):
-		return self.predict_prob()*trials
+        # area of region which coin would be on if it hit
+        region = (self.gap_x * self.gap_y -
+            (self.gap_x-diameter) * (self.gap_y-diameter))
+        return region/(self.gap_x * self.gap_y)
 
-class NeedleSim:
-	def __init__(self, length, gap):
-		if length <= 0:
-			raise InvalidInput("length", "<= 0")
-		if gap <= 0:
-			raise InvalidInput("gap", "<= 0")
+    def predict_hits(self, trials):
+        """
+        For the variables passed into the simulation,
+        predict the number of times the coin will hit
+        the grid.
 
-		self.length = float(length)  # Length of the needle
-		self.gap = float(gap)        # Gap between the two lines where the needle falls
+        Note that this function will return a float
+        and not an integer.
+        """
+        return self.predict_prob()*trials
 
-	def run_trials(self, trials):
-		if trials <= 0:
-			raise InvalidInput("trials", "<= 0")
+class NeedleSim(object):
+    """
+    Simulation of Buffon's Needle Experiment.
+    """
+    def __init__(self, length, gap):
+        if length <= 0:
+            raise InvalidInput("length must not be <= 0")
+        if gap <= 0:
+            raise InvalidInput("gap must not be <= 0")
 
-		hits = 0
+        self.length = float(length)
+        self.gap = float(gap)
 
-		for _ in xrange(trials):
-			x = random.uniform(0.0, self.gap) # location of needle after drop
+    def run_trials(self, trials):
+        """
+        Run the simulation a specified number of times.
+        """
+        if trials <= 0:
+            raise InvalidInput("trials must not be <= 0")
 
-			angle = random.uniform(0.0, math.pi) # angle of needle in radians
-			opp = self.length/2 * math.sin(angle)
+        hits = 0
 
-			if self.gap - x < opp or x < opp:
-				hits += 1
+        for _ in xrange(trials):
+            x_pos = random.uniform(0.0, self.gap)
 
-		return hits
+            angle = random.uniform(0.0, math.pi)
+            opp = self.length/2 * math.sin(angle)
 
-class NeedleAngleSim:
-	def __init__(self, length, gap, angle):
-		if length <= 0:
-			raise InvalidInput("length", "<= 0")
-		if gap <= 0:
-			raise InvalidInput("gap", "<= 0")
-		if angle <= 0 or angle >= math.pi:
-			raise InvalidInput("angle", "<= 0 or >= math.pi")
+            if self.gap - x_pos < opp or x_pos < opp:
+                hits += 1
 
-		self.length = float(length)  # Length of the needle
-		self.gap = float(gap)        # Gap between the two lines where the needle falls
-		self.angle = float(angle)    # Angle of needle
+        return hits
 
-	def run_trials(self, trials):
-		if trials <= 0:
-			raise InvalidInput("trials", "<= 0")
+class NeedleAngleSim(object):
+    """
+    Simulation of Buffon's Needle Experiment, with a fixed angle.
+    """
+    def __init__(self, length, gap, angle):
+        if length <= 0:
+            raise InvalidInput("length must not be <= 0")
+        if gap <= 0:
+            raise InvalidInput("gap must not be <= 0")
+        if angle <= 0 or angle >= math.pi:
+            raise InvalidInput("angle must not be <= 0 or >= math.pi")
 
-		# since the angle is specified, precompute the opposite
-		opp = self.length/2 * math.sin(self.angle)
+        self.length = float(length)
+        self.gap = float(gap)
+        self.angle = float(angle)
 
-		hits = 0
+    def run_trials(self, trials):
+        """
+        Run the simulation a specified number of times.
+        """
+        if trials <= 0:
+            raise InvalidInput("trials must not be <= 0")
 
-		for _ in xrange(trials):
-			x = random.uniform(0.0, self.gap) # location of needle after drop
+        # since the angle is specified, precompute the opposite
+        opp = self.length/2 * math.sin(self.angle)
 
-			if self.gap - x < opp or x < opp:
-				hits += 1
+        hits = 0
 
-		return hits
+        for _ in xrange(trials):
+            x_pos = random.uniform(0.0, self.gap)
 
-	def predict_prob(self):
-		opp = self.length/2 * math.sin(self.angle)
-		if opp*2 >= self.gap:
-			return 1.0 # will always touch
+            if self.gap - x_pos < opp or x_pos < opp:
+                hits += 1
 
-		# area of region which needle would be on if it hit
-		return opp*2/self.gap
+        return hits
 
-	def predict_hits(self, trials):
-		return self.predict_prob()*trials
+    def predict_prob(self):
+        """
+        For the variables passed into the simulation,
+        predict the probability that the needle will hit
+        at least one of the two parallel lines.
+        """
+        opp = self.length/2 * math.sin(self.angle)
+
+        # will always touch
+        if opp*2 >= self.gap:
+            return 1.0
+
+        # area of region which needle would be on if it hit
+        return opp*2/self.gap
+
+    def predict_hits(self, trials):
+        """
+        For the variables passed into the simulation,
+        predict the number of times the needle will hit
+        at least one of the two parallel lines.
+
+        Note that this function will return a float
+        and not an integer.
+        """
+        return self.predict_prob()*trials
