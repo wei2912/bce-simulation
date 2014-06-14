@@ -80,27 +80,30 @@ class TestCoinSim(unittest.TestCase):
         """
         match_theoretical_test
         ===
-        If the diameter of the coin < gap_x and
-        the diameter of the coin < gap_y,
+        When the chi-square statistic is calculated,
         the p-value should be < 0.05.
         """
 
         for _ in range(NUM_TESTS):
             gap_x = non_zero_rand()
             gap_y = non_zero_rand()
-            diameter = non_zero_rand() * min(gap_x, gap_y)
-            radius = diameter/2
+            radius = non_zero_rand()/2
 
             sim = sims.CoinSim(radius, gap_x, gap_y)
 
             hits = sim.run_trials(TRIALS)
             pred_hits = sim.predict_hits(TRIALS)
 
+            # if they're equal
+            # skip the calculation
+            if hits == pred_hits:
+                continue
+
             stats = [
                 (hits-pred_hits)**2/pred_hits,
                 (pred_hits-hits)**2/(TRIALS-pred_hits)
             ]
-            chi2 = sum(stats)/len(stats)
+            chi2 = sum(stats)
             self.assertTrue(
                 chi2 < MAX_STAT,
                 "chi-square = %f >= %f" % (chi2, MAX_STAT)
@@ -211,27 +214,30 @@ class TestNeedleAngleSim(unittest.TestCase):
         """
         match_theoretical_test
         ===
-        If the diameter of the coin < gap_x and
-        the diameter of the coin < gap_y,
+        When the chi-square statistic is calculated,
         the p-value should be < 0.05.
         """
 
         for _ in range(NUM_TESTS):
             angle = random.uniform(0.0, math.pi)
             length = non_zero_rand()
-            opp = length * math.sin(angle)
-            gap = opp + non_zero_rand()
+            gap = non_zero_rand()
 
             sim = sims.NeedleAngleSim(length, gap, angle)
 
             hits = sim.run_trials(TRIALS)
             pred_hits = sim.predict_hits(TRIALS)
 
+            # if they're equal
+            # skip the calculation
+            if hits == pred_hits:
+                continue
+
             stats = [
                 (hits-pred_hits)**2/pred_hits,
                 (pred_hits-hits)**2/(TRIALS-pred_hits)
             ]
-            chi2 = sum(stats)/len(stats)
+            chi2 = sum(stats)
             self.assertTrue(
                 chi2 < MAX_STAT,
                 "chi-square = %f >= %f" % (chi2, MAX_STAT)
@@ -283,27 +289,30 @@ class TestCoinPhysicsSim(unittest.TestCase):
         """
         match_theoretical_test
         ===
-        If the diameter of the coin < gap_x and
-        the diameter of the coin < gap_y,
+        When the chi-square statistic is calculated,
         the p-value should be < 0.05.
         """
 
         for _ in range(NUM_TESTS):
             gap_x = non_zero_rand()
             gap_y = non_zero_rand()
-            diameter = non_zero_rand() * min(gap_x, gap_y)
-            radius = diameter/2
+            radius = non_zero_rand()/2
 
             sim = sims.CoinPhysicsSim(radius, gap_x, gap_y)
 
             hits = sim.run_trials(TRIALS)
             pred_hits = sim.predict_hits(TRIALS)
 
+            # if they're equal
+            # skip the calculation
+            if pred_hits:
+                continue
+
             stats = [
                 (hits-pred_hits)**2/pred_hits,
                 (pred_hits-hits)**2/(TRIALS-pred_hits)
             ]
-            chi2 = sum(stats)/len(stats)
+            chi2 = sum(stats)
             self.assertTrue(
                 chi2 < MAX_STAT,
                 "chi-square = %f >= %f" % (chi2, MAX_STAT)
