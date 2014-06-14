@@ -61,7 +61,7 @@ class CoinSim(object):
             return 1.0
 
         area = self.gap_x * self.gap_y
-        return ((area - (self.gap_x-diameter) * (self.gap_y-diameter)) / 
+        return ((area - (self.gap_x-diameter) * (self.gap_y-diameter)) /
             area)
 
     def predict_hits(self, trials):
@@ -190,6 +190,14 @@ class CoinPhysicsSim(object):
         self.gap_y = float(gap_y)
 
     def __transform_center(self, x_pos, y_pos):
+        """
+        Depending on the region which the coin lands,
+        this function transforms the coin onto a
+        Cartesian plane where the axes are the closest
+        corner and returns the coordinates of the
+        center of the circle.
+        """
+
         x_split = self.gap_x/2
         y_split = self.gap_y/2
 
@@ -204,6 +212,12 @@ class CoinPhysicsSim(object):
         return (center_x, center_y)
 
     def __get_pivots(self, center_x, center_y):
+        """
+        Get the x-intercepts and y-intercepts of
+        the circle and return a list of pivots which
+        the coin lies on.
+        """
+
         pivots = []
 
         if self.radius**2 - center_y**2 > 0: # no imaginary numbers!
