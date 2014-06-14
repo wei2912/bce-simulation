@@ -10,7 +10,7 @@ import random
 from utils import sims
 
 TRIALS = 10000 # number of trials to run per test case
-NUM_TESTS = 10 # number of tests to run
+NUM_TESTS = 10 # number of tests to run per test case
 MAX_STAT = 3.841 # p < 0.05 for a df of 1
 
 def non_zero_rand():
@@ -25,9 +25,9 @@ class TestCoinSim(unittest.TestCase):
     Test suite for CoinSim.
     """
 
-    def __bad_input_test(self):
+    def test_bad_input(self):
         """
-        bad_input_test
+        test_bad_input
         ===
 
         If bad input is passed to the simulation,
@@ -46,9 +46,9 @@ class TestCoinSim(unittest.TestCase):
         self.assertRaises(sims.InvalidInput, sim.run_trials, 0)
         self.assertRaises(sims.InvalidInput, sim.run_trials, -1)
 
-    def __always_hit_test(self):
+    def test_always_hit(self):
         """
-        always_hit_test
+        test_always_hit
         ===
         If the diameter of the coin >= gap_x or
         the diameter of the coin >= gap_y,
@@ -75,10 +75,11 @@ class TestCoinSim(unittest.TestCase):
                 sim = sims.CoinSim(radius, pair[0], pair[1])
                 hits = sim.run_trials(TRIALS)
                 self.assertEquals(hits, TRIALS, "coin does not always hit")
+                self.assertEquals(sim.predict_prob(), 1.0, "predicted probability != 1.0")
 
-    def __match_theoretical_test(self):
+    def test_match_theoretical(self):
         """
-        match_theoretical_test
+        test_match_theoretical
         ===
         When the chi-square statistic is calculated,
         the p-value should be < 0.05.
@@ -109,30 +110,14 @@ class TestCoinSim(unittest.TestCase):
                 "chi-square = %f >= %f" % (chi2, MAX_STAT)
             )
 
-    def test_init(self):
-        """
-        Runs the following tests for the init function:
-        * bad_input_test
-        """
-        self.__bad_input_test()
-
-    def test_run_trials(self):
-        """
-        Runs the following tests for function `run_trials`:
-        * always_hit_test
-        * match_theoretical_test
-        """
-        self.__always_hit_test()
-        self.__match_theoretical_test()
-
 class TestNeedleSim(unittest.TestCase):
     """
     Test suite for NeedleSim.
     """
 
-    def __bad_input_test(self):
+    def test_bad_input(self):
         """
-        bad_input_test
+        test_bad_input
         ===
 
         If bad input is passed to the simulation,
@@ -149,21 +134,14 @@ class TestNeedleSim(unittest.TestCase):
         self.assertRaises(sims.InvalidInput, sim.run_trials, 0)
         self.assertRaises(sims.InvalidInput, sim.run_trials, -1)
 
-    def test_init(self):
-        """
-        Runs the following tests for the init function:
-        * bad_input_test
-        """
-        self.__bad_input_test()
-
 class TestNeedleAngleSim(unittest.TestCase):
     """
     Test suite for NeedleAngleSim.
     """
 
-    def __bad_input_test(self):
+    def test_bad_input(self):
         """
-        bad_input_test
+        test_bad_input
         ===
 
         If bad input is passed to the simulation,
@@ -184,9 +162,9 @@ class TestNeedleAngleSim(unittest.TestCase):
         self.assertRaises(sims.InvalidInput, sim.run_trials, 0)
         self.assertRaises(sims.InvalidInput, sim.run_trials, -1)
 
-    def __always_hit_test(self):
+    def test_always_hit(self):
         """
-        always_hit_test
+        test_always_hit
         ===
 
         If the opposite of the needle >= gap,
@@ -209,10 +187,11 @@ class TestNeedleAngleSim(unittest.TestCase):
             sim = sims.NeedleAngleSim(length, less_gap, angle)
             hits = sim.run_trials(TRIALS)
             self.assertEquals(hits, TRIALS, "needle does not always hit")
+            self.assertEquals(sim.predict_prob(), 1.0, "predicted probability != 1.0")
 
-    def __match_theoretical_test(self):
+    def test_match_theoretical(self):
         """
-        match_theoretical_test
+        test_match_theoretical
         ===
         When the chi-square statistic is calculated,
         the p-value should be < 0.05.
@@ -243,30 +222,14 @@ class TestNeedleAngleSim(unittest.TestCase):
                 "chi-square = %f >= %f" % (chi2, MAX_STAT)
             )
 
-    def test_init(self):
-        """
-        Runs the following tests for the init function:
-        * bad_input_test
-        """
-        self.__bad_input_test()
-
-    def test_run_trials(self):
-        """
-        Runs the following tests for function `run_trials`:
-        * always_hit_test
-        * match_theoretical_test
-        """
-        self.__always_hit_test()
-        self.__match_theoretical_test()
-
 class TestCoinPhysicsSim(unittest.TestCase):
     """
     Test suite for CoinPhysicsSim.
     """
 
-    def __bad_input_test(self):
+    def test_bad_input(self):
         """
-        bad_input_test
+        test_bad_input
         ===
 
         If bad input is passed to the simulation,
@@ -285,9 +248,9 @@ class TestCoinPhysicsSim(unittest.TestCase):
         self.assertRaises(sims.InvalidInput, sim.run_trials, 0)
         self.assertRaises(sims.InvalidInput, sim.run_trials, -1)
 
-    def __match_theoretical_test(self):
+    def test_match_theoretical(self):
         """
-        match_theoretical_test
+        test_match_theoretical
         ===
         When the chi-square statistic is calculated,
         the p-value should be < 0.05.
@@ -317,20 +280,6 @@ class TestCoinPhysicsSim(unittest.TestCase):
                 chi2 < MAX_STAT,
                 "chi-square = %f >= %f" % (chi2, MAX_STAT)
             )
-
-    def test_init(self):
-        """
-        Runs the following tests for the init function:
-        * bad_input_test
-        """
-        self.__bad_input_test()
-
-    def test_run_trials(self):
-        """
-        Runs the following tests for function `run_trials`:
-        * match_theoretical_test
-        """
-        self.__match_theoretical_test()
 
 if __name__ == '__main__':
     unittest.main()
