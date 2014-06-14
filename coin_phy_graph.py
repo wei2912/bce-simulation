@@ -46,7 +46,8 @@ def plot_width(args):
 
     plt.xlabel("Width of square gap")
     plt.ylabel("P(E)")
-    plt.title("Buffon's Coin Experiment (physics variant) - Width of square gap against P(E)")
+    plt.title("Buffon's Coin Experiment (physics variant)" +
+    	" - Width of square gap against P(E)")
     plt.grid(True)
 
 def plot_radius(args):
@@ -81,7 +82,8 @@ def plot_radius(args):
 
     plt.xlabel("Radius")
     plt.ylabel("P(E)")
-    plt.title("Buffon's Coin Experiment (physics variant) - Radius against P(E)")
+    plt.title("Buffon's Coin Experiment (physics variant)" +
+    	" - Radius against P(E)")
     plt.grid(True)
 
 MODES = {
@@ -97,7 +99,8 @@ MODES_TXT = [
 
 def get_args():
     parser = argparse.ArgumentParser(
-        description="Graph plotter for Buffon's Coin Experiment (physics variant)"
+        description=("Graph plotter for Buffon's Coin Experiment" +
+        "(physics variant)")
     )
 
     parser.add_argument(
