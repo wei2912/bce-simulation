@@ -22,20 +22,21 @@ def plot_width(args):
     balances on the grid.
     """
 
-    gaps = stepvals.get_range(args.gap, args.step)
+    vals = stepvals.get_range(args.gap, 0.001)
     probs = []
-    for gap in gaps:
+    for gap in vals:
         sim = sims.CoinPhysicsSim(args.radius, gap, gap)
         probs.append(sim.predict_prob())
 
     plt.plot(
-        gaps,
+        vals,
         probs,
         color='red',
         linewidth=2.0
     )
 
-    for gap in gaps:
+    vals = stepvals.get_range(args.gap, args.step)
+    for gap in vals:
         sim = sims.CoinPhysicsSim(args.radius, gap, gap)
         expprob = float(sim.run_trials(args.trials))/args.trials
 
@@ -56,20 +57,21 @@ def plot_radius(args):
     balances on the grid.
     """
 
-    radii = stepvals.get_range(args.radius, args.step)
+    vals = stepvals.get_range(args.radius, 0.001)
     probs = []
-    for radius in radii:
+    for radius in vals:
         sim = sims.CoinPhysicsSim(radius, args.gap, args.gap)
         probs.append(sim.predict_prob())
 
     plt.plot(
-        radii,
+        vals,
         probs,
         color='red',
         linewidth=2.0
     )
 
-    for radius in radii:
+    vals = stepvals.get_range(args.radius, args.step)
+    for radius in vals:
         sim = sims.CoinPhysicsSim(radius, args.gap, args.gap)
         expprob = float(sim.run_trials(args.trials))/args.trials
 
