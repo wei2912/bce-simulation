@@ -168,3 +168,92 @@ class NeedleAngleSim(object):
         and not an integer.
         """
         return self.predict_prob()*trials
+
+class CoinPhysicsSim(object):
+    """
+    Simulation of a modified Buffon's Coin Experiment.
+
+    The program checks if the coin will balance in addition
+    to touching one of the lines of the grid.
+    """
+    def __init__(self, radius, gap_x, gap_y):
+        if radius <= 0:
+            raise InvalidInput("radius must not be <= 0")
+        if gap_x <= 0:
+            raise InvalidInput("gap_x must not be <= 0")
+        if gap_y <= 0:
+            raise InvalidInput("gap_y must not be <= 0")
+
+        self.radius = float(radius)
+        self.gap_x = float(gap_x)
+        self.gap_y = float(gap_y)
+
+    def __transform_center(self, x_pos, y_pos):
+    	x_split = self.gap_x/2
+        y_split = self.gap_y/2
+
+        center_x = x_pos
+        if x_pos > x_split:
+        	center_x = self.gap_x-x_pos
+
+        center_y = y_pos
+        if y_pos > y_split:
+        	center_y = self.gap_y-y_pos
+
+        return (center_x, center_y)
+
+    def __get_pivots(self, center_x, center_y):
+        pivots = []
+
+        if self.radius**2 - center_y**2 > 0: # no imaginary numbers!
+        	sqrt = (self.radius**2 - center_y**2)**(0.5)
+        	pivots.append((center_x + sqrt, 0))
+        	pivots.append((center_x - sqrt, 0))
+
+        if self.radius**2 - center_x**2 > 0:
+        	sqrt = (self.radius**2 - center_x**2)**(0.5)
+        	pivots.append((0, center_y + sqrt))
+        	pivots.append((0, center_y - sqrt))
+
+        return pivots
+
+    def run_trials(self, trials):
+        """
+        Run the simulation a specified number of times.
+        """
+        if trials <= 0:
+            raise InvalidInput("trials must not be<= 0")
+
+        hits = 0
+
+        for _ in xrange(trials):
+            x_pos = random.uniform(0.0, self.gap_x)
+            y_pos = random.uniform(0.0, self.gap_y)
+
+            centers = self.__transform_center(x_pos, y_pos)
+            center_x = centers[0]
+            center_y = centers[1]
+
+            # if the center of gravity actually lies on the edge
+            # the coin will balance
+            if center_x == 0 or center_y == 0:
+            	hits += 1
+            	continue
+
+            print("(x - %f)^2 + (y - %f)^2 = %f^2" % (center_x, center_y, self.radius))
+
+            pivots = self.__get_pivots(center_x, center_y)
+            print(pivots)
+
+            # if it isn't touching the axes at at least 3 points
+            # it will definitely not balance
+            # other than in the case above where it lies on the edge
+            if not len(pivots) > 2:
+            	continue
+
+            # TODO: convex hull of pivots and center
+            # check if the center of gravity is a point in the shape
+            # if it is, the coin does not balance.
+            # otherwise, the coin does.
+
+        return hits
