@@ -5,7 +5,7 @@ python:
 before_install:
   - sudo apt-get update -qq
   - sudo apt-get install -y pylint
-  - sudo pip install matplotlib
+  - sudo pip install matplotlib pyhull
 install: true
 script: npm test
 

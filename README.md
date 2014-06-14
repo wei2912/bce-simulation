@@ -11,5 +11,6 @@ The [website](http://bce-simulation.herokuapp.com/) for the simulation is curren
 The following are dependencies:
 
 	matplotlib
+	pyhull
 
 They can be installed using `pip install [insert dependency]` without the square brackets.

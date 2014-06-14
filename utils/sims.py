@@ -4,6 +4,7 @@ This module contains all simulations used in `bce-simulation`.
 
 import random
 import math
+from pyhull.convex_hull import ConvexHull
 
 class InvalidInput(Exception):
     """
@@ -54,14 +55,14 @@ class CoinSim(object):
         """
         diameter = self.radius*2
 
-        # will always touch
+        # if it always touches
+        # cap the probability at 1.0
         if diameter >= self.gap_x or diameter >= self.gap_y:
             return 1.0
 
-        # area of region which coin would be on if it hit
-        region = (self.gap_x * self.gap_y -
-            (self.gap_x-diameter) * (self.gap_y-diameter))
-        return region/(self.gap_x * self.gap_y)
+        return (self.gap_x * self.gap_y -
+            (self.gap_x-diameter) * (self.gap_y-diameter) /
+            (self.gap_x * self.gap_y))
 
     def predict_hits(self, trials):
         """
@@ -151,11 +152,11 @@ class NeedleAngleSim(object):
         """
         opp = self.length/2 * math.sin(self.angle)
 
-        # will always touch
+        # if it always touches
+        # cap the probability at 1.0
         if opp*2 >= self.gap:
             return 1.0
 
-        # area of region which needle would be on if it hit
         return opp*2/self.gap
 
     def predict_hits(self, trials):
@@ -230,9 +231,9 @@ class CoinPhysicsSim(object):
             x_pos = random.uniform(0.0, self.gap_x)
             y_pos = random.uniform(0.0, self.gap_y)
 
-            centers = self.__transform_center(x_pos, y_pos)
-            center_x = centers[0]
-            center_y = centers[1]
+            center = self.__transform_center(x_pos, y_pos)
+            center_x = center[0]
+            center_y = center[1]
 
             # if the center of gravity actually lies on the edge
             # the coin will balance
@@ -251,9 +252,46 @@ class CoinPhysicsSim(object):
             if not len(pivots) > 2:
             	continue
 
-            # TODO: convex hull of pivots and center
+            # convex hull of pivots and center
             # check if the center of gravity is a point in the shape
             # if it is, the coin does not balance.
             # otherwise, the coin does.
+            points = pivots + [center]
+            hull = ConvexHull(points)
+            found = True
+            for line in hull.vertices:
+            	# the center is always the last point
+            	# if the last point is found in the vertice
+            	# it's not a hit.
+            	if len(points)-1 in line:
+            		continue
+
+            # if the center isn't part of the vertices
+            # it's a hit
+            if found:
+            	hits += 1
+            	print("GOALLL")
 
         return hits
+
+    def predict_prob(self):
+    	"""
+        For the variables passed into the simulation,
+        predict the probability that the needle will hit
+        at least one of the two parallel lines.
+        """
+
+        # area of coin / area of rectangle
+    	return math.pi * self.radius**2 / (self.gap_x * self.gap_y)
+
+    def predict_hits(self, trials):
+        """
+        For the variables passed into the simulation,
+        predict the number of times the needle will hit
+        at least one of the two parallel lines.
+
+        Note that this function will return a float
+        and not an integer.
+        """
+        return self.predict_prob()*trials
+    	
