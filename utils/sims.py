@@ -293,7 +293,11 @@ class CoinPhysicsSim(object):
         """
 
         # area of coin / area of rectangle
-        return math.pi * self.radius**2 / (self.gap_x * self.gap_y)
+        area_coin = math.pi * self.radius**2
+        area = self.gap_x * self.gap_y
+        if area_coin > area:
+            return 1.0
+        return area_coin / area
 
     def predict_hits(self, trials):
         """
