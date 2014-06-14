@@ -253,5 +253,75 @@ class TestNeedleAngleSim(unittest.TestCase):
         self.__always_hit_test()
         self.__match_theoretical_test()
 
+class TestCoinPhysicsSim(unittest.TestCase):
+    """
+    Test suite for CoinPhysicsSim.
+    """
+
+    def __bad_input_test(self):
+        """
+        bad_input_test
+        ===
+
+        If bad input is passed to the simulation,
+        the simulation should raise an exception.
+        """
+
+        self.assertRaises(sims.InvalidInput, sims.CoinPhysicsSim, 0, 1, 1)
+        self.assertRaises(sims.InvalidInput, sims.CoinPhysicsSim, 1, 0, 1)
+        self.assertRaises(sims.InvalidInput, sims.CoinPhysicsSim, 1, 1, 0)
+
+        self.assertRaises(sims.InvalidInput, sims.CoinPhysicsSim, -1, 1, 1)
+        self.assertRaises(sims.InvalidInput, sims.CoinPhysicsSim, 1, -1, 1)
+        self.assertRaises(sims.InvalidInput, sims.CoinPhysicsSim, 1, 1, -1)
+
+        sim = sims.CoinPhysicsSim(1, 1, 1)
+        self.assertRaises(sims.InvalidInput, sim.run_trials, 0)
+        self.assertRaises(sims.InvalidInput, sim.run_trials, -1)
+
+    def __match_theoretical_test(self):
+        """
+        match_theoretical_test
+        ===
+        If the diameter of the coin < gap_x and
+        the diameter of the coin < gap_y,
+        the p-value should be < 0.05.
+        """
+
+        for _ in range(NUM_TESTS):
+            gap_x = non_zero_rand()
+            gap_y = non_zero_rand()
+            diameter = non_zero_rand() * min(gap_x, gap_y)
+            radius = diameter/2
+
+            sim = sims.CoinPhysicsSim(radius, gap_x, gap_y)
+
+            hits = sim.run_trials(TRIALS)
+            pred_hits = sim.predict_hits(TRIALS)
+
+            stats = [
+                (hits-pred_hits)**2/pred_hits,
+                (pred_hits-hits)**2/(TRIALS-pred_hits)
+            ]
+            chi2 = sum(stats)/len(stats)
+            self.assertTrue(
+                chi2 < MAX_STAT,
+                "chi-square = %f >= %f" % (chi2, MAX_STAT)
+            )
+
+    def test_init(self):
+        """
+        Runs the following tests for the init function:
+        * bad_input_test
+        """
+        self.__bad_input_test()
+
+    def test_run_trials(self):
+        """
+        Runs the following tests for function `run_trials`:
+        * match_theoretical_test
+        """
+        self.__match_theoretical_test()
+
 if __name__ == '__main__':
     unittest.main()

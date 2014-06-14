@@ -60,9 +60,9 @@ class CoinSim(object):
         if diameter >= self.gap_x or diameter >= self.gap_y:
             return 1.0
 
-        return (self.gap_x * self.gap_y -
-            (self.gap_x-diameter) * (self.gap_y-diameter) /
-            (self.gap_x * self.gap_y))
+        area = self.gap_x * self.gap_y
+        return ((area - (self.gap_x-diameter) * (self.gap_y-diameter)) / 
+            area)
 
     def predict_hits(self, trials):
         """
@@ -190,16 +190,16 @@ class CoinPhysicsSim(object):
         self.gap_y = float(gap_y)
 
     def __transform_center(self, x_pos, y_pos):
-    	x_split = self.gap_x/2
+        x_split = self.gap_x/2
         y_split = self.gap_y/2
 
         center_x = x_pos
         if x_pos > x_split:
-        	center_x = self.gap_x-x_pos
+            center_x = self.gap_x-x_pos
 
         center_y = y_pos
         if y_pos > y_split:
-        	center_y = self.gap_y-y_pos
+            center_y = self.gap_y-y_pos
 
         return (center_x, center_y)
 
@@ -207,14 +207,14 @@ class CoinPhysicsSim(object):
         pivots = []
 
         if self.radius**2 - center_y**2 > 0: # no imaginary numbers!
-        	sqrt = (self.radius**2 - center_y**2)**(0.5)
-        	pivots.append((center_x + sqrt, 0))
-        	pivots.append((center_x - sqrt, 0))
+            sqrt = (self.radius**2 - center_y**2)**(0.5)
+            pivots.append((center_x + sqrt, 0))
+            pivots.append((center_x - sqrt, 0))
 
         if self.radius**2 - center_x**2 > 0:
-        	sqrt = (self.radius**2 - center_x**2)**(0.5)
-        	pivots.append((0, center_y + sqrt))
-        	pivots.append((0, center_y - sqrt))
+            sqrt = (self.radius**2 - center_x**2)**(0.5)
+            pivots.append((0, center_y + sqrt))
+            pivots.append((0, center_y - sqrt))
 
         return pivots
 
@@ -238,19 +238,16 @@ class CoinPhysicsSim(object):
             # if the center of gravity actually lies on the edge
             # the coin will balance
             if center_x == 0 or center_y == 0:
-            	hits += 1
-            	continue
-
-            print("(x - %f)^2 + (y - %f)^2 = %f^2" % (center_x, center_y, self.radius))
+                hits += 1
+                continue
 
             pivots = self.__get_pivots(center_x, center_y)
-            print(pivots)
 
             # if it isn't touching the axes at at least 3 points
             # it will definitely not balance
             # other than in the case above where it lies on the edge
             if not len(pivots) > 2:
-            	continue
+                continue
 
             # convex hull of pivots and center
             # check if the center of gravity is a point in the shape
@@ -260,29 +257,29 @@ class CoinPhysicsSim(object):
             hull = ConvexHull(points)
             found = True
             for line in hull.vertices:
-            	# the center is always the last point
-            	# if the last point is found in the vertice
-            	# it's not a hit.
-            	if len(points)-1 in line:
-            		continue
+                # the center is always the last point
+                # if the last point is found in the vertice
+                # it's not a hit.
+                if len(points)-1 in line:
+                    found = False
+                    break
 
             # if the center isn't part of the vertices
             # it's a hit
             if found:
-            	hits += 1
-            	print("GOALLL")
+                hits += 1
 
         return hits
 
     def predict_prob(self):
-    	"""
+        """
         For the variables passed into the simulation,
         predict the probability that the needle will hit
         at least one of the two parallel lines.
         """
 
         # area of coin / area of rectangle
-    	return math.pi * self.radius**2 / (self.gap_x * self.gap_y)
+        return math.pi * self.radius**2 / (self.gap_x * self.gap_y)
 
     def predict_hits(self, trials):
         """
@@ -294,4 +291,4 @@ class CoinPhysicsSim(object):
         and not an integer.
         """
         return self.predict_prob()*trials
-    	
+        
