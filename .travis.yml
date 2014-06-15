@@ -2,11 +2,8 @@ language: python
 python:
   - "2.7"
 
-before_install:
-  - sudo apt-get update -qq
-install:
-  - sudo apt-get install -y pylint
-  - sudo pip install -q matplotlib pyhull
+before_install: scripts/before_install.sh
+install: scripts/install.sh
 script: npm test
 
 deploy:
