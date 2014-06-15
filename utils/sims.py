@@ -7,7 +7,7 @@ is runned from the command line.
 import random
 import math
 import unittest
-from pyhull import convex_hull
+from pyhull.convex_hull import ConvexHull
 
 TRIALS = 10000 # number of trials to run per test case
 NUM_TESTS = 10 # number of tests to run per test case
@@ -103,17 +103,17 @@ class TestCoinSim(unittest.TestCase):
         the simulation should raise an exception.
         """
 
-        self.assertRaises(sims.InvalidInput, sims.CoinSim, 0, 1, 1)
-        self.assertRaises(sims.InvalidInput, sims.CoinSim, 1, 0, 1)
-        self.assertRaises(sims.InvalidInput, sims.CoinSim, 1, 1, 0)
+        self.assertRaises(InvalidInput, CoinSim, 0, 1, 1)
+        self.assertRaises(InvalidInput, CoinSim, 1, 0, 1)
+        self.assertRaises(InvalidInput, CoinSim, 1, 1, 0)
 
-        self.assertRaises(sims.InvalidInput, sims.CoinSim, -1, 1, 1)
-        self.assertRaises(sims.InvalidInput, sims.CoinSim, 1, -1, 1)
-        self.assertRaises(sims.InvalidInput, sims.CoinSim, 1, 1, -1)
+        self.assertRaises(InvalidInput, CoinSim, -1, 1, 1)
+        self.assertRaises(InvalidInput, CoinSim, 1, -1, 1)
+        self.assertRaises(InvalidInput, CoinSim, 1, 1, -1)
 
-        sim = sims.CoinSim(1, 1, 1)
-        self.assertRaises(sims.InvalidInput, sim.run_trials, 0)
-        self.assertRaises(sims.InvalidInput, sim.run_trials, -1)
+        sim = CoinSim(1, 1, 1)
+        self.assertRaises(InvalidInput, sim.run_trials, 0)
+        self.assertRaises(InvalidInput, sim.run_trials, -1)
 
     def test_always_hit(self):
         """
@@ -141,7 +141,7 @@ class TestCoinSim(unittest.TestCase):
             ]
 
             for pair in pairs:
-                sim = sims.CoinSim(radius, pair[0], pair[1])
+                sim = CoinSim(radius, pair[0], pair[1])
                 hits = sim.run_trials(TRIALS)
                 self.assertEquals(hits, TRIALS, "coin does not always hit")
                 self.assertEquals(sim.predict_prob(), 1.0, "predicted probability != 1.0")
@@ -159,7 +159,7 @@ class TestCoinSim(unittest.TestCase):
             gap_y = _non_zero_rand()
             radius = _non_zero_rand()/2
 
-            sim = sims.CoinSim(radius, gap_x, gap_y)
+            sim = CoinSim(radius, gap_x, gap_y)
 
             hits = sim.run_trials(TRIALS)
             pred_hits = sim.predict_hits(TRIALS)
@@ -227,15 +227,15 @@ class TestNeedleSim(unittest.TestCase):
         the simulation should raise an exception.
         """
 
-        self.assertRaises(sims.InvalidInput, sims.NeedleSim, 0, 1)
-        self.assertRaises(sims.InvalidInput, sims.NeedleSim, 1, 0)
+        self.assertRaises(InvalidInput, NeedleSim, 0, 1)
+        self.assertRaises(InvalidInput, NeedleSim, 1, 0)
 
-        self.assertRaises(sims.InvalidInput, sims.NeedleSim, -1, 1)
-        self.assertRaises(sims.InvalidInput, sims.NeedleSim, 1, -1)
+        self.assertRaises(InvalidInput, NeedleSim, -1, 1)
+        self.assertRaises(InvalidInput, NeedleSim, 1, -1)
 
-        sim = sims.NeedleSim(1, 1)
-        self.assertRaises(sims.InvalidInput, sim.run_trials, 0)
-        self.assertRaises(sims.InvalidInput, sim.run_trials, -1)
+        sim = NeedleSim(1, 1)
+        self.assertRaises(InvalidInput, sim.run_trials, 0)
+        self.assertRaises(InvalidInput, sim.run_trials, -1)
 
 
 class NeedleAngleSim(object):
@@ -314,19 +314,19 @@ class TestNeedleAngleSim(unittest.TestCase):
         the simulation should raise an exception.
         """
 
-        self.assertRaises(sims.InvalidInput, sims.NeedleAngleSim, 0, 1, 0.1)
-        self.assertRaises(sims.InvalidInput, sims.NeedleAngleSim, 1, 0, 0.1)
+        self.assertRaises(InvalidInput, NeedleAngleSim, 0, 1, 0.1)
+        self.assertRaises(InvalidInput, NeedleAngleSim, 1, 0, 0.1)
 
-        self.assertRaises(sims.InvalidInput, sims.NeedleAngleSim, -1, 1, 0.1)
-        self.assertRaises(sims.InvalidInput, sims.NeedleAngleSim, 1, -1, 0.1)
+        self.assertRaises(InvalidInput, NeedleAngleSim, -1, 1, 0.1)
+        self.assertRaises(InvalidInput, NeedleAngleSim, 1, -1, 0.1)
 
-        self.assertRaises(sims.InvalidInput, sims.NeedleAngleSim, 1, 1, math.pi)
-        self.assertRaises(sims.InvalidInput, sims.NeedleAngleSim, 1, 1, 3.15)
-        self.assertRaises(sims.InvalidInput, sims.NeedleAngleSim, 1, 1, -0.1)
+        self.assertRaises(InvalidInput, NeedleAngleSim, 1, 1, math.pi)
+        self.assertRaises(InvalidInput, NeedleAngleSim, 1, 1, 3.15)
+        self.assertRaises(InvalidInput, NeedleAngleSim, 1, 1, -0.1)
 
-        sim = sims.NeedleAngleSim(1, 1, 0.1)
-        self.assertRaises(sims.InvalidInput, sim.run_trials, 0)
-        self.assertRaises(sims.InvalidInput, sim.run_trials, -1)
+        sim = NeedleAngleSim(1, 1, 0.1)
+        self.assertRaises(InvalidInput, sim.run_trials, 0)
+        self.assertRaises(InvalidInput, sim.run_trials, -1)
 
     def test_always_hit(self):
         """
@@ -350,7 +350,7 @@ class TestNeedleAngleSim(unittest.TestCase):
 
             less_gap = opp - _non_zero_rand()*opp
 
-            sim = sims.NeedleAngleSim(length, less_gap, angle)
+            sim = NeedleAngleSim(length, less_gap, angle)
             hits = sim.run_trials(TRIALS)
             self.assertEquals(hits, TRIALS, "needle does not always hit")
             self.assertEquals(sim.predict_prob(), 1.0, "predicted probability != 1.0")
@@ -368,7 +368,7 @@ class TestNeedleAngleSim(unittest.TestCase):
             length = _non_zero_rand()
             gap = _non_zero_rand()
 
-            sim = sims.NeedleAngleSim(length, gap, angle)
+            sim = NeedleAngleSim(length, gap, angle)
 
             hits = sim.run_trials(TRIALS)
             pred_hits = sim.predict_hits(TRIALS)
@@ -487,7 +487,7 @@ class CoinPhysicsSim(object):
             # if it is, the coin does not balance.
             # otherwise, the coin does.
             points = pivots + [center]
-            hull = convex_hull.ConvexHull(points)
+            hull = ConvexHull(points)
             found = True
             for line in hull.vertices:
                 # the center is always the last point
@@ -543,17 +543,17 @@ class TestCoinPhysicsSim(unittest.TestCase):
         the simulation should raise an exception.
         """
 
-        self.assertRaises(sims.InvalidInput, sims.CoinPhysicsSim, 0, 1, 1)
-        self.assertRaises(sims.InvalidInput, sims.CoinPhysicsSim, 1, 0, 1)
-        self.assertRaises(sims.InvalidInput, sims.CoinPhysicsSim, 1, 1, 0)
+        self.assertRaises(InvalidInput, CoinPhysicsSim, 0, 1, 1)
+        self.assertRaises(InvalidInput, CoinPhysicsSim, 1, 0, 1)
+        self.assertRaises(InvalidInput, CoinPhysicsSim, 1, 1, 0)
 
-        self.assertRaises(sims.InvalidInput, sims.CoinPhysicsSim, -1, 1, 1)
-        self.assertRaises(sims.InvalidInput, sims.CoinPhysicsSim, 1, -1, 1)
-        self.assertRaises(sims.InvalidInput, sims.CoinPhysicsSim, 1, 1, -1)
+        self.assertRaises(InvalidInput, CoinPhysicsSim, -1, 1, 1)
+        self.assertRaises(InvalidInput, CoinPhysicsSim, 1, -1, 1)
+        self.assertRaises(InvalidInput, CoinPhysicsSim, 1, 1, -1)
 
-        sim = sims.CoinPhysicsSim(1, 1, 1)
-        self.assertRaises(sims.InvalidInput, sim.run_trials, 0)
-        self.assertRaises(sims.InvalidInput, sim.run_trials, -1)
+        sim = CoinPhysicsSim(1, 1, 1)
+        self.assertRaises(InvalidInput, sim.run_trials, 0)
+        self.assertRaises(InvalidInput, sim.run_trials, -1)
 
     def test_match_theoretical(self):
         """
@@ -568,7 +568,7 @@ class TestCoinPhysicsSim(unittest.TestCase):
             gap_y = _non_zero_rand()
             radius = _non_zero_rand()/2
 
-            sim = sims.CoinPhysicsSim(radius, gap_x, gap_y)
+            sim = CoinPhysicsSim(radius, gap_x, gap_y)
 
             hits = sim.run_trials(TRIALS)
             pred_hits = sim.predict_hits(TRIALS)
