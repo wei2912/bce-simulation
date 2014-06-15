@@ -1,10 +1,24 @@
 """
-This module contains all simulations used in `bce-simulation`.
+This module contains all simulations used in `bce-simulation`
+as well as test suites that can be runned when the module
+is runned from the command line.
 """
 
 import random
 import math
+import unittest
 from pyhull.convex_hull import ConvexHull
+
+TRIALS = 10000 # number of trials to run per test case
+NUM_TESTS = 10 # number of tests to run per test case
+MAX_STAT = 3.841 # p < 0.05 for a df of 1
+
+def _non_zero_rand():
+    """
+    Returns a random float x where
+    0.0 < x <= 1.0
+    """
+    return 1.0 - random.random()
 
 class InvalidInput(Exception):
     """
@@ -75,6 +89,97 @@ class CoinSim(object):
         """
         return self.predict_prob()*trials
 
+class TestCoinSim(unittest.TestCase):
+    """
+    Test suite for CoinSim.
+    """
+
+    def test_bad_input(self):
+        """
+        test_bad_input
+        ===
+
+        If bad input is passed to the simulation,
+        the simulation should raise an exception.
+        """
+
+        self.assertRaises(sims.InvalidInput, sims.CoinSim, 0, 1, 1)
+        self.assertRaises(sims.InvalidInput, sims.CoinSim, 1, 0, 1)
+        self.assertRaises(sims.InvalidInput, sims.CoinSim, 1, 1, 0)
+
+        self.assertRaises(sims.InvalidInput, sims.CoinSim, -1, 1, 1)
+        self.assertRaises(sims.InvalidInput, sims.CoinSim, 1, -1, 1)
+        self.assertRaises(sims.InvalidInput, sims.CoinSim, 1, 1, -1)
+
+        sim = sims.CoinSim(1, 1, 1)
+        self.assertRaises(sims.InvalidInput, sim.run_trials, 0)
+        self.assertRaises(sims.InvalidInput, sim.run_trials, -1)
+
+    def test_always_hit(self):
+        """
+        test_always_hit
+        ===
+        If the diameter of the coin >= gap_x or
+        the diameter of the coin >= gap_y,
+        the coin should always hit the grid.
+        """
+
+        for _ in range(NUM_TESTS):
+            radius = 1.0 - non_zero_rand()
+            diameter = radius*2
+            more_gap = diameter + non_zero_rand()
+            less_gap = diameter - non_zero_rand()*diameter
+
+            pairs = [
+                (diameter, more_gap),
+                (more_gap, diameter),
+                (diameter, less_gap),
+                (less_gap, diameter),
+                (less_gap, more_gap),
+                (more_gap, less_gap),
+                (less_gap, less_gap)
+            ]
+
+            for pair in pairs:
+                sim = sims.CoinSim(radius, pair[0], pair[1])
+                hits = sim.run_trials(TRIALS)
+                self.assertEquals(hits, TRIALS, "coin does not always hit")
+                self.assertEquals(sim.predict_prob(), 1.0, "predicted probability != 1.0")
+
+    def test_match_theoretical(self):
+        """
+        test_match_theoretical
+        ===
+        When the chi-square statistic is calculated,
+        the p-value should be < 0.05.
+        """
+
+        for _ in range(NUM_TESTS):
+            gap_x = non_zero_rand()
+            gap_y = non_zero_rand()
+            radius = non_zero_rand()/2
+
+            sim = sims.CoinSim(radius, gap_x, gap_y)
+
+            hits = sim.run_trials(TRIALS)
+            pred_hits = sim.predict_hits(TRIALS)
+
+            # if they're equal
+            # skip the calculation
+            if hits == pred_hits:
+                continue
+
+            stats = [
+                (hits-pred_hits)**2/pred_hits,
+                (pred_hits-hits)**2/(TRIALS-pred_hits)
+            ]
+            chi2 = sum(stats)
+            self.assertTrue(
+                chi2 < MAX_STAT,
+                "chi-square = %f >= %f" % (chi2, MAX_STAT)
+            )
+
+
 class NeedleSim(object):
     """
     Simulation of Buffon's Needle Experiment.
@@ -107,6 +212,31 @@ class NeedleSim(object):
                 hits += 1
 
         return hits
+
+class TestNeedleSim(unittest.TestCase):
+    """
+    Test suite for NeedleSim.
+    """
+
+    def test_bad_input(self):
+        """
+        test_bad_input
+        ===
+
+        If bad input is passed to the simulation,
+        the simulation should raise an exception.
+        """
+
+        self.assertRaises(sims.InvalidInput, sims.NeedleSim, 0, 1)
+        self.assertRaises(sims.InvalidInput, sims.NeedleSim, 1, 0)
+
+        self.assertRaises(sims.InvalidInput, sims.NeedleSim, -1, 1)
+        self.assertRaises(sims.InvalidInput, sims.NeedleSim, 1, -1)
+
+        sim = sims.NeedleSim(1, 1)
+        self.assertRaises(sims.InvalidInput, sim.run_trials, 0)
+        self.assertRaises(sims.InvalidInput, sim.run_trials, -1)
+
 
 class NeedleAngleSim(object):
     """
@@ -169,6 +299,95 @@ class NeedleAngleSim(object):
         and not an integer.
         """
         return self.predict_prob()*trials
+
+class TestNeedleAngleSim(unittest.TestCase):
+    """
+    Test suite for NeedleAngleSim.
+    """
+
+    def test_bad_input(self):
+        """
+        test_bad_input
+        ===
+
+        If bad input is passed to the simulation,
+        the simulation should raise an exception.
+        """
+
+        self.assertRaises(sims.InvalidInput, sims.NeedleAngleSim, 0, 1, 0.1)
+        self.assertRaises(sims.InvalidInput, sims.NeedleAngleSim, 1, 0, 0.1)
+
+        self.assertRaises(sims.InvalidInput, sims.NeedleAngleSim, -1, 1, 0.1)
+        self.assertRaises(sims.InvalidInput, sims.NeedleAngleSim, 1, -1, 0.1)
+
+        self.assertRaises(sims.InvalidInput, sims.NeedleAngleSim, 1, 1, math.pi)
+        self.assertRaises(sims.InvalidInput, sims.NeedleAngleSim, 1, 1, 3.15)
+        self.assertRaises(sims.InvalidInput, sims.NeedleAngleSim, 1, 1, -0.1)
+
+        sim = sims.NeedleAngleSim(1, 1, 0.1)
+        self.assertRaises(sims.InvalidInput, sim.run_trials, 0)
+        self.assertRaises(sims.InvalidInput, sim.run_trials, -1)
+
+    def test_always_hit(self):
+        """
+        test_always_hit
+        ===
+
+        If the opposite of the needle >= gap,
+        the needle should always hit at least
+        one of the two parallel lines.
+        """
+
+        for _ in range(NUM_TESTS):
+            # normally we would consider 0 radians
+            # however in this case 0 radians would mean it
+            # is impossible for the needle to have a non-zero opposite
+            # and hence will not always hit.
+            angle = non_zero_rand()*math.pi
+
+            opp = non_zero_rand()
+            length = opp/math.sin(angle)
+
+            less_gap = opp - non_zero_rand()*opp
+
+            sim = sims.NeedleAngleSim(length, less_gap, angle)
+            hits = sim.run_trials(TRIALS)
+            self.assertEquals(hits, TRIALS, "needle does not always hit")
+            self.assertEquals(sim.predict_prob(), 1.0, "predicted probability != 1.0")
+
+    def test_match_theoretical(self):
+        """
+        test_match_theoretical
+        ===
+        When the chi-square statistic is calculated,
+        the p-value should be < 0.05.
+        """
+
+        for _ in range(NUM_TESTS):
+            angle = random.uniform(0.0, math.pi)
+            length = non_zero_rand()
+            gap = non_zero_rand()
+
+            sim = sims.NeedleAngleSim(length, gap, angle)
+
+            hits = sim.run_trials(TRIALS)
+            pred_hits = sim.predict_hits(TRIALS)
+
+            # if they're equal
+            # skip the calculation
+            if hits == pred_hits:
+                continue
+
+            stats = [
+                (hits-pred_hits)**2/pred_hits,
+                (pred_hits-hits)**2/(TRIALS-pred_hits)
+            ]
+            chi2 = sum(stats)
+            self.assertTrue(
+                chi2 < MAX_STAT,
+                "chi-square = %f >= %f" % (chi2, MAX_STAT)
+            )
+
 
 class CoinPhysicsSim(object):
     """
@@ -309,4 +528,67 @@ class CoinPhysicsSim(object):
         and not an integer.
         """
         return self.predict_prob()*trials
-        
+
+class TestCoinPhysicsSim(unittest.TestCase):
+    """
+    Test suite for CoinPhysicsSim.
+    """
+
+    def test_bad_input(self):
+        """
+        test_bad_input
+        ===
+
+        If bad input is passed to the simulation,
+        the simulation should raise an exception.
+        """
+
+        self.assertRaises(sims.InvalidInput, sims.CoinPhysicsSim, 0, 1, 1)
+        self.assertRaises(sims.InvalidInput, sims.CoinPhysicsSim, 1, 0, 1)
+        self.assertRaises(sims.InvalidInput, sims.CoinPhysicsSim, 1, 1, 0)
+
+        self.assertRaises(sims.InvalidInput, sims.CoinPhysicsSim, -1, 1, 1)
+        self.assertRaises(sims.InvalidInput, sims.CoinPhysicsSim, 1, -1, 1)
+        self.assertRaises(sims.InvalidInput, sims.CoinPhysicsSim, 1, 1, -1)
+
+        sim = sims.CoinPhysicsSim(1, 1, 1)
+        self.assertRaises(sims.InvalidInput, sim.run_trials, 0)
+        self.assertRaises(sims.InvalidInput, sim.run_trials, -1)
+
+    def test_match_theoretical(self):
+        """
+        test_match_theoretical
+        ===
+        When the chi-square statistic is calculated,
+        the p-value should be < 0.05.
+        """
+
+        for _ in range(NUM_TESTS):
+            gap_x = non_zero_rand()
+            gap_y = non_zero_rand()
+            radius = non_zero_rand()/2
+
+            sim = sims.CoinPhysicsSim(radius, gap_x, gap_y)
+
+            hits = sim.run_trials(TRIALS)
+            pred_hits = sim.predict_hits(TRIALS)
+
+            # if they're equal
+            # skip the calculation
+            if pred_hits:
+                continue
+
+            stats = [
+                (hits-pred_hits)**2/pred_hits,
+                (pred_hits-hits)**2/(TRIALS-pred_hits)
+            ]
+            chi2 = sum(stats)
+            self.assertTrue(
+                chi2 < MAX_STAT,
+                "chi-square = %f >= %f" % (chi2, MAX_STAT)
+            )
+
+if __name__ == '__main__':
+    unittest.main()
+    import doctest
+    doctest.testmod()
