@@ -29,7 +29,7 @@ ys = stepvals.get_range(args.gap, args.step)
 
 for radius in xs:
 	for gap in ys:
-		sim = sims.CoinSim(args.radius, args.gap_x, args.gap_y, args.trials)
+		sim = sims.CoinGridSim(args.radius, args.gap_x, args.gap_y, args.trials)
 		expprob = float(sim.run_trials())/args.trials
 
 		if args.verbose:
