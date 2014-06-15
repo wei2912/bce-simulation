@@ -1,2 +1,2 @@
-sudo apt-get install -y pylint python-matplotlib
-sudo pip install -q pyhull
+sudo apt-get install -y -q pylint python-matplotlib || exit 1
+sudo pip install pyhull || exit 1
