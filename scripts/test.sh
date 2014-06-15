@@ -1,5 +1,7 @@
 #!/bin/bash
 
+ls -aR ./
+
 echo "##############"
 echo "# unit tests #"
 echo "##############"
