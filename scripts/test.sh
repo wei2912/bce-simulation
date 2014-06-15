@@ -1,6 +1,6 @@
 #!/bin/bash
 
-find . -not -name '.git'
+find . -not -path "./.git"
 
 echo "##############"
 echo "# unit tests #"
