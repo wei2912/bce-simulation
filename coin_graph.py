@@ -43,7 +43,8 @@ def plot_width(args):
 
     plt.xlabel("Width of square gap")
     plt.ylabel("P(E)")
-    plt.title("Buffon's Coin Experiment - Width of square gap against P(E)")
+    plt.title("Buffon's Coin Experiment - Width of square gap against P(E)" +
+    	"\nradius = %f" % args.radius)
     plt.grid(True)
 
 def plot_radius(args):
@@ -77,7 +78,8 @@ def plot_radius(args):
 
     plt.xlabel("Radius")
     plt.ylabel("P(E)")
-    plt.title("Buffon's Coin Experiment - Radius against P(E)")
+    plt.title("Buffon's Coin Experiment - Radius against P(E)" +
+    	"\nwidth of square gap = %f" % args.gap)
     plt.grid(True)
 
 MODES = {

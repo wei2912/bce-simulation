@@ -31,7 +31,8 @@ def plot_length(args):
 
     plt.xlabel("Length of needle")
     plt.ylabel("P(E)")
-    plt.title("Buffon's Needle Experiment - Length of needle against P(E)")
+    plt.title("Buffon's Needle Experiment - Length of needle against P(E)" +
+        "\ngap = %f" % args.gap)
     plt.grid(True)
 
 def plot_gap(args):
@@ -54,7 +55,8 @@ def plot_gap(args):
 
     plt.xlabel("Gap length")
     plt.ylabel("P(E)")
-    plt.title("Buffon's Needle Experiment - Gap width against P(E)")
+    plt.title("Buffon's Needle Experiment - Gap width against P(E)" +
+        "\nradius = %f" % args.radius)
     plt.grid(True)
 
 def plot_angle(args):
