@@ -8,7 +8,7 @@ Experiment and prints out the number of hits.
 
 import argparse
 
-from utils import sims
+from utils.sims import NeedleSim, NeedleAngleSim
 
 def get_args():
     parser = argparse.ArgumentParser(
@@ -51,9 +51,9 @@ def get_args():
 def main():
     args = get_args()
     if args.angle:
-        sim = sims.NeedleAngleSim(args.length, args.gap, args.angle)
+        sim = NeedleAngleSim(args.length, args.gap, args.angle)
     else:
-        sim = sims.NeedleSim(args.length, args.gap)
+        sim = NeedleSim(args.length, args.gap)
     print "%d/%d" % (sim.run_trials(args.trials), args.trials)
 
 main()

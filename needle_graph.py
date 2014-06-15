@@ -10,7 +10,8 @@ import argparse, math
 
 import matplotlib.pyplot as plt
 
-from utils import sims, stepvals
+from utils import stepvals
+from utils.sims import NeedleSim, NeedleAngleSim
 
 def plot_length(args):
     """
@@ -22,7 +23,7 @@ def plot_length(args):
 
     vals = stepvals.get_range(args.length, args.step)
     for length in vals:
-        sim = sims.NeedleSim(length, args.gap)
+        sim = NeedleSim(length, args.gap)
         expprob = float(sim.run_trials(args.trials))/args.trials
 
         if args.verbose:
@@ -46,7 +47,7 @@ def plot_gap(args):
 
     vals = stepvals.get_range(args.gap, args.step)
     for gap in vals:
-        sim = sims.NeedleSim(args.length, gap)
+        sim = NeedleSim(args.length, gap)
         expprob = float(sim.run_trials(args.trials))/args.trials
 
         if args.verbose:
@@ -70,7 +71,7 @@ def plot_angle(args):
     vals = stepvals.get_range(math.pi, 0.001)[:-1] # we don't want math.pi
     probs = []
     for angle in vals:
-        sim = sims.NeedleAngleSim(args.length, args.gap, angle)
+        sim = NeedleAngleSim(args.length, args.gap, angle)
         probs.append(sim.predict_prob())
 
     plt.plot(
@@ -82,7 +83,7 @@ def plot_angle(args):
 
     vals = stepvals.get_range(math.pi, args.step)[:-1]
     for angle in vals:
-        sim = sims.NeedleAngleSim(args.length, args.gap, angle)
+        sim = NeedleAngleSim(args.length, args.gap, angle)
         expprob = float(sim.run_trials(args.trials))/args.trials
 
         if args.verbose:

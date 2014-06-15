@@ -8,7 +8,7 @@ Experiment and prints out the number of hits.
 
 import argparse
 
-from utils import sims
+from utils.sims import CoinSim
 
 def get_args():
     parser = argparse.ArgumentParser(
@@ -51,7 +51,7 @@ def get_args():
 
 def main():
     args = get_args()
-    sim = sims.CoinSim(args.radius, args.gap_x, args.gap_y)
+    sim = CoinSim(args.radius, args.gap_x, args.gap_y)
     print "%d/%d" % (sim.run_trials(args.trials), args.trials)
 
 main()
