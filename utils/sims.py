@@ -7,7 +7,7 @@ is runned from the command line.
 import random
 import math
 import unittest
-from pyhull.convex_hull import ConvexHull
+from pyhull import convex_hull
 
 TRIALS = 10000 # number of trials to run per test case
 NUM_TESTS = 10 # number of tests to run per test case
@@ -125,10 +125,10 @@ class TestCoinSim(unittest.TestCase):
         """
 
         for _ in range(NUM_TESTS):
-            radius = 1.0 - non_zero_rand()
+            radius = 1.0 - _non_zero_rand()
             diameter = radius*2
-            more_gap = diameter + non_zero_rand()
-            less_gap = diameter - non_zero_rand()*diameter
+            more_gap = diameter + _non_zero_rand()
+            less_gap = diameter - _non_zero_rand()*diameter
 
             pairs = [
                 (diameter, more_gap),
@@ -155,9 +155,9 @@ class TestCoinSim(unittest.TestCase):
         """
 
         for _ in range(NUM_TESTS):
-            gap_x = non_zero_rand()
-            gap_y = non_zero_rand()
-            radius = non_zero_rand()/2
+            gap_x = _non_zero_rand()
+            gap_y = _non_zero_rand()
+            radius = _non_zero_rand()/2
 
             sim = sims.CoinSim(radius, gap_x, gap_y)
 
@@ -343,12 +343,12 @@ class TestNeedleAngleSim(unittest.TestCase):
             # however in this case 0 radians would mean it
             # is impossible for the needle to have a non-zero opposite
             # and hence will not always hit.
-            angle = non_zero_rand()*math.pi
+            angle = _non_zero_rand()*math.pi
 
-            opp = non_zero_rand()
+            opp = _non_zero_rand()
             length = opp/math.sin(angle)
 
-            less_gap = opp - non_zero_rand()*opp
+            less_gap = opp - _non_zero_rand()*opp
 
             sim = sims.NeedleAngleSim(length, less_gap, angle)
             hits = sim.run_trials(TRIALS)
@@ -365,8 +365,8 @@ class TestNeedleAngleSim(unittest.TestCase):
 
         for _ in range(NUM_TESTS):
             angle = random.uniform(0.0, math.pi)
-            length = non_zero_rand()
-            gap = non_zero_rand()
+            length = _non_zero_rand()
+            gap = _non_zero_rand()
 
             sim = sims.NeedleAngleSim(length, gap, angle)
 
@@ -487,7 +487,7 @@ class CoinPhysicsSim(object):
             # if it is, the coin does not balance.
             # otherwise, the coin does.
             points = pivots + [center]
-            hull = ConvexHull(points)
+            hull = convex_hull.ConvexHull(points)
             found = True
             for line in hull.vertices:
                 # the center is always the last point
@@ -564,9 +564,9 @@ class TestCoinPhysicsSim(unittest.TestCase):
         """
 
         for _ in range(NUM_TESTS):
-            gap_x = non_zero_rand()
-            gap_y = non_zero_rand()
-            radius = non_zero_rand()/2
+            gap_x = _non_zero_rand()
+            gap_y = _non_zero_rand()
+            radius = _non_zero_rand()/2
 
             sim = sims.CoinPhysicsSim(radius, gap_x, gap_y)
 
