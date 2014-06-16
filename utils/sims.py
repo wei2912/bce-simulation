@@ -213,6 +213,30 @@ class NeedleSim(object):
 
         return hits
 
+    def predict_prob(self):
+        """
+        For the variables passed into the simulation,
+        predict the probability that the needle will hit
+        one of the two parallel lines.
+        """
+
+        if self.length <= self.gap:
+            return (2*self.length)/(self.gap*math.pi)
+        else:
+            needle_ratio = self.length/self.gap
+            return (2/math.pi)*(needle_ratio - (needle_ratio**2 - 1)**0.5 + math.acos(needle_ratio))
+
+    def predict_hits(self, trials):
+        """
+        For the variables passed into the simulation,
+        predict the number of times the needle will hit
+        one of the two parallel lines.
+
+        Note that this function will return a float
+        and not an integer.
+        """
+        return self.predict_prob()*trials
+
 class TestNeedleSim(unittest.TestCase):
     """
     Test suite for NeedleSim.
