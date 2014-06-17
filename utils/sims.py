@@ -6,8 +6,9 @@ is runned from the command line.
 
 import random
 import math
-import unittest
 import chull
+
+import unittest
 
 TRIALS = 10000 # number of trials to run per test case
 NUM_TESTS = 10 # number of tests to run per test case
