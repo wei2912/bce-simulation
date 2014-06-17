@@ -1,2 +1,1 @@
-sudo apt-get install -y pylint || exit 1
-sudo pip install pyhull matplotlib || exit 1
+sudo apt-get install -y pylint python-numpy python-scipy python-matplotlib || exit 1
