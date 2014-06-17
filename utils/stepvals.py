@@ -5,7 +5,6 @@ Refer to function `get_range` for more details.
 """
 
 import math
-import unittest
 
 def get_range(val, step):
     """
@@ -30,6 +29,5 @@ def get_range(val, step):
     return stepvals
 
 if __name__ == '__main__':
-    unittest.main()
     import doctest
     doctest.testmod()
