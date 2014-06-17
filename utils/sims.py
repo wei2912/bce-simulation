@@ -6,9 +6,10 @@ is runned from the command line.
 
 import random
 import math
-import chull
 
-sqrt_2 = 2**0.5
+from utils import chull
+
+SQRT_2 = 2**0.5
 
 class InvalidInput(Exception):
     """
@@ -117,7 +118,8 @@ class NeedleSim(object):
             return (2*self.length)/(self.gap*math.pi)
         else:
             needle_ratio = self.length/self.gap
-            return (2/math.pi)*(needle_ratio - (needle_ratio**2 - 1)**0.5 + math.acos(self.gap/self.length))
+            return (2/math.pi)*(needle_ratio - (needle_ratio**2 - 1)**0.5
+                + math.acos(self.gap/self.length))
 
     def predict_hits(self, trials):
         """
@@ -305,7 +307,7 @@ class CoinPhysicsSim(object):
         radius_ratio = (self.radius/self.gap)**2
         if self.gap >= self.radius*2:
             return math.pi * radius_ratio
-        elif self.gap > self.radius*sqrt_2:
+        elif self.gap > self.radius*SQRT_2:
             return ((4*radius_ratio - 1)**0.5
                 + (radius_ratio * (math.pi -
                 4*math.acos(self.gap/(2*self.radius)))))

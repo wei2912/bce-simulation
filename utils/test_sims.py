@@ -1,14 +1,20 @@
+"""
+This module contains test suites for simulations
+in `sims.py` that can be runned when the module
+is runned from the command line.
+"""
+
 import unittest
 
 import random
 import math
-from sims import InvalidInput, CoinSim, NeedleSim, NeedleAngleSim, CoinPhysicsSim
+from utils.sims import InvalidInput, CoinSim, NeedleSim, NeedleAngleSim, CoinPhysicsSim
 
 TRIALS = 10000 # number of trials to run per test case
 NUM_TESTS = 10 # number of tests to run per test case
 MAX_STAT = 3.841 # p < 0.05 for a df of 1
 
-sqrt_2 = 2**0.5
+SQRT_2 = 2**0.5
 
 def _non_zero_rand():
     """
@@ -294,7 +300,7 @@ class TestCoinPhysicsSim(unittest.TestCase):
 
         for _ in range(NUM_TESTS):
             radius = _non_zero_rand()/2
-            less_gap = _non_zero_rand() * (radius*sqrt_2)
+            less_gap = _non_zero_rand() * (radius*SQRT_2)
 
             sim = CoinPhysicsSim(radius, less_gap)
             hits = sim.run_trials(TRIALS)
