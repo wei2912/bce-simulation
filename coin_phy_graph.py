@@ -26,7 +26,7 @@ def plot_width(args):
     vals = stepvals.get_range(args.gap, 0.001)
     probs = []
     for gap in vals:
-        sim = CoinPhysicsSim(args.radius, gap, gap)
+        sim = CoinPhysicsSim(args.radius, gap)
         probs.append(sim.predict_prob())
 
     plt.plot(
@@ -38,7 +38,7 @@ def plot_width(args):
 
     vals = stepvals.get_range(args.gap, args.step)
     for gap in vals:
-        sim = CoinPhysicsSim(args.radius, gap, gap)
+        sim = CoinPhysicsSim(args.radius, gap)
         expprob = float(sim.run_trials(args.trials))/args.trials
 
         if args.verbose:
@@ -63,7 +63,7 @@ def plot_radius(args):
     vals = stepvals.get_range(args.radius, 0.001)
     probs = []
     for radius in vals:
-        sim = CoinPhysicsSim(radius, args.gap, args.gap)
+        sim = CoinPhysicsSim(radius, args.gap)
         probs.append(sim.predict_prob())
 
     plt.plot(
@@ -75,7 +75,7 @@ def plot_radius(args):
 
     vals = stepvals.get_range(args.radius, args.step)
     for radius in vals:
-        sim = CoinPhysicsSim(radius, args.gap, args.gap)
+        sim = CoinPhysicsSim(radius, args.gap)
         expprob = float(sim.run_trials(args.trials))/args.trials
 
         if args.verbose:

@@ -13,6 +13,8 @@ TRIALS = 10000 # number of trials to run per test case
 NUM_TESTS = 10 # number of tests to run per test case
 MAX_STAT = 3.841 # p < 0.05 for a df of 1
 
+sqrt_2 = 2**0.5
+
 def _non_zero_rand():
     """
     Returns a random float x where
@@ -30,17 +32,14 @@ class CoinSim(object):
     """
     Simulation of Buffon's Coin Experiment.
     """
-    def __init__(self, radius, gap_x, gap_y):
+    def __init__(self, radius, gap):
         if radius <= 0:
             raise InvalidInput("radius must not be <= 0")
-        if gap_x <= 0:
-            raise InvalidInput("gap_x must not be <= 0")
-        if gap_y <= 0:
-            raise InvalidInput("gap_y must not be <= 0")
+        if gap <= 0:
+            raise InvalidInput("gap must not be <= 0")
 
         self.radius = float(radius)
-        self.gap_x = float(gap_x)
-        self.gap_y = float(gap_y)
+        self.gap = float(gap)
 
     def run_trials(self, trials):
         """
@@ -52,11 +51,11 @@ class CoinSim(object):
         hits = 0
 
         for _ in xrange(trials):
-            x_pos = random.uniform(0.0, self.gap_x)
-            y_pos = random.uniform(0.0, self.gap_y)
+            x_pos = random.uniform(0.0, self.gap)
+            y_pos = random.uniform(0.0, self.gap)
 
-            if (self.gap_x - x_pos < self.radius or x_pos < self.radius or
-                self.gap_y - y_pos < self.radius or y_pos < self.radius):
+            if (self.gap - x_pos < self.radius or x_pos < self.radius or
+                self.gap - y_pos < self.radius or y_pos < self.radius):
                 hits += 1
 
         return hits
@@ -68,14 +67,11 @@ class CoinSim(object):
         the grid.
         """
         diameter = self.radius*2
-
-        # if it always touches
-        # cap the probability at 1.0
-        if diameter >= self.gap_x or diameter >= self.gap_y:
+        if diameter >= self.gap:
             return 1.0
 
-        area = self.gap_x * self.gap_y
-        return ((area - (self.gap_x-diameter) * (self.gap_y-diameter)) /
+        area = self.gap**2
+        return ((area - (self.gap-diameter) * (self.gap-diameter)) /
             area)
 
     def predict_hits(self, trials):
@@ -103,15 +99,13 @@ class TestCoinSim(unittest.TestCase):
         the simulation should raise an exception.
         """
 
-        self.assertRaises(InvalidInput, CoinSim, 0, 1, 1)
-        self.assertRaises(InvalidInput, CoinSim, 1, 0, 1)
-        self.assertRaises(InvalidInput, CoinSim, 1, 1, 0)
+        self.assertRaises(InvalidInput, CoinSim, 0, 1)
+        self.assertRaises(InvalidInput, CoinSim, 1, 0)
 
-        self.assertRaises(InvalidInput, CoinSim, -1, 1, 1)
-        self.assertRaises(InvalidInput, CoinSim, 1, -1, 1)
-        self.assertRaises(InvalidInput, CoinSim, 1, 1, -1)
+        self.assertRaises(InvalidInput, CoinSim, -1, 1)
+        self.assertRaises(InvalidInput, CoinSim, 1, -1)
 
-        sim = CoinSim(1, 1, 1)
+        sim = CoinSim(1, 1)
         self.assertRaises(InvalidInput, sim.run_trials, 0)
         self.assertRaises(InvalidInput, sim.run_trials, -1)
 
@@ -119,32 +113,19 @@ class TestCoinSim(unittest.TestCase):
         """
         test_always_hit
         ===
-        If the diameter of the coin >= gap_x or
-        the diameter of the coin >= gap_y,
+        If the diameter of the coin >= gap,
         the coin should always hit the grid.
         """
 
         for _ in range(NUM_TESTS):
             radius = 1.0 - _non_zero_rand()
             diameter = radius*2
-            more_gap = diameter + _non_zero_rand()
             less_gap = diameter - _non_zero_rand()*diameter
 
-            pairs = [
-                (diameter, more_gap),
-                (more_gap, diameter),
-                (diameter, less_gap),
-                (less_gap, diameter),
-                (less_gap, more_gap),
-                (more_gap, less_gap),
-                (less_gap, less_gap)
-            ]
-
-            for pair in pairs:
-                sim = CoinSim(radius, pair[0], pair[1])
-                hits = sim.run_trials(TRIALS)
-                self.assertEquals(hits, TRIALS, "coin does not always hit")
-                self.assertEquals(sim.predict_prob(), 1.0, "predicted probability != 1.0")
+            sim = CoinSim(radius, less_gap)
+            hits = sim.run_trials(TRIALS)
+            self.assertEquals(hits, TRIALS, "coin does not always hit")
+            self.assertEquals(sim.predict_prob(), 1.0, "predicted probability != 1.0")
 
     def test_match_theoretical(self):
         """
@@ -155,11 +136,10 @@ class TestCoinSim(unittest.TestCase):
         """
 
         for _ in range(NUM_TESTS):
-            gap_x = _non_zero_rand()
-            gap_y = _non_zero_rand()
+            gap = _non_zero_rand()
             radius = _non_zero_rand()/2
 
-            sim = CoinSim(radius, gap_x, gap_y)
+            sim = CoinSim(radius, gap)
 
             hits = sim.run_trials(TRIALS)
             pred_hits = sim.predict_hits(TRIALS)
@@ -420,17 +400,14 @@ class CoinPhysicsSim(object):
     The program checks if the coin will balance in addition
     to touching one of the lines of the grid.
     """
-    def __init__(self, radius, gap_x, gap_y):
+    def __init__(self, radius, gap):
         if radius <= 0:
             raise InvalidInput("radius must not be <= 0")
-        if gap_x <= 0:
-            raise InvalidInput("gap_x must not be <= 0")
-        if gap_y <= 0:
-            raise InvalidInput("gap_y must not be <= 0")
+        if gap <= 0:
+            raise InvalidInput("gap must not be <= 0")
 
         self.radius = float(radius)
-        self.gap_x = float(gap_x)
-        self.gap_y = float(gap_y)
+        self.gap = float(gap)
 
     def __transform_center(self, x_pos, y_pos):
         """
@@ -441,16 +418,15 @@ class CoinPhysicsSim(object):
         center of the circle.
         """
 
-        x_split = self.gap_x/2
-        y_split = self.gap_y/2
+        split = self.gap/2
 
         center_x = x_pos
-        if x_pos > x_split:
-            center_x = self.gap_x-x_pos
+        if x_pos > split:
+            center_x = self.gap-x_pos
 
         center_y = y_pos
-        if y_pos > y_split:
-            center_y = self.gap_y-y_pos
+        if y_pos > split:
+            center_y = self.gap-y_pos
 
         return (center_x, center_y)
 
@@ -485,8 +461,8 @@ class CoinPhysicsSim(object):
         hits = 0
 
         for _ in xrange(trials):
-            x_pos = random.uniform(0.0, self.gap_x)
-            y_pos = random.uniform(0.0, self.gap_y)
+            x_pos = random.uniform(0.0, self.gap)
+            y_pos = random.uniform(0.0, self.gap)
 
             center = self.__transform_center(x_pos, y_pos)
             center_x = center[0]
@@ -527,12 +503,15 @@ class CoinPhysicsSim(object):
         at least one of the two parallel lines.
         """
 
-        # area of coin / area of rectangle
-        area_coin = math.pi * self.radius**2
-        area = self.gap_x * self.gap_y
-        if area_coin > area:
+        radius_ratio = (self.radius/self.gap)**2
+        if self.gap >= self.radius*2:
+            return math.pi * radius_ratio
+        elif self.gap > self.radius*sqrt_2:
+            return ((4*radius_ratio - 1)**0.5
+                + (radius_ratio * (math.pi -
+                4*math.acos(self.gap/(2*self.radius)))))
+        else:
             return 1.0
-        return area_coin / area
 
     def predict_hits(self, trials):
         """
@@ -559,15 +538,13 @@ class TestCoinPhysicsSim(unittest.TestCase):
         the simulation should raise an exception.
         """
 
-        self.assertRaises(InvalidInput, CoinPhysicsSim, 0, 1, 1)
-        self.assertRaises(InvalidInput, CoinPhysicsSim, 1, 0, 1)
-        self.assertRaises(InvalidInput, CoinPhysicsSim, 1, 1, 0)
+        self.assertRaises(InvalidInput, CoinPhysicsSim, 0, 1)
+        self.assertRaises(InvalidInput, CoinPhysicsSim, 1, 0)
 
-        self.assertRaises(InvalidInput, CoinPhysicsSim, -1, 1, 1)
-        self.assertRaises(InvalidInput, CoinPhysicsSim, 1, -1, 1)
-        self.assertRaises(InvalidInput, CoinPhysicsSim, 1, 1, -1)
+        self.assertRaises(InvalidInput, CoinPhysicsSim, -1, 1)
+        self.assertRaises(InvalidInput, CoinPhysicsSim, 1, -1)
 
-        sim = CoinPhysicsSim(1, 1, 1)
+        sim = CoinPhysicsSim(1, 1)
         self.assertRaises(InvalidInput, sim.run_trials, 0)
         self.assertRaises(InvalidInput, sim.run_trials, -1)
 
@@ -580,11 +557,10 @@ class TestCoinPhysicsSim(unittest.TestCase):
         """
 
         for _ in range(NUM_TESTS):
-            gap_x = _non_zero_rand()
-            gap_y = _non_zero_rand()
+            gap = _non_zero_rand()
             radius = _non_zero_rand()/2
 
-            sim = CoinPhysicsSim(radius, gap_x, gap_y)
+            sim = CoinPhysicsSim(radius, gap)
 
             hits = sim.run_trials(TRIALS)
             pred_hits = sim.predict_hits(TRIALS)

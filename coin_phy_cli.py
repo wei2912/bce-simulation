@@ -25,19 +25,11 @@ def get_args():
     )
 
     parser.add_argument(
-        '-gx',
-        '--gap_x',
+        '-g',
+        '--gap',
         type=float,
         required=True,
-        help='width of rectangular gap'
-    )
-
-    parser.add_argument(
-        '-gy',
-        '--gap_y',
-        type=float,
-        required=True,
-        help='length of rectangular gap'
+        help='width of square gap'
     )
 
     parser.add_argument(
@@ -52,7 +44,7 @@ def get_args():
 
 def main():
     args = get_args()
-    sim = CoinPhysicsSim(args.radius, args.gap_x, args.gap_y)
+    sim = CoinPhysicsSim(args.radius, args.gap)
     print "%d/%d" % (sim.run_trials(args.trials), args.trials)
 
 main()
