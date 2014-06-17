@@ -7,7 +7,7 @@ is runned from the command line.
 import random
 import math
 import unittest
-from pyhull.convex_hull import ConvexHull
+import chull
 
 TRIALS = 10000 # number of trials to run per test case
 NUM_TESTS = 10 # number of tests to run per test case
@@ -511,19 +511,11 @@ class CoinPhysicsSim(object):
             # if it is, the coin does not balance.
             # otherwise, the coin does.
             points = pivots + [center]
-            hull = ConvexHull(points)
-            found = True
-            for line in hull.vertices:
-                # the center is always the last point
-                # if the last point is found in the vertice
-                # it's not a hit.
-                if len(points)-1 in line:
-                    found = False
-                    break
+            hull_points = chull.convex_hull(points)
 
-            # if the center isn't part of the vertices
-            # it's a hit
-            if found:
+            # if center is in the convex hull
+            # whee we have a hit
+            if not center in hull_points:
                 hits += 1
 
         return hits
