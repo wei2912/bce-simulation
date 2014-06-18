@@ -6,7 +6,7 @@ before_install:
 - sudo apt-get update -qq
 install: scripts/install.sh
 script:
-- npm test
+- npm test || exit 1
 - pylint utils *py
 - exit 0
 
