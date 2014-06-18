@@ -87,7 +87,7 @@ class TestCoinSim:
         for radius in stepvals.get_range(0.5, NUM_TESTS):
             pairs += [(radius, 1.0)]
         for gap in stepvals.get_range(1.0, NUM_TESTS):
-            pairs += [(0.05, gap)]
+            pairs += [(0.25, gap)]
 
         for pair in pairs:
             sim = CoinSim(pair[0], pair[1])
