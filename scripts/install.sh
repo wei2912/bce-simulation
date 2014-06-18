@@ -1,3 +1,3 @@
 sudo apt-get install -y -qq pylint python-matplotlib
-sudo pip install -q pytest pytest-bench
+pip install -r requirements.txt
 exit 0
