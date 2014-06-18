@@ -9,9 +9,10 @@ import pytest
 import random
 import math
 from utils.sims import InvalidInput, CoinSim, NeedleSim, NeedleAngleSim, CoinPhysicsSim
+from utils import stepvals
 
 TRIALS = 10000 # number of trials to run per test case
-NUM_TESTS = 10 # number of tests to run per test case
+NUM_TESTS = 5 # number of tests to run per test case
 MAX_STAT = 3.841 # p < 0.05 for a df of 1
 
 SQRT_2 = 2**0.5
@@ -39,15 +40,19 @@ class TestCoinSim:
 
         with pytest.raises(InvalidInput):
             CoinSim(0, 1)
+        with pytest.raises(InvalidInput):
             CoinSim(1, 0)
 
+        with pytest.raises(InvalidInput):
             CoinSim(-1, 1)
+        with pytest.raises(InvalidInput):
             CoinSim(1, -1)
 
         sim = CoinSim(1, 1)
         with pytest.raises(InvalidInput):
             sim.run_trials(0)
-            sim.run_trials(1)
+        with pytest.raises(InvalidInput):
+            sim.run_trials(-1)
 
     def test_always_hit(self):
         """
@@ -75,11 +80,14 @@ class TestCoinSim:
         the p-value should be < 0.05.
         """
 
-        for _ in range(NUM_TESTS):
-            gap = _non_zero_rand()
-            radius = _non_zero_rand()/2
+        pairs = []
+        for radius in stepvals.get_range(0.5, TRIALS):
+            pairs += [(radius, 1.0)]
+        for gap in stepvals.get_range(1.0, TRIALS):
+            pairs += [(0.05, gap)]
 
-            sim = CoinSim(radius, gap)
+        for pair in pairs:
+            sim = CoinSim(pair[0], pair[1])
 
             hits = sim.run_trials(TRIALS)
             pred_hits = sim.predict_hits(TRIALS)
@@ -112,15 +120,19 @@ class TestNeedleSim:
 
         with pytest.raises(InvalidInput):
             NeedleSim(0, 1)
+        with pytest.raises(InvalidInput):
             NeedleSim(1, 0)
 
+        with pytest.raises(InvalidInput):
             NeedleSim(-1, 1)
+        with pytest.raises(InvalidInput):
             NeedleSim(1, -1)
 
         sim = NeedleSim(1, 1)
         with pytest.raises(InvalidInput):
             sim.run_trials(0)
-            sim.run_trials(1)
+        with pytest.raises(InvalidInput):
+            sim.run_trials(-1)
 
     def test_match_theoretical(self):
         """
@@ -130,11 +142,14 @@ class TestNeedleSim:
         the p-value should be < 0.05.
         """
 
-        for _ in range(NUM_TESTS):
-            gap = _non_zero_rand()
-            length = _non_zero_rand()
+        pairs = []
+        for length in stepvals.get_range(1.0, TRIALS):
+            pairs += [(length, 0.5)]
+        for gap in stepvals.get_range(1.0, TRIALS):
+            pairs += [(0.5, gap)]
 
-            sim = NeedleSim(length, gap)
+        for pair in pairs:
+            sim = NeedleSim(pair[0], pair[1])
 
             hits = sim.run_trials(TRIALS)
             pred_hits = sim.predict_hits(TRIALS)
@@ -167,18 +182,25 @@ class TestNeedleAngleSim:
 
         with pytest.raises(InvalidInput):
             NeedleAngleSim(0, 1, 0.1)
+        with pytest.raises(InvalidInput):
             NeedleAngleSim(1, 0, 0.1)
 
+        with pytest.raises(InvalidInput):
             NeedleAngleSim(-1, 1, 0.1)
+        with pytest.raises(InvalidInput):
             NeedleAngleSim(1, -1, 0.1)
 
+        with pytest.raises(InvalidInput):
             NeedleAngleSim(1, 1, math.pi)
+        with pytest.raises(InvalidInput):
             NeedleAngleSim(1, 1, 3.15)
+        with pytest.raises(InvalidInput):
             NeedleAngleSim(1, 1, -0.1)
 
         sim = NeedleAngleSim(1, 1, 0.1)
         with pytest.raises(InvalidInput):
             sim.run_trials(0)
+        with pytest.raises(InvalidInput):
             sim.run_trials(-1)
 
     def test_always_hit(self):
@@ -216,12 +238,16 @@ class TestNeedleAngleSim:
         the p-value should be < 0.05.
         """
 
-        for _ in range(NUM_TESTS):
-            angle = random.uniform(0.0, math.pi)
-            length = _non_zero_rand()
-            gap = _non_zero_rand()
+        angle = random.uniform(0.0, math.pi)
 
-            sim = NeedleAngleSim(length, gap, angle)
+        pairs = []
+        for length in stepvals.get_range(1.0, TRIALS):
+            pairs += [(length, 0.5)]
+        for gap in stepvals.get_range(1.0, TRIALS):
+            pairs += [(0.5, gap)]
+
+        for pair in pairs:
+            sim = NeedleAngleSim(pair[0], pair[1], angle)
 
             hits = sim.run_trials(TRIALS)
             pred_hits = sim.predict_hits(TRIALS)
@@ -254,15 +280,19 @@ class TestCoinPhysicsSim:
 
         with pytest.raises(InvalidInput):
             CoinPhysicsSim(0, 1)
+        with pytest.raises(InvalidInput):
             CoinPhysicsSim(1, 0)
 
+        with pytest.raises(InvalidInput):
             CoinPhysicsSim(-1, 1)
+        with pytest.raises(InvalidInput):
             CoinPhysicsSim(1, -1)
 
         sim = CoinPhysicsSim(1, 1)
         with pytest.raises(InvalidInput):
             sim.run_trials(0)
-            sim.run_trials(1)
+        with pytest.raises(InvalidInput):
+            sim.run_trials(-1)
 
     def test_always_hit(self):
         """
@@ -291,11 +321,14 @@ class TestCoinPhysicsSim:
         the p-value should be < 0.05.
         """
 
-        for _ in range(NUM_TESTS):
-            gap = _non_zero_rand()
-            radius = _non_zero_rand()/2
+        pairs = []
+        for radius in stepvals.get_range(0.5, TRIALS):
+            pairs += [(radius, 1.0)]
+        for gap in stepvals.get_range(1.0, TRIALS):
+            pairs += [(0.05, gap)]
 
-            sim = CoinPhysicsSim(radius, gap)
+        for pair in pairs:
+            sim = CoinPhysicsSim(pair[0], pair[1])
 
             hits = sim.run_trials(TRIALS)
             pred_hits = sim.predict_hits(TRIALS)

@@ -97,12 +97,12 @@ class NeedleSim(object):
         hits = 0
 
         for _ in xrange(trials):
-            x_pos = random.uniform(0.0, self.gap)
+            y_pos = random.uniform(0.0, self.gap)
 
             angle = random.uniform(0.0, math.pi)
             opp = self.length/2 * math.sin(angle)
 
-            if self.gap - x_pos < opp or x_pos < opp:
+            if self.gap - y_pos < opp or y_pos < opp:
                 hits += 1
 
         return hits
@@ -148,6 +148,9 @@ class NeedleAngleSim(object):
         self.gap = float(gap)
         self.angle = float(angle)
 
+        # since the angle is specified, precompute the opposite
+        self.opp = self.length/2 * math.sin(self.angle)
+
     def run_trials(self, trials):
         """
         Run the simulation a specified number of times.
@@ -155,15 +158,12 @@ class NeedleAngleSim(object):
         if trials <= 0:
             raise InvalidInput("trials must not be <= 0")
 
-        # since the angle is specified, precompute the opposite
-        opp = self.length/2 * math.sin(self.angle)
-
         hits = 0
 
         for _ in xrange(trials):
-            x_pos = random.uniform(0.0, self.gap)
+            y_pos = random.uniform(0.0, self.gap)
 
-            if self.gap - x_pos < opp or x_pos < opp:
+            if self.gap - y_pos < self.opp or y_pos < self.opp:
                 hits += 1
 
         return hits
@@ -174,14 +174,11 @@ class NeedleAngleSim(object):
         predict the probability that the needle will hit
         at least one of the two parallel lines.
         """
-        opp = self.length/2 * math.sin(self.angle)
-
-        # if it always touches
-        # cap the probability at 1.0
-        if opp*2 >= self.gap:
+        
+        result = self.opp*2/self.gap
+        if result > 1.0:
             return 1.0
-
-        return opp*2/self.gap
+        return result
 
     def predict_hits(self, trials):
         """
@@ -240,13 +237,15 @@ class CoinPhysicsSim(object):
 
         pivots = []
 
-        if self.radius**2 - center_y**2 > 0: # no imaginary numbers!
-            sqrt = (self.radius**2 - center_y**2)**(0.5)
+        sqval = self.radius**2 - center_y**2
+        if sqval > 0: # no imaginary numbers!
+            sqrt = sqval**(0.5)
             pivots.append((center_x + sqrt, 0))
             pivots.append((center_x - sqrt, 0))
 
-        if self.radius**2 - center_x**2 > 0:
-            sqrt = (self.radius**2 - center_x**2)**(0.5)
+        sqval = self.radius**2 - center_x**2
+        if sqval > 0:
+            sqrt = sqval**(0.5)
             pivots.append((0, center_y + sqrt))
             pivots.append((0, center_y - sqrt))
 
