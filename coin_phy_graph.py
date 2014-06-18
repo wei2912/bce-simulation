@@ -23,7 +23,7 @@ def plot_width(args):
     balances on the grid.
     """
 
-    vals = stepvals.get_range(args.gap, 0.001)
+    vals = stepvals.get_range(args.gap, 1000)
     probs = []
     for gap in vals:
         sim = CoinPhysicsSim(args.radius, gap)
@@ -36,7 +36,7 @@ def plot_width(args):
         linewidth=2.0
     )
 
-    vals = stepvals.get_range(args.gap, args.step)
+    vals = stepvals.get_range(args.gap, args.stepsize)
     for gap in vals:
         sim = CoinPhysicsSim(args.radius, gap)
         expprob = float(sim.run_trials(args.trials))/args.trials
@@ -60,7 +60,7 @@ def plot_radius(args):
     balances on the grid.
     """
 
-    vals = stepvals.get_range(args.radius, 0.001)
+    vals = stepvals.get_range(args.radius, 1000)
     probs = []
     for radius in vals:
         sim = CoinPhysicsSim(radius, args.gap)
@@ -73,7 +73,7 @@ def plot_radius(args):
         linewidth=2.0
     )
 
-    vals = stepvals.get_range(args.radius, args.step)
+    vals = stepvals.get_range(args.radius, args.stepsize)
     for radius in vals:
         sim = CoinPhysicsSim(radius, args.gap)
         expprob = float(sim.run_trials(args.trials))/args.trials
@@ -132,10 +132,10 @@ def get_args():
 
     parser.add_argument(
         '-s',
-        '--step',
+        '--stepsize',
         type=float,
         required=True,
-        help='step to take when increasing radius/gap'
+        help='number of steps to take when increasing radius/gap'
     )
 
     parser.add_argument(

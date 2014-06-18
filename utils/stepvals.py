@@ -6,11 +6,12 @@ Refer to function `get_range` for more details.
 
 import math
 
-def get_range(val, step):
+def get_range(val, size):
     """
-    This function will return a range of values.
+    This function will return a range of values
+    given a step size.
 
-    For a value of 100.0 with a step value of 10.0,
+    For a value of 100.0 with a step size of 10,
     the following range is generated:
 
     [10.0, 20.0, 30.0, ..., 100.0]
@@ -20,10 +21,7 @@ def get_range(val, step):
     append the value onto the range.
     """
 
-    if step >= val:
-        raise Exception("Step value is too large! Must be smaller than value.")
-
-    stepvals = [i*step for i in xrange(int(math.ceil(val/step)))][1:]
+    stepvals = [i*(val/size) for i in xrange(1, size+1)]
     if not stepvals[-1] == val: # if last element isn't the actual value
         stepvals += [val] # add it in
     return stepvals

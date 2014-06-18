@@ -21,7 +21,7 @@ def plot_length(args):
     hits at least one of the two parallel lines.
     """
 
-    vals = stepvals.get_range(args.length, args.step)
+    vals = stepvals.get_range(args.length, args.stepsize)
     for length in vals:
         sim = NeedleSim(length, args.gap)
         expprob = float(sim.run_trials(args.trials))/args.trials
@@ -45,7 +45,7 @@ def plot_gap(args):
     at least one of the lines.
     """
 
-    vals = stepvals.get_range(args.gap, args.step)
+    vals = stepvals.get_range(args.gap, args.stepsize)
     for gap in vals:
         sim = NeedleSim(args.length, gap)
         expprob = float(sim.run_trials(args.trials))/args.trials
@@ -68,7 +68,7 @@ def plot_angle(args):
     at least one of the two parallel lines.
     """
 
-    vals = stepvals.get_range(math.pi, 0.001)[:-1] # we don't want math.pi
+    vals = stepvals.get_range(math.pi, 1000)[:-1] # we don't want math.pi
     probs = []
     for angle in vals:
         sim = NeedleAngleSim(args.length, args.gap, angle)
@@ -81,7 +81,7 @@ def plot_angle(args):
         linewidth=2.0
     )
 
-    vals = stepvals.get_range(math.pi, args.step)[:-1]
+    vals = stepvals.get_range(math.pi, args.stepsize)[:-1]
     for angle in vals:
         sim = NeedleAngleSim(args.length, args.gap, angle)
         expprob = float(sim.run_trials(args.trials))/args.trials
@@ -140,10 +140,10 @@ def get_args():
 
     parser.add_argument(
         '-s',
-        '--step',
+        '--stepsize',
         type=float,
         required=True,
-        help='step to take when increasing radius/gap'
+        help='number of steps to take when increasing radius/gap'
     )
 
     parser.add_argument(

@@ -20,7 +20,7 @@ def plot_width(args):
     and the probability which the coin hits the grid.
     """
 
-    vals = stepvals.get_range(args.gap, 0.001)
+    vals = stepvals.get_range(args.gap, 1000)
     probs = []
     for gap in vals:
         sim = CoinSim(args.radius, gap)
@@ -33,7 +33,7 @@ def plot_width(args):
         linewidth=2.0
     )
 
-    vals = stepvals.get_range(args.gap, args.step)
+    vals = stepvals.get_range(args.gap, args.stepsize)
     for gap in vals:
         sim = CoinSim(args.radius, gap)
         expprob = float(sim.run_trials(args.trials))/args.trials
@@ -55,7 +55,7 @@ def plot_radius(args):
     and the probability which the coin hits the grid.
     """
 
-    vals = stepvals.get_range(args.radius, 0.001)
+    vals = stepvals.get_range(args.radius, 1000)
     probs = []
     for radius in vals:
         sim = CoinSim(radius, args.gap)
@@ -68,7 +68,7 @@ def plot_radius(args):
         linewidth=2.0
     )
 
-    vals = stepvals.get_range(args.radius, args.step)
+    vals = stepvals.get_range(args.radius, args.stepsize)
     for radius in vals:
         sim = CoinSim(radius, args.gap)
         expprob = float(sim.run_trials(args.trials))/args.trials
@@ -125,10 +125,10 @@ def get_args():
 
     parser.add_argument(
         '-s',
-        '--step',
-        type=float,
-        required=True,
-        help='step to take when increasing radius/gap'
+        '--stepsize',
+        type=int,
+        default=100,
+        help='number of steps to take when increasing radius/gap'
     )
 
     parser.add_argument(
