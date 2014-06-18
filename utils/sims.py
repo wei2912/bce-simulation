@@ -54,8 +54,7 @@ class CoinSim(object):
                 (ratio, ratio)
         )
 
-        hits = ne.evaluate('where (x_pos | y_pos, 1, 0)')
-        return np.sum(hits)
+        return ne.evaluate('sum(where (x_pos | y_pos, 1, 0))')
 
     def predict_prob(self):
         """
@@ -102,18 +101,16 @@ class NeedleSim(object):
         if trials <= 0:
             raise InvalidInput("trials must not be <= 0")
 
-        hits = 0
+        ratio = np.random.random(size=trials)
+        ratio = ne.evaluate(
+            '%f/2 * sin(ratio*%f) / %f' %
+                (self.length, math.pi, self.gap)
+        )
 
-        for _ in xrange(trials):
-            y_pos = random.uniform(0.0, self.gap)
-
-            angle = random.uniform(0.0, math.pi)
-            opp = self.length/2 * math.sin(angle)
-
-            if self.gap - y_pos < opp or y_pos < opp:
-                hits += 1
-
-        return hits
+        y_pos = np.random.random(size=trials)
+        return ne.evaluate(
+            'sum(where ((1.0 - y_pos < ratio) | (y_pos < ratio), 1, 0))'
+        )
 
     def predict_prob(self):
         """
@@ -166,15 +163,13 @@ class NeedleAngleSim(object):
         if trials <= 0:
             raise InvalidInput("trials must not be <= 0")
 
-        hits = 0
+        ratio = self.opp/self.gap
+        y_pos = np.random.random(size=trials)
 
-        for _ in xrange(trials):
-            y_pos = random.uniform(0.0, self.gap)
-
-            if self.gap - y_pos < self.opp or y_pos < self.opp:
-                hits += 1
-
-        return hits
+        return ne.evaluate(
+            'sum(where ((1.0 - y_pos < %f) | (y_pos < %f), 1, 0))' %
+                (ratio, ratio)
+        )
 
     def predict_prob(self):
         """

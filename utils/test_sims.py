@@ -5,6 +5,7 @@ is runned from the command line.
 """
 
 import pytest
+from pytest import mark
 
 import random
 import math
@@ -54,6 +55,7 @@ class TestCoinSim:
         with pytest.raises(InvalidInput):
             sim.run_trials(-1)
 
+    @mark.bench('CoinSim.run_trials')
     def test_always_hit(self):
         """
         test_always_hit
@@ -72,6 +74,7 @@ class TestCoinSim:
             assert hits == TRIALS
             assert sim.predict_prob() == 1.0
 
+    @mark.bench('CoinSim.run_trials')
     def test_match_theoretical(self):
         """
         test_match_theoretical
@@ -81,9 +84,9 @@ class TestCoinSim:
         """
 
         pairs = []
-        for radius in stepvals.get_range(0.5, TRIALS):
+        for radius in stepvals.get_range(0.5, NUM_TESTS):
             pairs += [(radius, 1.0)]
-        for gap in stepvals.get_range(1.0, TRIALS):
+        for gap in stepvals.get_range(1.0, NUM_TESTS):
             pairs += [(0.05, gap)]
 
         for pair in pairs:
@@ -134,6 +137,7 @@ class TestNeedleSim:
         with pytest.raises(InvalidInput):
             sim.run_trials(-1)
 
+    @mark.bench('NeedleSim.run_trials')
     def test_match_theoretical(self):
         """
         test_match_theoretical
@@ -143,9 +147,9 @@ class TestNeedleSim:
         """
 
         pairs = []
-        for length in stepvals.get_range(1.0, TRIALS):
+        for length in stepvals.get_range(1.0, NUM_TESTS):
             pairs += [(length, 0.5)]
-        for gap in stepvals.get_range(1.0, TRIALS):
+        for gap in stepvals.get_range(1.0, NUM_TESTS):
             pairs += [(0.5, gap)]
 
         for pair in pairs:
@@ -203,6 +207,7 @@ class TestNeedleAngleSim:
         with pytest.raises(InvalidInput):
             sim.run_trials(-1)
 
+    @mark.bench('NeedleAngleSim.run_trials')
     def test_always_hit(self):
         """
         test_always_hit
@@ -230,6 +235,7 @@ class TestNeedleAngleSim:
             assert hits == TRIALS
             assert sim.predict_prob() == 1.0
 
+    @mark.bench('NeedleAngleSim.run_trials')
     def test_match_theoretical(self):
         """
         test_match_theoretical
@@ -241,9 +247,9 @@ class TestNeedleAngleSim:
         angle = random.uniform(0.0, math.pi)
 
         pairs = []
-        for length in stepvals.get_range(1.0, TRIALS):
+        for length in stepvals.get_range(1.0, NUM_TESTS):
             pairs += [(length, 0.5)]
-        for gap in stepvals.get_range(1.0, TRIALS):
+        for gap in stepvals.get_range(1.0, NUM_TESTS):
             pairs += [(0.5, gap)]
 
         for pair in pairs:
@@ -294,6 +300,7 @@ class TestCoinPhysicsSim:
         with pytest.raises(InvalidInput):
             sim.run_trials(-1)
 
+    @mark.bench('CoinPhysicsSim.run_trials')
     def test_always_hit(self):
         """
         test_always_hit
@@ -313,6 +320,7 @@ class TestCoinPhysicsSim:
             assert hits == TRIALS
             assert sim.predict_prob() == 1.0
 
+    @mark.bench('CoinPhysicsSim.run_trials')
     def test_match_theoretical(self):
         """
         test_match_theoretical
@@ -322,9 +330,9 @@ class TestCoinPhysicsSim:
         """
 
         pairs = []
-        for radius in stepvals.get_range(0.5, TRIALS):
+        for radius in stepvals.get_range(0.5, NUM_TESTS):
             pairs += [(radius, 1.0)]
-        for gap in stepvals.get_range(1.0, TRIALS):
+        for gap in stepvals.get_range(1.0, NUM_TESTS):
             pairs += [(0.05, gap)]
 
         for pair in pairs:
