@@ -7,6 +7,9 @@ is runned from the command line.
 import random
 import math
 
+import numpy as np
+import numexpr as ne
+
 from utils import chull
 
 SQRT_2 = 2**0.5
@@ -37,17 +40,22 @@ class CoinSim(object):
         if trials <= 0:
             raise InvalidInput("trials must not be<= 0")
 
-        hits = 0
+        ratio = self.radius/self.gap
 
-        for _ in xrange(trials):
-            x_pos = random.uniform(0.0, self.gap)
-            y_pos = random.uniform(0.0, self.gap)
+        x_pos = np.random.random(size=trials)
+        y_pos = np.random.random(size=trials)
 
-            if (self.gap - x_pos < self.radius or x_pos < self.radius or
-                self.gap - y_pos < self.radius or y_pos < self.radius):
-                hits += 1
+        x_pos = ne.evaluate(
+            '(1.0 - x_pos < %f) | (x_pos < %f)' %
+                (ratio, ratio)
+        )
+        y_pos = ne.evaluate(
+            '(1.0 - y_pos < %f) | (y_pos < %f)' %
+                (ratio, ratio)
+        )
 
-        return hits
+        hits = ne.evaluate('where (x_pos | y_pos, 1, 0)')
+        return np.sum(hits)
 
     def predict_prob(self):
         """
@@ -174,7 +182,7 @@ class NeedleAngleSim(object):
         predict the probability that the needle will hit
         at least one of the two parallel lines.
         """
-        
+
         result = self.opp*2/self.gap
         if result > 1.0:
             return 1.0
