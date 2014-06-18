@@ -27,7 +27,3 @@ def get_range(val, step):
     if not stepvals[-1] == val: # if last element isn't the actual value
         stepvals += [val] # add it in
     return stepvals
-
-if __name__ == '__main__':
-    import doctest
-    doctest.testmod()

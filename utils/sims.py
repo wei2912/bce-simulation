@@ -324,7 +324,3 @@ class CoinPhysicsSim(object):
         and not an integer.
         """
         return self.predict_prob()*trials
-
-if __name__ == '__main__':
-    import doctest
-    doctest.testmod()

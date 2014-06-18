@@ -4,8 +4,7 @@ python:
 
 before_install:
 - sudo apt-get update -qq
-install:
-- sudo apt-get install -y pylint python-numpy python-scipy python-matplotlib || exit 1
+install: scripts/install.sh
 script:
 - npm test
 - pylint utils *py

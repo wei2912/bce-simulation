@@ -4,7 +4,7 @@ in `sims.py` that can be runned when the module
 is runned from the command line.
 """
 
-import unittest
+import pytest
 
 import random
 import math
@@ -23,7 +23,7 @@ def _non_zero_rand():
     """
     return 1.0 - random.random()
 
-class TestCoinSim(unittest.TestCase):
+class TestCoinSim:
     """
     Test suite for CoinSim.
     """
@@ -37,15 +37,17 @@ class TestCoinSim(unittest.TestCase):
         the simulation should raise an exception.
         """
 
-        self.assertRaises(InvalidInput, CoinSim, 0, 1)
-        self.assertRaises(InvalidInput, CoinSim, 1, 0)
+        with pytest.raises(InvalidInput):
+            CoinSim(0, 1)
+            CoinSim(1, 0)
 
-        self.assertRaises(InvalidInput, CoinSim, -1, 1)
-        self.assertRaises(InvalidInput, CoinSim, 1, -1)
+            CoinSim(-1, 1)
+            CoinSim(1, -1)
 
         sim = CoinSim(1, 1)
-        self.assertRaises(InvalidInput, sim.run_trials, 0)
-        self.assertRaises(InvalidInput, sim.run_trials, -1)
+        with pytest.raises(InvalidInput):
+            sim.run_trials(0)
+            sim.run_trials(1)
 
     def test_always_hit(self):
         """
@@ -62,18 +64,8 @@ class TestCoinSim(unittest.TestCase):
 
             sim = CoinSim(radius, less_gap)
             hits = sim.run_trials(TRIALS)
-            self.assertEquals(
-            	hits,
-            	TRIALS,
-            	"coin does not always hit (radius=%f, gap=%f)"
-            		% (radius, less_gap)
-            )
-            self.assertEquals(
-            	sim.predict_prob(),
-            	1.0,
-            	"predicted probability != 1.0 (radius=%f, gap=%f)"
-            		% (radius, less_gap)
-            )
+            assert hits == TRIALS
+            assert sim.predict_prob() == 1.0
 
     def test_match_theoretical(self):
         """
@@ -102,13 +94,9 @@ class TestCoinSim(unittest.TestCase):
                 (pred_hits-hits)**2/(TRIALS-pred_hits)
             ]
             chi2 = sum(stats)
-            self.assertTrue(
-                chi2 < MAX_STAT,
-                "chi-square = %f >= %f (radius=%f, gap=%f)"
-                	% (chi2, MAX_STAT, radius, gap)
-            )
+            assert chi2 < MAX_STAT
 
-class TestNeedleSim(unittest.TestCase):
+class TestNeedleSim:
     """
     Test suite for NeedleSim.
     """
@@ -122,15 +110,17 @@ class TestNeedleSim(unittest.TestCase):
         the simulation should raise an exception.
         """
 
-        self.assertRaises(InvalidInput, NeedleSim, 0, 1)
-        self.assertRaises(InvalidInput, NeedleSim, 1, 0)
+        with pytest.raises(InvalidInput):
+            NeedleSim(0, 1)
+            NeedleSim(1, 0)
 
-        self.assertRaises(InvalidInput, NeedleSim, -1, 1)
-        self.assertRaises(InvalidInput, NeedleSim, 1, -1)
+            NeedleSim(-1, 1)
+            NeedleSim(1, -1)
 
         sim = NeedleSim(1, 1)
-        self.assertRaises(InvalidInput, sim.run_trials, 0)
-        self.assertRaises(InvalidInput, sim.run_trials, -1)
+        with pytest.raises(InvalidInput):
+            sim.run_trials(0)
+            sim.run_trials(1)
 
     def test_match_theoretical(self):
         """
@@ -159,13 +149,9 @@ class TestNeedleSim(unittest.TestCase):
                 (pred_hits-hits)**2/(TRIALS-pred_hits)
             ]
             chi2 = sum(stats)
-            self.assertTrue(
-                chi2 < MAX_STAT,
-                "chi-square = %f >= %f (length=%f, gap=%f)"
-                    % (chi2, MAX_STAT, length, gap)
-            )
+            assert chi2 < MAX_STAT
 
-class TestNeedleAngleSim(unittest.TestCase):
+class TestNeedleAngleSim:
     """
     Test suite for NeedleAngleSim.
     """
@@ -179,19 +165,21 @@ class TestNeedleAngleSim(unittest.TestCase):
         the simulation should raise an exception.
         """
 
-        self.assertRaises(InvalidInput, NeedleAngleSim, 0, 1, 0.1)
-        self.assertRaises(InvalidInput, NeedleAngleSim, 1, 0, 0.1)
+        with pytest.raises(InvalidInput):
+            NeedleAngleSim(0, 1, 0.1)
+            NeedleAngleSim(1, 0, 0.1)
 
-        self.assertRaises(InvalidInput, NeedleAngleSim, -1, 1, 0.1)
-        self.assertRaises(InvalidInput, NeedleAngleSim, 1, -1, 0.1)
+            NeedleAngleSim(-1, 1, 0.1)
+            NeedleAngleSim(1, -1, 0.1)
 
-        self.assertRaises(InvalidInput, NeedleAngleSim, 1, 1, math.pi)
-        self.assertRaises(InvalidInput, NeedleAngleSim, 1, 1, 3.15)
-        self.assertRaises(InvalidInput, NeedleAngleSim, 1, 1, -0.1)
+            NeedleAngleSim(1, 1, math.pi)
+            NeedleAngleSim(1, 1, 3.15)
+            NeedleAngleSim(1, 1, -0.1)
 
         sim = NeedleAngleSim(1, 1, 0.1)
-        self.assertRaises(InvalidInput, sim.run_trials, 0)
-        self.assertRaises(InvalidInput, sim.run_trials, -1)
+        with pytest.raises(InvalidInput):
+            sim.run_trials(0)
+            sim.run_trials(-1)
 
     def test_always_hit(self):
         """
@@ -217,18 +205,8 @@ class TestNeedleAngleSim(unittest.TestCase):
 
             sim = NeedleAngleSim(length, less_gap, angle)
             hits = sim.run_trials(TRIALS)
-            self.assertEquals(
-                hits,
-                TRIALS,
-                "needle does not always hit (length=%f, gap=%f, angle=%f)"
-                    % (length, less_gap, angle)
-            )
-            self.assertEquals(
-                sim.predict_prob(),
-                1.0,
-                "predicted probability != 1.0 (length=%f, gap=%f, angle=%f)"
-                    % (length, less_gap, angle)
-            )
+            assert hits == TRIALS
+            assert sim.predict_prob() == 1.0
 
     def test_match_theoretical(self):
         """
@@ -258,13 +236,9 @@ class TestNeedleAngleSim(unittest.TestCase):
                 (pred_hits-hits)**2/(TRIALS-pred_hits)
             ]
             chi2 = sum(stats)
-            self.assertTrue(
-                chi2 < MAX_STAT,
-                "chi-square = %f >= %f (length=%f, gap=%f, angle=%f)"
-                    % (chi2, MAX_STAT, length, gap, angle)
-            )
+            assert chi2 < MAX_STAT
 
-class TestCoinPhysicsSim(unittest.TestCase):
+class TestCoinPhysicsSim:
     """
     Test suite for CoinPhysicsSim.
     """
@@ -278,15 +252,17 @@ class TestCoinPhysicsSim(unittest.TestCase):
         the simulation should raise an exception.
         """
 
-        self.assertRaises(InvalidInput, CoinPhysicsSim, 0, 1)
-        self.assertRaises(InvalidInput, CoinPhysicsSim, 1, 0)
+        with pytest.raises(InvalidInput):
+            CoinPhysicsSim(0, 1)
+            CoinPhysicsSim(1, 0)
 
-        self.assertRaises(InvalidInput, CoinPhysicsSim, -1, 1)
-        self.assertRaises(InvalidInput, CoinPhysicsSim, 1, -1)
+            CoinPhysicsSim(-1, 1)
+            CoinPhysicsSim(1, -1)
 
         sim = CoinPhysicsSim(1, 1)
-        self.assertRaises(InvalidInput, sim.run_trials, 0)
-        self.assertRaises(InvalidInput, sim.run_trials, -1)
+        with pytest.raises(InvalidInput):
+            sim.run_trials(0)
+            sim.run_trials(1)
 
     def test_always_hit(self):
         """
@@ -304,18 +280,8 @@ class TestCoinPhysicsSim(unittest.TestCase):
 
             sim = CoinPhysicsSim(radius, less_gap)
             hits = sim.run_trials(TRIALS)
-            self.assertEquals(
-                hits,
-                TRIALS,
-                "coin does not always balance (radius=%f, gap=%f)"
-                    % (radius, less_gap)
-            )
-            self.assertEquals(
-                sim.predict_prob(),
-                1.0,
-                "predicted probability != 1.0 (radius=%f, gap=%f)"
-                    % (radius, less_gap)
-            )
+            assert hits == TRIALS
+            assert sim.predict_prob() == 1.0
 
     def test_match_theoretical(self):
         """
@@ -344,11 +310,4 @@ class TestCoinPhysicsSim(unittest.TestCase):
                 (pred_hits-hits)**2/(TRIALS-pred_hits)
             ]
             chi2 = sum(stats)
-            self.assertTrue(
-                chi2 < MAX_STAT,
-                "chi-square = %f >= %f (radius=%f, gap=%f)"
-                    % (chi2, MAX_STAT, radius, gap)
-            )
-
-if __name__ == '__main__':
-    unittest.main()
+            assert chi2 < MAX_STAT

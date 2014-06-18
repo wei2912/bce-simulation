@@ -8,9 +8,9 @@ The [website](http://bce-simulation.herokuapp.com/) for the simulation is curren
 
 ## Dependencies
 
-The following are dependencies:
+To install dependencies on a Debian system, run `scripts/install.sh`.
 
-	matplotlib
-	pyhull
+## Test suite
 
-They can be installed using `pip install [insert dependency]` without the square brackets.
+To test the simulations, run `py.test`.
+
