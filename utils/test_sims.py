@@ -65,7 +65,7 @@ class TestCoinSim:
         """
 
         for _ in range(NUM_TESTS):
-            radius = 1.0 - _non_zero_rand()
+            radius = _non_zero_rand()
             diameter = radius*2
             less_gap = diameter - _non_zero_rand()*diameter
 
@@ -83,14 +83,11 @@ class TestCoinSim:
         the p-value should be < 0.05.
         """
 
-        pairs = []
-        for radius in stepvals.get_range(0.5, NUM_TESTS):
-            pairs += [(radius, 1.0)]
-        for gap in stepvals.get_range(1.0, NUM_TESTS):
-            pairs += [(0.05, gap)]
+        for _ in range(NUM_TESTS):
+            radius = _non_zero_rand()/2
+            gap = _non_zero_rand()
 
-        for pair in pairs:
-            sim = CoinSim(pair[0], pair[1])
+            sim = CoinSim(radius, gap)
 
             hits = sim.run_trials(TRIALS)
             pred_hits = sim.predict_hits(TRIALS)
@@ -146,14 +143,11 @@ class TestNeedleSim:
         the p-value should be < 0.05.
         """
 
-        pairs = []
-        for length in stepvals.get_range(1.0, NUM_TESTS):
-            pairs += [(length, 0.5)]
-        for gap in stepvals.get_range(1.0, NUM_TESTS):
-            pairs += [(0.5, gap)]
+        for _ in range(NUM_TESTS):
+            length = _non_zero_rand()
+            gap = _non_zero_rand()
 
-        for pair in pairs:
-            sim = NeedleSim(pair[0], pair[1])
+            sim = NeedleSim(length, gap)
 
             hits = sim.run_trials(TRIALS)
             pred_hits = sim.predict_hits(TRIALS)
@@ -244,16 +238,12 @@ class TestNeedleAngleSim:
         the p-value should be < 0.05.
         """
 
-        angle = random.uniform(0.0, math.pi)
+        for _ in range(NUM_TESTS):
+            angle = random.uniform(0.0, math.pi)
+            length = _non_zero_rand()
+            gap = _non_zero_rand() 
 
-        pairs = []
-        for length in stepvals.get_range(1.0, NUM_TESTS):
-            pairs += [(length, 0.5)]
-        for gap in stepvals.get_range(1.0, NUM_TESTS):
-            pairs += [(0.5, gap)]
-
-        for pair in pairs:
-            sim = NeedleAngleSim(pair[0], pair[1], angle)
+            sim = NeedleAngleSim(length, gap, angle)
 
             hits = sim.run_trials(TRIALS)
             pred_hits = sim.predict_hits(TRIALS)
@@ -329,14 +319,11 @@ class TestCoinPhysicsSim:
         the p-value should be < 0.05.
         """
 
-        pairs = []
-        for radius in stepvals.get_range(0.5, NUM_TESTS):
-            pairs += [(radius, 1.0)]
-        for gap in stepvals.get_range(1.0, NUM_TESTS):
-            pairs += [(0.05, gap)]
+        for _ in range(NUM_TESTS):
+            radius = _non_zero_rand()/2
+            gap = _non_zero_rand()
 
-        for pair in pairs:
-            sim = CoinPhysicsSim(pair[0], pair[1])
+            sim = CoinPhysicsSim(radius, gap)
 
             hits = sim.run_trials(TRIALS)
             pred_hits = sim.predict_hits(TRIALS)
