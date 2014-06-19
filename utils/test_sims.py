@@ -330,7 +330,7 @@ class TestCoinPhysicsSim:
 
             # if they're equal
             # skip the calculation
-            if pred_hits:
+            if hits == pred_hits:
                 continue
 
             stats = [
