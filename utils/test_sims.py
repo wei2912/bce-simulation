@@ -15,6 +15,8 @@ TRIALS = 10000 # number of trials to run per test case
 NUM_TESTS = 5 # number of tests to run per test case
 MAX_STAT = 3.841 # p < 0.05 for a df of 1
 
+BENCH_TRIALS = 1000000 # number of trials to run for benchmarking
+
 SQRT_2 = 2**0.5
 
 def _non_zero_rand():
@@ -115,7 +117,7 @@ class TestBenchCoinSim:
         gap = _non_zero_rand()
 
         sim = CoinSim(radius, gap)
-        sim.run_trials(TRIALS)
+        sim.run_trials(BENCH_TRIALS)
 
 class TestNeedleSim:
     """
@@ -182,7 +184,7 @@ class TestBenchNeedleSim:
         gap = _non_zero_rand()
 
         sim = NeedleSim(length, gap)
-        sim.run_trials(TRIALS)
+        sim.run_trials(BENCH_TRIALS)
 
 class TestNeedleAngleSim:
     """
@@ -282,7 +284,7 @@ class TestBenchNeedleAngleSim:
         gap = _non_zero_rand()
 
         sim = NeedleAngleSim(length, gap, angle)
-        sim.run_trials(TRIALS)
+        sim.run_trials(BENCH_TRIALS)
 
 class TestCoinPhysicsSim:
     """
@@ -367,4 +369,4 @@ class TestBenchCoinPhysicsSim:
         gap = _non_zero_rand()
 
         sim = CoinPhysicsSim(radius, gap)
-        sim.run_trials(TRIALS)
+        sim.run_trials(BENCH_TRIALS)
