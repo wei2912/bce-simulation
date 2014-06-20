@@ -5,7 +5,6 @@ is runned from the command line.
 """
 
 import pytest
-from pytest import mark
 
 import random
 import math
@@ -65,7 +64,6 @@ class TestCoinSim:
         with pytest.raises(InvalidInput):
             sim.run_trials(-1)
 
-    @mark.bench('CoinSim.run_trials')
     def test_always_hit(self):
         """
         test_always_hit
@@ -84,7 +82,6 @@ class TestCoinSim:
             assert hits == TRIALS
             assert sim.predict_prob() == 1.0
 
-    @mark.bench('CoinSim.run_trials')
     def test_match_theoretical(self):
         """
         test_match_theoretical
@@ -139,7 +136,6 @@ class TestNeedleSim:
         with pytest.raises(InvalidInput):
             sim.run_trials(-1)
 
-    @mark.bench('NeedleSim.run_trials')
     def test_match_theoretical(self):
         """
         test_match_theoretical
@@ -201,7 +197,6 @@ class TestNeedleAngleSim:
         with pytest.raises(InvalidInput):
             sim.run_trials(-1)
 
-    @mark.bench('NeedleAngleSim.run_trials')
     def test_always_hit(self):
         """
         test_always_hit
@@ -229,7 +224,6 @@ class TestNeedleAngleSim:
             assert hits == TRIALS
             assert sim.predict_prob() == 1.0
 
-    @mark.bench('NeedleAngleSim.run_trials')
     def test_match_theoretical(self):
         """
         test_match_theoretical
@@ -285,7 +279,6 @@ class TestCoinPhysicsSim:
         with pytest.raises(InvalidInput):
             sim.run_trials(-1)
 
-    @mark.bench('CoinPhysicsSim.run_trials')
     def test_always_hit(self):
         """
         test_always_hit
@@ -305,7 +298,6 @@ class TestCoinPhysicsSim:
             assert hits == TRIALS
             assert sim.predict_prob() == 1.0
 
-    @mark.bench('CoinPhysicsSim.run_trials')
     def test_match_theoretical(self):
         """
         test_match_theoretical
