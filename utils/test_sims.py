@@ -1,15 +1,15 @@
 """
 This module contains test suites for simulations
-in `sims.py` that can be runned when the module
-is runned from the command line.
+in `sims.py` that can be runned using
+`py.test`.
 """
 
 import pytest
+from pytest import mark
 
 import random
 import math
 from utils.sims import InvalidInput, CoinSim, NeedleSim, NeedleAngleSim, CoinPhysicsSim
-from utils import stepvals
 
 TRIALS = 10000 # number of trials to run per test case
 NUM_TESTS = 5 # number of tests to run per test case
@@ -41,9 +41,6 @@ class TestCoinSim:
 
     def test_bad_input(self):
         """
-        test_bad_input
-        ===
-
         If bad input is passed to the simulation,
         the simulation should raise an exception.
         """
@@ -66,8 +63,6 @@ class TestCoinSim:
 
     def test_always_hit(self):
         """
-        test_always_hit
-        ===
         If the diameter of the coin >= gap,
         the coin should always hit the grid.
         """
@@ -84,8 +79,6 @@ class TestCoinSim:
 
     def test_match_theoretical(self):
         """
-        test_match_theoretical
-        ===
         When the chi-square statistic is calculated,
         the p-value should be < 0.05.
         """
@@ -106,6 +99,24 @@ class TestCoinSim:
 
             assert _chi_square(hits, pred_hits, TRIALS) < MAX_STAT
 
+class TestBenchCoinSim:
+    """
+    Benchmarks for CoinSim.
+    """
+
+    @mark.bench('CoinSim.run_trials')
+    def test_general(self):
+        """
+        Benchmark the general performance
+        of CoinSim.
+        """
+
+        radius = _non_zero_rand()/2
+        gap = _non_zero_rand()
+
+        sim = CoinSim(radius, gap)
+        sim.run_trials(TRIALS)
+
 class TestNeedleSim:
     """
     Test suite for NeedleSim.
@@ -113,9 +124,6 @@ class TestNeedleSim:
 
     def test_bad_input(self):
         """
-        test_bad_input
-        ===
-
         If bad input is passed to the simulation,
         the simulation should raise an exception.
         """
@@ -138,8 +146,6 @@ class TestNeedleSim:
 
     def test_match_theoretical(self):
         """
-        test_match_theoretical
-        ===
         When the chi-square statistic is calculated,
         the p-value should be < 0.05.
         """
@@ -160,6 +166,24 @@ class TestNeedleSim:
 
             assert _chi_square(hits, pred_hits, TRIALS) < MAX_STAT
 
+class TestBenchNeedleSim:
+    """
+    Benchmarks for NeedleSim.
+    """
+
+    @mark.bench('NeedleSim.run_trials')
+    def test_general(self):
+        """
+        Benchmark the general performance
+        of NeedleSim.
+        """
+
+        length = _non_zero_rand()
+        gap = _non_zero_rand()
+
+        sim = NeedleSim(length, gap)
+        sim.run_trials(TRIALS)
+
 class TestNeedleAngleSim:
     """
     Test suite for NeedleAngleSim.
@@ -167,9 +191,6 @@ class TestNeedleAngleSim:
 
     def test_bad_input(self):
         """
-        test_bad_input
-        ===
-
         If bad input is passed to the simulation,
         the simulation should raise an exception.
         """
@@ -199,9 +220,6 @@ class TestNeedleAngleSim:
 
     def test_always_hit(self):
         """
-        test_always_hit
-        ===
-
         If the opposite of the needle >= gap,
         the needle should always hit at least
         one of the two parallel lines.
@@ -226,8 +244,6 @@ class TestNeedleAngleSim:
 
     def test_match_theoretical(self):
         """
-        test_match_theoretical
-        ===
         When the chi-square statistic is calculated,
         the p-value should be < 0.05.
         """
@@ -249,6 +265,25 @@ class TestNeedleAngleSim:
 
             assert _chi_square(hits, pred_hits, TRIALS) < MAX_STAT
 
+class TestBenchNeedleAngleSim:
+    """
+    Benchmarks for NeedleAngleSim.
+    """
+
+    @mark.bench('NeedleAngleSim.run_trials')
+    def test_general(self):
+        """
+        Benchmark the general performance
+        of NeedleAngleSim.
+        """
+
+        angle = random.uniform(0.0, math.pi)
+        length = _non_zero_rand()
+        gap = _non_zero_rand()
+
+        sim = NeedleAngleSim(length, gap, angle)
+        sim.run_trials(TRIALS)
+
 class TestCoinPhysicsSim:
     """
     Test suite for CoinPhysicsSim.
@@ -256,9 +291,6 @@ class TestCoinPhysicsSim:
 
     def test_bad_input(self):
         """
-        test_bad_input
-        ===
-
         If bad input is passed to the simulation,
         the simulation should raise an exception.
         """
@@ -281,10 +313,7 @@ class TestCoinPhysicsSim:
 
     def test_always_hit(self):
         """
-        test_always_hit
-        ===
-
-        If the gap < r*(2**0.5),
+        If the gap < r*sqrt(2),
         the coin should always balance
         on the grid.
         """
@@ -321,3 +350,21 @@ class TestCoinPhysicsSim:
                 continue
 
             assert _chi_square(hits, pred_hits, TRIALS) < MAX_STAT
+
+class TestBenchCoinPhysicsSim:
+    """
+    Benchmarks for CoinPhysicsSim.
+    """
+
+    @mark.bench('CoinPhysicsSim.run_trials')
+    def test_general(self):
+        """
+        Benchmark the general performance
+        of CoinPhysicsSim.
+        """
+
+        radius = _non_zero_rand()/2
+        gap = _non_zero_rand()
+
+        sim = CoinPhysicsSim(radius, gap)
+        sim.run_trials(TRIALS)
