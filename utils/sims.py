@@ -107,16 +107,12 @@ class NeedleSim(object):
         gap = self.gap
         pi = math.pi
 
-        ratio = np.random.random(size=trials)
-        ratio = ne.evaluate(
-            'length/2 * sin(ratio*pi) / gap'
-        )
-
+        angles = np.random.random(size=trials)
         y_pos = np.random.random(size=trials)
 
         clauses = [
-            '1.0 - y_pos < ratio',
-            'y_pos < ratio'
+            'gap - y_pos*gap < length/2 * sin(angles*pi)',
+            'y_pos*gap < length/2 * sin(angles*pi)'
         ]
 
         return ne.evaluate(
