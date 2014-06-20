@@ -107,7 +107,7 @@ class TestCoinSim:
             if hits == pred_hits:
                 continue
 
-            assert _chi_square(hits, pred_hits) < MAX_STAT
+            assert _chi_square(hits, pred_hits, TRIALS) < MAX_STAT
 
 class TestNeedleSim:
     """
@@ -162,7 +162,7 @@ class TestNeedleSim:
             if hits == pred_hits:
                 continue
 
-            assert _chi_square(hits, pred_hits) < MAX_STAT
+            assert _chi_square(hits, pred_hits, TRIALS) < MAX_STAT
 
 class TestNeedleAngleSim:
     """
@@ -253,7 +253,7 @@ class TestNeedleAngleSim:
             if hits == pred_hits:
                 continue
 
-            assert _chi_square(hits, pred_hits) < MAX_STAT
+            assert _chi_square(hits, pred_hits, TRIALS) < MAX_STAT
 
 class TestCoinPhysicsSim:
     """
@@ -328,4 +328,4 @@ class TestCoinPhysicsSim:
             if hits == pred_hits:
                 continue
 
-            assert _chi_square(hits, pred_hits) < MAX_STAT
+            assert _chi_square(hits, pred_hits, TRIALS) < MAX_STAT
