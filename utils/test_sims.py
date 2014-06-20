@@ -25,6 +25,16 @@ def _non_zero_rand():
     """
     return 1.0 - random.random()
 
+def _chi_square(hits, pred_hits, trials):
+    """
+    Returns a chi-square statistic.
+    """
+    stats = [
+        (hits-pred_hits)**2/pred_hits,
+        (pred_hits-hits)**2/(trials-pred_hits)
+    ]
+    return sum(stats)
+
 class TestCoinSim:
     """
     Test suite for CoinSim.
@@ -97,12 +107,7 @@ class TestCoinSim:
             if hits == pred_hits:
                 continue
 
-            stats = [
-                (hits-pred_hits)**2/pred_hits,
-                (pred_hits-hits)**2/(TRIALS-pred_hits)
-            ]
-            chi2 = sum(stats)
-            assert chi2 < MAX_STAT
+            assert _chi_square(hits, pred_hits) < MAX_STAT
 
 class TestNeedleSim:
     """
@@ -157,12 +162,7 @@ class TestNeedleSim:
             if hits == pred_hits:
                 continue
 
-            stats = [
-                (hits-pred_hits)**2/pred_hits,
-                (pred_hits-hits)**2/(TRIALS-pred_hits)
-            ]
-            chi2 = sum(stats)
-            assert chi2 < MAX_STAT
+            assert _chi_square(hits, pred_hits) < MAX_STAT
 
 class TestNeedleAngleSim:
     """
@@ -253,12 +253,7 @@ class TestNeedleAngleSim:
             if hits == pred_hits:
                 continue
 
-            stats = [
-                (hits-pred_hits)**2/pred_hits,
-                (pred_hits-hits)**2/(TRIALS-pred_hits)
-            ]
-            chi2 = sum(stats)
-            assert chi2 < MAX_STAT
+            assert _chi_square(hits, pred_hits) < MAX_STAT
 
 class TestCoinPhysicsSim:
     """
@@ -333,9 +328,4 @@ class TestCoinPhysicsSim:
             if hits == pred_hits:
                 continue
 
-            stats = [
-                (hits-pred_hits)**2/pred_hits,
-                (pred_hits-hits)**2/(TRIALS-pred_hits)
-            ]
-            chi2 = sum(stats)
-            assert chi2 < MAX_STAT
+            assert _chi_square(hits, pred_hits) < MAX_STAT
