@@ -45,16 +45,17 @@ class CoinSim(object):
         x_pos = np.random.random(size=trials)
         y_pos = np.random.random(size=trials)
 
-        x_pos = ne.evaluate(
-            '(1.0 - x_pos < %f) | (x_pos < %f)' %
-                (ratio, ratio)
-        )
-        y_pos = ne.evaluate(
-            '(1.0 - y_pos < %f) | (y_pos < %f)' %
-                (ratio, ratio)
-        )
+        clauses = [
+            '1.0 - x_pos < ratio',
+            'x_pos < ratio',
+            '1.0 - y_pos < ratio',
+            'y_pos < ratio'
+        ]
 
-        return ne.evaluate('sum(where (x_pos | y_pos, 1, 0))')
+        return ne.evaluate(
+            'sum(where (%s, 1, 0))' %
+                ' | '.join(['(%s)' % i for i in clauses])
+        )
 
     def predict_prob(self):
         """
@@ -101,15 +102,26 @@ class NeedleSim(object):
         if trials <= 0:
             raise InvalidInput("trials must not be <= 0")
 
+        # redefining vars in the local scope
+        length = self.length
+        gap = self.gap
+        pi = math.pi
+
         ratio = np.random.random(size=trials)
         ratio = ne.evaluate(
-            '%f/2 * sin(ratio*%f) / %f' %
-                (self.length, math.pi, self.gap)
+            'length/2 * sin(ratio*pi) / gap'
         )
 
         y_pos = np.random.random(size=trials)
+
+        clauses = [
+            '1.0 - y_pos < ratio',
+            'y_pos < ratio'
+        ]
+
         return ne.evaluate(
-            'sum(where ((1.0 - y_pos < ratio) | (y_pos < ratio), 1, 0))'
+            'sum(where (%s, 1, 0))' %
+                ' | '.join(['(%s)' % i for i in clauses])
         )
 
     def predict_prob(self):
@@ -166,9 +178,14 @@ class NeedleAngleSim(object):
         ratio = self.opp/self.gap
         y_pos = np.random.random(size=trials)
 
+        clauses = [
+            '1.0 - y_pos < ratio',
+            'y_pos < ratio'
+        ]
+
         return ne.evaluate(
-            'sum(where ((1.0 - y_pos < %f) | (y_pos < %f), 1, 0))' %
-                (ratio, ratio)
+            'sum(where (%s, 1, 0))' %
+                ' | '.join(['(%s)' % i for i in clauses])
         )
 
     def predict_prob(self):
