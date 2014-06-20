@@ -4,7 +4,7 @@
   "description": "A set of simulations of Buffon's Coin Experiments.",
   "main": "server.js",
   "scripts": {
-    "test": "py.test --bench",
+    "test": "py.test",
     "start": "node server.js"
   },
   "repository": "wei2912/bce-simulation",
