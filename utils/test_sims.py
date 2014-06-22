@@ -26,15 +26,17 @@ def _non_zero_rand():
     """
     return 1.0 - random.random()
 
-def _chi_square(hits, pred_hits, trials):
+def _is_pass_chi2(hits, pred_prob, trials):
     """
-    Returns a chi-square statistic.
+    Calculates a chi-square statistic and
+    return a boolean value indicating if
+    the test is passed.
     """
-    stats = [
-        (hits-pred_hits)**2/pred_hits,
-        (pred_hits-hits)**2/(trials-pred_hits)
-    ]
-    return sum(stats)
+    if pred_prob == 1.0 and hits == trials:
+        return True # settled
+
+    return ((hits - trials*pred_prob)**2 / 
+        (trials*pred_prob * (1 - pred_prob))) < MAX_STAT
 
 class TestCoinSim:
     """
@@ -92,14 +94,12 @@ class TestCoinSim:
             sim = CoinSim(radius, gap)
 
             hits = sim.run_trials(TRIALS)
-            pred_hits = sim.predict_hits(TRIALS)
-
-            # if they're equal
-            # skip the calculation
-            if hits == pred_hits:
-                continue
-
-            assert _chi_square(hits, pred_hits, TRIALS) < MAX_STAT
+            pred_prob = sim.predict_prob()
+            assert _is_pass_chi2(
+                hits,
+                pred_prob,
+                TRIALS
+            ) < MAX_STAT
 
 class TestBenchCoinSim:
     """
@@ -159,14 +159,12 @@ class TestNeedleSim:
             sim = NeedleSim(length, gap)
 
             hits = sim.run_trials(TRIALS)
-            pred_hits = sim.predict_hits(TRIALS)
-
-            # if they're equal
-            # skip the calculation
-            if hits == pred_hits:
-                continue
-
-            assert _chi_square(hits, pred_hits, TRIALS) < MAX_STAT
+            pred_prob = sim.predict_prob()
+            assert _is_pass_chi2(
+                hits,
+                pred_prob,
+                TRIALS
+            ) < MAX_STAT
 
 class TestBenchNeedleSim:
     """
@@ -244,14 +242,12 @@ class TestCoinPhysicsSim:
             sim = CoinPhysicsSim(radius, gap)
 
             hits = sim.run_trials(TRIALS)
-            pred_hits = sim.predict_hits(TRIALS)
-
-            # if they're equal
-            # skip the calculation
-            if hits == pred_hits:
-                continue
-
-            assert _chi_square(hits, pred_hits, TRIALS) < MAX_STAT
+            pred_prob = sim.predict_prob()
+            assert _is_pass_chi2(
+                hits,
+                pred_prob,
+                TRIALS
+            ) < MAX_STAT
 
 class TestBenchCoinPhysicsSim:
     """
@@ -264,8 +260,6 @@ class TestBenchCoinPhysicsSim:
         Benchmark the general performance
         of CoinPhysicsSim.
         """
-
-        return
 
         radius = _non_zero_rand()/2
         gap = _non_zero_rand()
