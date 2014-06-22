@@ -11,7 +11,7 @@ import argparse, math
 import matplotlib.pyplot as plt
 
 from utils import stepvals
-from utils.sims import NeedleSim, NeedleAngleSim
+from utils.sims import NeedleSim
 
 def plot_length(args):
     """
@@ -60,53 +60,15 @@ def plot_gap(args):
         "\nradius = %f" % args.radius)
     plt.grid(True)
 
-def plot_angle(args):
-    """
-    Plots a 2D scatter plot which shows the
-    relationship between the angle of a needle
-    and the probability which the needle hits
-    at least one of the two parallel lines.
-    """
-
-    vals = stepvals.get_range(math.pi, 1000)[:-1] # we don't want math.pi
-    probs = []
-    for angle in vals:
-        sim = NeedleAngleSim(args.length, args.gap, angle)
-        probs.append(sim.predict_prob())
-
-    plt.plot(
-        vals,
-        probs,
-        color='red',
-        linewidth=2.0
-    )
-
-    vals = stepvals.get_range(math.pi, args.stepsize)[:-1]
-    for angle in vals:
-        sim = NeedleAngleSim(args.length, args.gap, angle)
-        expprob = float(sim.run_trials(args.trials))/args.trials
-
-        if args.verbose:
-            print "length = %f, gap = %f, angle=%f: %f" % (args.length,
-                args.gap, angle, expprob)
-        plt.scatter(angle, expprob)
-
-    plt.xlabel("Angle of needle (radians)")
-    plt.ylabel("P(E)")
-    plt.title("Buffon's Needle Experiment - Angle of needle against P(E)")
-    plt.grid(True)
-
 MODES = {
     0: plot_length,
-    1: plot_gap,
-    2: plot_angle
+    1: plot_gap
 }
 
 MODES_TXT = [
     'mode determines what type of graph to plot.',
     'mode 0: 2D scatter plot, length of needle against P(E)',
     'mode 1: 2D scatter plot, gap width against P(E)'
-    'mode 2: 2D scatter plot, angle of needle against P(E)'
 ]
 
 def get_args():

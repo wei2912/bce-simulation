@@ -145,68 +145,6 @@ class NeedleSim(object):
         """
         return self.predict_prob()*trials
 
-class NeedleAngleSim(object):
-    """
-    Simulation of Buffon's Needle Experiment, with a fixed angle.
-    """
-    def __init__(self, length, gap, angle):
-        if length <= 0:
-            raise InvalidInput("length must not be <= 0")
-        if gap <= 0:
-            raise InvalidInput("gap must not be <= 0")
-        if angle <= 0 or angle >= math.pi:
-            raise InvalidInput("angle must not be <= 0 or >= math.pi")
-
-        self.length = float(length)
-        self.gap = float(gap)
-        self.angle = float(angle)
-
-        # since the angle is specified, precompute the opposite
-        self.opp = self.length/2 * math.sin(self.angle)
-
-    def run_trials(self, trials):
-        """
-        Run the simulation a specified number of times.
-        """
-        if trials <= 0:
-            raise InvalidInput("trials must not be <= 0")
-
-        ratio = self.opp/self.gap
-        y_pos = np.random.random(size=trials)
-
-        clauses = [
-            '1.0 - y_pos < ratio',
-            'y_pos < ratio'
-        ]
-
-        return ne.evaluate(
-            'sum(where (%s, 1, 0))' %
-                ' | '.join(['(%s)' % i for i in clauses])
-        )
-
-    def predict_prob(self):
-        """
-        For the variables passed into the simulation,
-        predict the probability that the needle will hit
-        at least one of the two parallel lines.
-        """
-
-        result = self.opp*2/self.gap
-        if result > 1.0:
-            return 1.0
-        return result
-
-    def predict_hits(self, trials):
-        """
-        For the variables passed into the simulation,
-        predict the number of times the needle will hit
-        at least one of the two parallel lines.
-
-        Note that this function will return a float
-        and not an integer.
-        """
-        return self.predict_prob()*trials
-
 class CoinPhysicsSim(object):
     """
     Simulation of a modified Buffon's Coin Experiment.

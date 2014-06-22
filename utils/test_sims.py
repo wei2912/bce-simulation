@@ -9,13 +9,13 @@ from pytest import mark
 
 import random
 import math
-from utils.sims import InvalidInput, CoinSim, NeedleSim, NeedleAngleSim, CoinPhysicsSim
+from utils.sims import InvalidInput, CoinSim, NeedleSim, CoinPhysicsSim
 
 TRIALS = 10000 # number of trials to run per test case
 NUM_TESTS = 5 # number of tests to run per test case
 MAX_STAT = 3.841 # p < 0.05 for a df of 1
 
-BENCH_TRIALS = 10000 # number of trials to run for benchmarking
+BENCH_TRIALS = 1000000 # number of trials to run for benchmarking
 
 SQRT_2 = 2**0.5
 
@@ -184,106 +184,6 @@ class TestBenchNeedleSim:
         gap = _non_zero_rand()
 
         sim = NeedleSim(length, gap)
-        sim.run_trials(BENCH_TRIALS)
-
-class TestNeedleAngleSim:
-    """
-    Test suite for NeedleAngleSim.
-    """
-
-    def test_bad_input(self):
-        """
-        If bad input is passed to the simulation,
-        the simulation should raise an exception.
-        """
-
-        with pytest.raises(InvalidInput):
-            NeedleAngleSim(0, 1, 0.1)
-        with pytest.raises(InvalidInput):
-            NeedleAngleSim(1, 0, 0.1)
-
-        with pytest.raises(InvalidInput):
-            NeedleAngleSim(-1, 1, 0.1)
-        with pytest.raises(InvalidInput):
-            NeedleAngleSim(1, -1, 0.1)
-
-        with pytest.raises(InvalidInput):
-            NeedleAngleSim(1, 1, math.pi)
-        with pytest.raises(InvalidInput):
-            NeedleAngleSim(1, 1, 3.15)
-        with pytest.raises(InvalidInput):
-            NeedleAngleSim(1, 1, -0.1)
-
-        sim = NeedleAngleSim(1, 1, 0.1)
-        with pytest.raises(InvalidInput):
-            sim.run_trials(0)
-        with pytest.raises(InvalidInput):
-            sim.run_trials(-1)
-
-    def test_always_hit(self):
-        """
-        If the opposite of the needle >= gap,
-        the needle should always hit at least
-        one of the two parallel lines.
-        """
-
-        for _ in range(NUM_TESTS):
-            # normally we would consider 0 radians
-            # however in this case 0 radians would mean it
-            # is impossible for the needle to have a non-zero opposite
-            # and hence will not always hit.
-            angle = _non_zero_rand()*math.pi
-
-            opp = _non_zero_rand()
-            length = opp/math.sin(angle)
-
-            less_gap = opp - _non_zero_rand()*opp
-
-            sim = NeedleAngleSim(length, less_gap, angle)
-            hits = sim.run_trials(TRIALS)
-            assert hits == TRIALS
-            assert sim.predict_prob() == 1.0
-
-    def test_match_theoretical(self):
-        """
-        When the chi-square statistic is calculated,
-        the p-value should be < 0.05.
-        """
-
-        for _ in range(NUM_TESTS):
-            angle = random.uniform(0.0, math.pi)
-            length = _non_zero_rand()
-            gap = _non_zero_rand() 
-
-            sim = NeedleAngleSim(length, gap, angle)
-
-            hits = sim.run_trials(TRIALS)
-            pred_hits = sim.predict_hits(TRIALS)
-
-            # if they're equal
-            # skip the calculation
-            if hits == pred_hits:
-                continue
-
-            assert _chi_square(hits, pred_hits, TRIALS) < MAX_STAT
-
-class TestBenchNeedleAngleSim:
-    """
-    Benchmarks for NeedleAngleSim.
-    """
-
-    @mark.bench('NeedleAngleSim.run_trials')
-    def test_general(self):
-        """
-        Benchmark the general performance
-        of NeedleAngleSim.
-        """
-
-        angle = random.uniform(0.0, math.pi)
-        length = _non_zero_rand()
-        gap = _non_zero_rand()
-
-        sim = NeedleAngleSim(length, gap, angle)
         sim.run_trials(BENCH_TRIALS)
 
 class TestCoinPhysicsSim:

@@ -32,13 +32,6 @@ def get_args():
     )
 
     parser.add_argument(
-        '-a',
-        '--angle',
-        type=float,
-        help=('angle of needle (if provided, angle will be fixed)')
-    )
-
-    parser.add_argument(
         '-t',
         '--trials',
         type=int,
@@ -50,10 +43,7 @@ def get_args():
 
 def main():
     args = get_args()
-    if args.angle:
-        sim = NeedleAngleSim(args.length, args.gap, args.angle)
-    else:
-        sim = NeedleSim(args.length, args.gap)
+    sim = NeedleSim(args.length, args.gap)
     print "%d/%d" % (sim.run_trials(args.trials), args.trials)
 
 main()
