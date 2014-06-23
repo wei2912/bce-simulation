@@ -45,6 +45,7 @@ def plot_width(args):
             print "radius = %f, gap = %f: %f" % (args.radius, gap, expprob)
         plt.scatter(gap, expprob)
 
+    plt.axis(xmin=-1, xmax=args.gap+1, ymin=0)
     plt.xlabel("Width of square gap")
     plt.ylabel("P(E)")
     plt.title("Buffon's Coin Experiment (physics variant)" +
@@ -82,6 +83,7 @@ def plot_radius(args):
             print "radius = %f, gap = %f: %f" % (radius, args.gap, expprob)
         plt.scatter(radius, expprob)
 
+    plt.axis(xmin=-1, xmax=args.radius+1, ymin=0)
     plt.xlabel("Radius")
     plt.ylabel("P(E)")
     plt.title("Buffon's Coin Experiment (physics variant)" +
