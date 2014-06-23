@@ -4,7 +4,7 @@ python:
 
 env:
   global:
-    - secure: "VaMsE8yJwa2HY9On2aPHHBnNcgnXTsMDyr+Pc0K2L5411fJM/DyDs7lJwnl3z/GxeUj0sh+q5NlOJvfxFzvC7aZfHMZ3zg45DKMlx9ejQhb25QkgnX6qr5hfK/PTE8Fs/qkcGaWApbw3s0+ieJXYivuGCbmG0w+M65+RzovxnPE="
+    - secure: "Ij2Bnf2yxM3R2qbuxjDj+TyFft92dc11yfYIn3FzSLaB25URzukypNNrDiPUercC+VWsuM6CiVh5uPhCmBWGhWlY7rJzc7O75/j34tTcJqXx4oDV7SV1GYK4PtWN0F6L9pUp5jJvH0XcDn8KAKCMtQigP1D6MLweGd4AkkbaD/o="
 
 before_install:
 - sudo apt-get update -qq
@@ -13,12 +13,4 @@ script:
 - npm test || exit 1
 - pylint utils *py
 - exit 0
-
-deploy:
-  provider: heroku
-  api_key:
-    secure: hHFVh5+TA5U1iyFgqQuzLSjRrN4BFWEyUerUUtn589NiMDJFtE3SA1okJIQTlq2w/iAhBqjgMoDG0rMB6NVM/i7oobMdlQJfSOEt3FlCFGl+0r2RaHxF4YaCDMEjCv/+y6Of0ifjAHwYF/p0mu9WwM86Yhc4ajfiYI602i3i4Xs=
-  strategy: git
-  app:
-    #master: bce-simulation
-    heroku: bce-simulation-dev
+after_install: scripts/deploy.sh
