@@ -42,14 +42,15 @@ def plot_width(args):
         expprob = float(sim.run_trials(args.trials))/args.trials
 
         if args.verbose:
-            print "radius = %f, gap = %f: %f" % (args.radius, gap, expprob)
+            print "radius = %.5g, gap = %.5g: %.5g" % (args.radius, gap, expprob)
         plt.scatter(gap, expprob)
 
+    plt.axis(xmin=-1, xmax=args.gap+1, ymin=0)
     plt.xlabel("Width of square gap")
     plt.ylabel("P(E)")
     plt.title("Buffon's Coin Experiment (physics variant)" +
     	" - Width of square gap against P(E)" +
-    	"\nradius = %f" % args.radius)
+    	"\nradius = %.5g" % args.radius)
     plt.grid(True)
 
 def plot_radius(args):
@@ -79,14 +80,15 @@ def plot_radius(args):
         expprob = float(sim.run_trials(args.trials))/args.trials
 
         if args.verbose:
-            print "radius = %f, gap = %f: %f" % (radius, args.gap, expprob)
+            print "radius = %.5g, gap = %.5g: %.5g" % (radius, args.gap, expprob)
         plt.scatter(radius, expprob)
 
+    plt.axis(xmin=-1, xmax=args.radius+1, ymin=0)
     plt.xlabel("Radius")
     plt.ylabel("P(E)")
     plt.title("Buffon's Coin Experiment (physics variant)" +
     	" - Radius against P(E)" +
-    	"\nwidth of square gap = %f" % args.gap)
+    	"\nwidth of square gap = %.5g" % args.gap)
     plt.grid(True)
 
 MODES = {
@@ -134,7 +136,7 @@ def get_args():
         '-s',
         '--stepsize',
         type=float,
-        required=True,
+        default=100,
         help='number of steps to take when increasing radius/gap'
     )
 

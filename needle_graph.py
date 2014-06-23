@@ -27,13 +27,14 @@ def plot_length(args):
         expprob = float(sim.run_trials(args.trials))/args.trials
 
         if args.verbose:
-            print "length = %f, gap = %f: %f" % (length, args.gap, expprob)
+            print "length = %.5g, gap = %.5g: %.5g" % (length, args.gap, expprob)
         plt.scatter(length, expprob)
 
+    plt.axis(xmin=-1, xmax=args.length+1, ymin=0)
     plt.xlabel("Length of needle")
     plt.ylabel("P(E)")
     plt.title("Buffon's Needle Experiment - Length of needle against P(E)" +
-        "\ngap = %f" % args.gap)
+        "\ngap = %.5g" % args.gap)
     plt.grid(True)
 
 def plot_gap(args):
@@ -51,13 +52,14 @@ def plot_gap(args):
         expprob = float(sim.run_trials(args.trials))/args.trials
 
         if args.verbose:
-            print "length = %f, gap = %f: %f" % (args.length, gap, expprob)
+            print "length = %.5g, gap = %.5g: %.5g" % (args.length, gap, expprob)
         plt.scatter(gap, expprob)
 
+    plt.axes(xmin=-1, xmax=args.gap+1, ymin=0)
     plt.xlabel("Gap length")
     plt.ylabel("P(E)")
     plt.title("Buffon's Needle Experiment - Gap width against P(E)" +
-        "\nradius = %f" % args.radius)
+        "\nradius = %.5g" % args.radius)
     plt.grid(True)
 
 MODES = {
@@ -104,7 +106,7 @@ def get_args():
         '-s',
         '--stepsize',
         type=float,
-        required=True,
+        default=100,
         help='number of steps to take when increasing radius/gap'
     )
 

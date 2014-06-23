@@ -6,7 +6,7 @@
   <meta name="viewport" content="width=device-width">
   <link rel="stylesheet" href="main.css">
 </head>
-<body>
+<body class="coin">
   <hgroup>
    <h1><a href="http://wei2912.github.io/bce-simulation/">Buffon's Coin Simulation</a></h1>
    <h2>Web Builder</h2>
@@ -17,13 +17,27 @@
     <tbody>
       <tr>
         <th>
+          <label for="simulation">Simulation</label>
+        </th>
+        <td>
+          <select name="simulation">
+            <option value="coin" selected>Coin</option>
+            <option value="coin_phy">Coin (Physics)</option>
+            <option value="needle">Needle</option>
+          </select>
+        </td>
+      </tr>
+
+      <tr>
+        <th>
           <label for="type">Type of Graph</label>
         </th>
         <td>
           <select name="type">
-            <option value="coin" selected>Coin</option>
-            <option value="needle">needle</option>
-            <option value="needle-angle">needle-angle</option>
+            <option class="hide coin coin_phy" value="0" selected>Increasing width of square gap</option>
+            <option class="hide coin coin_phy" value="1">Increasing radius</option>
+            <option class="hide needle" value="0">Increasing width of gap</option>
+            <option class="hide needle" value="1">Increasing length</option>
           </select>
         </td>
       </tr>
@@ -33,43 +47,52 @@
           <label for="trials">Number of Trials to run</label>
         </th>
         <td>
-          <input name="trials" type="number" placeholder="10000">
+          <input name="trials" type="number" value="10000">
         </td>
       </tr>
 
       <tr>
+        <th>
+          <label for="step">Number of steps to take</label>
+        </th>
+        <td>
+          <input name="step" type="number" value="100">
+        </td>
+      </tr>
+
+      <tr class="hide coin coin_phy">
+        <th>
+          <label for="radius">Radius of coin</label>
+        </th>
+        <td>
+          <input name="radius" type="number" value="1">
+        </td>
+      </tr>
+
+      <tr class="hide coin coin_phy">
+        <th>
+          <label for="width">Width of square gap</label>
+        </th>
+        <td>
+          <input name="width" type="number" value="5">
+        </td>
+      </tr>
+
+      <tr class="hide needle">
+        <th>
+          <label for="length">Length of needle</label>
+        </th>
+        <td>
+          <input name="length" type="number" value="1">
+        </td>
+      </tr>
+
+      <tr class="hide needle">
         <th>
           <label for="gap">Length of Gap between 2 lines</label>
         </th>
         <td>
-          <input name="gap" type="number" placeholder="10">
-        </td>
-      </tr>
-
-      <tr>
-        <th>
-          <label for="radius">Radius of coin (only for coin experiment)</label>
-        </th>
-        <td>
-          <input name="radius" type="number" placeholder="2">
-        </td>
-      </tr>
-
-      <tr>
-        <th>
-          <label for="length">Length of needle (only for needle experiments)</label>
-        </th>
-        <td>
-          <input name="length" type="number" placeholder="3">
-        </td>
-      </tr>
-
-      <tr>
-        <th>
-          <label for="step">Step to take when increasing radius/gap</label>
-        </th>
-        <td>
-          <input name="step" type="number" placeholder="0.1">
+          <input name="gap" type="number" value="1">
         </td>
       </tr>
     </tbody>
@@ -86,5 +109,15 @@
     </p>
   </footer>
 
+
+  <script>
+  var body = document.body,
+      sim = document.getElementsByName('simulation')[0];
+  sim.onchange = function (e) {
+    var simType = sim.options[sim.selectedIndex].value;
+    body.className = simType;
+    console.log(simType);
+  };
+  </script>
 </body>
 </html>

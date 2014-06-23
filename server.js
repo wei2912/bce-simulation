@@ -42,18 +42,35 @@
   }
 
   function build(req, res, query) {
-    var type = query.type;
-    if (!/^(?:coin|needle(?:-angle)?)$/.test(type)) {
+    var type = query.simulation;
+    if (!/^(?:coin(?:_phy)?|needle)$/.test(type)) {
       res.end("unsupported");
     }
+
+    var mode = query['type'],
+        trials = query.trials,
+        step = query.step,
+        isCoin = /^coin/.test(type),
+        // Coin experiments
+        radius = query.radius,
+        width = query.width,
+        // Needle experiments
+        length = query.length,
+        gap = query.gap;
+
     var fileName = path.join(
       __dirname,
-      'output/' + type + '.' + query.trials + '.' + query.gap + '.'
-      + (type == 'coin' ? query.radius : query.length) + '.' + query.step + '.png'
+      'output/' + type + '.' + mode + '.' + trials + '.' + step + '.' +
+      (isCoin ? radius + '.' + width : length + '.' + gap) +
+      '.png'
     );
-    var fileToExec = path.join(__dirname, type + '-graph.py');
-    var args = ['python', fileToExec, '-o', fileName, '-t', query.trials, '-g', query.gap, '-s', query.step];
-    args.push(type == 'coin' ? '-r' : '-l', type == 'coin' ? query.radius : query.length);
+    var fileToExec = path.join(__dirname, type + '_graph.py');
+    var args = ['python', fileToExec, '-o', fileName, '-m', mode, '-t', trials, '-s', step];
+    if (isCoin) {
+      args.push('-r', radius, '-g', width);
+    } else {
+      args.push('-l', length, '-g', gap);
+    }
     console.log(args = args.join(' '));
     exec(args, function(err, stderr, stdout) {
       if (err || stderr) {
