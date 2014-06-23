@@ -104,7 +104,7 @@ def get_args():
         '-s',
         '--stepsize',
         type=float,
-        required=True,
+        default=100,
         help='number of steps to take when increasing radius/gap'
     )
 
