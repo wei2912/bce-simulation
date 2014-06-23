@@ -30,6 +30,7 @@ def plot_length(args):
             print "length = %.5g, gap = %.5g: %.5g" % (length, args.gap, expprob)
         plt.scatter(length, expprob)
 
+    plt.axis(xmin=-1, xmax=args.length+1, ymin=0)
     plt.xlabel("Length of needle")
     plt.ylabel("P(E)")
     plt.title("Buffon's Needle Experiment - Length of needle against P(E)" +
@@ -54,6 +55,7 @@ def plot_gap(args):
             print "length = %.5g, gap = %.5g: %.5g" % (args.length, gap, expprob)
         plt.scatter(gap, expprob)
 
+    plt.axes(xmin=-1, xmax=args.gap+1, ymin=0)
     plt.xlabel("Gap length")
     plt.ylabel("P(E)")
     plt.title("Buffon's Needle Experiment - Gap width against P(E)" +
