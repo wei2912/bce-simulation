@@ -11,6 +11,5 @@ before_install:
 install: scripts/install.sh
 script:
 - npm test || exit 1
-- pylint utils *py
-- exit 0
+- pylint utils *py && exit 0
 after_install: scripts/deploy.sh
