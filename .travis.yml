@@ -6,10 +6,7 @@ env:
   global:
     - secure: "Ij2Bnf2yxM3R2qbuxjDj+TyFft92dc11yfYIn3FzSLaB25URzukypNNrDiPUercC+VWsuM6CiVh5uPhCmBWGhWlY7rJzc7O75/j34tTcJqXx4oDV7SV1GYK4PtWN0F6L9pUp5jJvH0XcDn8KAKCMtQigP1D6MLweGd4AkkbaD/o="
 
-before_install:
-- sudo apt-get update -qq
+before_install: sudo apt-get update -qq
 install: scripts/install.sh
-script:
-- npm test || exit 1
-- pylint utils *py && exit 0
+script: npm test || exit 1
 after_install: scripts/deploy.sh
