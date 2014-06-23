@@ -2,6 +2,10 @@ language: python
 python:
   - "2.7"
 
+env:
+  global:
+    - secure: "VaMsE8yJwa2HY9On2aPHHBnNcgnXTsMDyr+Pc0K2L5411fJM/DyDs7lJwnl3z/GxeUj0sh+q5NlOJvfxFzvC7aZfHMZ3zg45DKMlx9ejQhb25QkgnX6qr5hfK/PTE8Fs/qkcGaWApbw3s0+ieJXYivuGCbmG0w+M65+RzovxnPE="
+
 before_install:
 - sudo apt-get update -qq
 install: scripts/install.sh
@@ -14,5 +18,6 @@ deploy:
   provider: heroku
   api_key:
     secure: hHFVh5+TA5U1iyFgqQuzLSjRrN4BFWEyUerUUtn589NiMDJFtE3SA1okJIQTlq2w/iAhBqjgMoDG0rMB6NVM/i7oobMdlQJfSOEt3FlCFGl+0r2RaHxF4YaCDMEjCv/+y6Of0ifjAHwYF/p0mu9WwM86Yhc4ajfiYI602i3i4Xs=
+  strategy: git
   app:
     master: bce-simulation
