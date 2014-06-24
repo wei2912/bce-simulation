@@ -33,7 +33,7 @@ def _is_pass_chi2(hits, pred_prob, trials):
     the test is passed.
     """
     if pred_prob == 1.0 and hits == trials:
-        return True # settled
+        return True # this definitely passes
 
     return ((hits - trials*pred_prob)**2 / 
         (trials*pred_prob * (1 - pred_prob))) < MAX_STAT
@@ -99,7 +99,7 @@ class TestCoinSim:
                 hits,
                 pred_prob,
                 TRIALS
-            ) < MAX_STAT
+            )
 
 class TestBenchCoinSim:
     """
@@ -164,7 +164,7 @@ class TestNeedleSim:
                 hits,
                 pred_prob,
                 TRIALS
-            ) < MAX_STAT
+            )
 
 class TestBenchNeedleSim:
     """
@@ -247,7 +247,7 @@ class TestCoinPhysicsSim:
                 hits,
                 pred_prob,
                 TRIALS
-            ) < MAX_STAT
+            )
 
 class TestBenchCoinPhysicsSim:
     """
