@@ -21,6 +21,19 @@ def plot_length(args):
     hits at least one of the two parallel lines.
     """
 
+    vals = stepvals.get_range(args.length, 1000)
+    probs = []
+    for length in vals:
+        sim = NeedleSim(length, args.gap)
+        probs.append(sim.predict_prob())
+
+    plt.plot(
+        vals,
+        probs,
+        color='red',
+        linewidth=2.0
+    )
+
     vals = stepvals.get_range(args.length, args.stepsize)
     for length in vals:
         sim = NeedleSim(length, args.gap)
@@ -46,6 +59,19 @@ def plot_gap(args):
     at least one of the lines.
     """
 
+    vals = stepvals.get_range(args.gap, 1000)
+    probs = []
+    for gap in vals:
+        sim = NeedleSim(args.length, gap)
+        probs.append(sim.predict_prob())
+
+    plt.plot(
+        vals,
+        probs,
+        color='red',
+        linewidth=2.0
+    )
+
     vals = stepvals.get_range(args.gap, args.stepsize)
     for gap in vals:
         sim = NeedleSim(args.length, gap)
@@ -55,11 +81,11 @@ def plot_gap(args):
             print "length = %.5g, gap = %.5g: %.5g" % (args.length, gap, expprob)
         plt.scatter(gap, expprob)
 
-    plt.axes(xmin=-1, xmax=args.gap+1, ymin=0)
+    plt.axis(xmin=-1, xmax=args.gap+1, ymin=0)
     plt.xlabel("Gap length")
     plt.ylabel("P(E)")
     plt.title("Buffon's Needle Experiment - Gap width against P(E)" +
-        "\nradius = %.5g" % args.radius)
+        "\nlength = %.5g" % args.length)
     plt.grid(True)
 
 MODES = {

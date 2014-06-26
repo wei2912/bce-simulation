@@ -2,11 +2,15 @@ language: python
 python:
   - "2.7"
 
-env:
-  global:
-    - secure: "Ij2Bnf2yxM3R2qbuxjDj+TyFft92dc11yfYIn3FzSLaB25URzukypNNrDiPUercC+VWsuM6CiVh5uPhCmBWGhWlY7rJzc7O75/j34tTcJqXx4oDV7SV1GYK4PtWN0F6L9pUp5jJvH0XcDn8KAKCMtQigP1D6MLweGd4AkkbaD/o="
-
 before_install: sudo apt-get update -qq
 install: scripts/install.sh
-script: npm test && exit 0
-after_success: scripts/deploy.sh
+script: npm test || exit 1
+
+deploy:
+  provider: heroku
+  buildpack: https://github.com/ddollar/heroku-buildpack-multi.git#d5b4b977e515c51f23c6853107b03b6cd5ee53c2
+  api_key:
+    secure: WnPE7usHjPA+g85C2uJYCLLRsZsBYxuSO5OSwiwyhWxDDbAkp6QMrqMFRZmS2PGPkp361o4ew6RSDuRD4ZSCeQo0aykU52Xkk2Xzesq46YO1H1xiDzbtd/A1W4t6plQq7mdqJHtd7bVMi+YRq80jATT0MbKnUlzyZll6A0IxT1Q=
+  app:
+    master: bce-simulation-dev
+    production: bce-simulation
