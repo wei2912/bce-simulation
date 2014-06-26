@@ -8,5 +8,5 @@ env:
 
 before_install: sudo apt-get update -qq
 install: scripts/install.sh
-script: npm test || exit 1
+script: npm test && exit 0
 after_success: scripts/deploy.sh
