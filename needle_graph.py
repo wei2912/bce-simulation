@@ -6,7 +6,7 @@ This script plots different types of graphs
 for Buffon's Needle Experiment.
 """
 
-import argparse, math
+import argparse, math, sys
 
 import matplotlib.pyplot as plt
 
@@ -138,8 +138,13 @@ def main():
     args = get_args()
     MODES[args.mode](args)
 
-    if args.output:
-        plt.savefig(args.output)
+    output = args.output
+
+    if output:
+        if output == 'stdout':
+            plt.savefig(sys.stdout)
+        else:
+            plt.savefig(output)
     else:
         plt.show()
 
