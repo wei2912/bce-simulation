@@ -1,2 +1,2 @@
-https://github.com/d10/heroku-buildpack-python-sklearn.git
-https://github.com/heroku/heroku-buildpack-nodejs.git#88533e498b94afb66fbf3ca77b435a9ca010b26b
+https://github.com/heroku/heroku-buildpack-nodejs.git
+https://github.com/kennethreitz/conda-buildpack.git#98093e1e4c4f0046f63847ff5b1e449d2cd7f481
