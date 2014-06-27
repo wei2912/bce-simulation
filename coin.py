@@ -1,0 +1,129 @@
+#!/usr/bin/env python
+# coding=utf-8
+
+"""
+This script runs a simulation of Buffon's Coin
+Experiment.
+"""
+
+import sys
+
+import matplotlib.pyplot as plt
+
+from utils import arghandle, stepvals
+from utils.sims import CoinSim
+
+def plot_width(args):
+    """
+    Plots a 2D scatter plot which shows the
+    relationship between the width of a square gap
+    and the probability which the coin hits the grid.
+    """
+
+    vals = stepvals.get_range(args.gap, 1000)
+    probs = []
+    for gap in vals:
+        sim = CoinSim(args.radius, gap)
+        probs.append(sim.predict_prob())
+
+    plt.plot(
+        vals,
+        probs,
+        color='red',
+        linewidth=2.0
+    )
+
+    vals = stepvals.get_range(args.gap, args.stepsize)
+    for gap in vals:
+        sim = CoinSim(args.radius, gap)
+        expprob = float(sim.run_trials(args.trials))/args.trials
+
+        if args.verbose:
+            print "radius = %.5g, gap = %.5g: %.5g" % (args.radius, gap, expprob)
+        plt.scatter(gap, expprob)
+
+    plt.axis(xmin=-1, xmax=args.gap+1, ymin=0)
+    plt.xlabel("Width of square gap")
+    plt.ylabel("P(E)")
+    plt.title("Buffon's Coin Experiment - Width of square gap against P(E)" +
+        "\nradius = %.5g" % args.radius)
+    plt.grid(True)
+
+def plot_radius(args):
+    """
+    Plots a 2D scatter plot which shows the
+    relationship between the radius of the coin
+    and the probability which the coin hits the grid.
+    """
+
+    vals = stepvals.get_range(args.radius, 1000)
+    probs = []
+    for radius in vals:
+        sim = CoinSim(radius, args.gap)
+        probs.append(sim.predict_prob())
+
+    plt.plot(
+        vals,
+        probs,
+        color='red',
+        linewidth=2.0
+    )
+
+    vals = stepvals.get_range(args.radius, args.stepsize)
+    for radius in vals:
+        sim = CoinSim(radius, args.gap)
+        expprob = float(sim.run_trials(args.trials))/args.trials
+
+        if args.verbose:
+            print "radius = %.5g, gap = %.5g: %.5g" % (radius, args.gap, expprob)
+        plt.scatter(radius, expprob)
+
+    plt.axis(xmin=-1, xmax=args.radius+1, ymin=0)
+    plt.xlabel("Radius")
+    plt.ylabel("P(E)")
+    plt.title("Buffon's Coin Experiment - Radius against P(E)" +
+        "\nwidth of square gap = %.5g" % args.gap)
+    plt.grid(True)
+
+MODES = {
+    0: plot_width,
+    1: plot_radius
+}
+
+MODES_TXT = [
+    'mode determines what type of graph to plot.',
+    'mode 0: 2D scatter plot, width of square gap against P(E)',
+    'mode 1: 2D scatter plot, radius against P(E)'
+]
+
+def _run_handler(args):
+    sim = CoinSim(args.radius, args.gap)
+    hits = sim.run_trials(args.trials)
+
+    print("%d/%d" % (hits, args.trials))
+    prob = float(hits)/args.trials
+    print("observed prob: %f" % prob)
+    print("expected prob: %f" % sim.predict_prob())
+
+def _plot_handler(args):
+    MODES[args.mode](args)
+
+    if args.output:
+        if args.output == 'stdout':
+            plt.savefig(sys.stdout)
+        else:
+            plt.savefig(args.output)
+    else:
+        plt.show()
+
+def main():
+    args = arghandle.get_args('coin', MODES, MODES_TXT)
+
+    handlers = {
+        'run': _run_handler,
+        'plot': _plot_handler
+    }
+
+    handlers[args.command](args)
+
+main()

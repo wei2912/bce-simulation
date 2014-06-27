@@ -2,15 +2,15 @@
 # coding=utf-8
 
 """
-This script plots different types of graphs
-for Buffon's Needle Experiment.
+This script runs a simulation of Buffon's Needle
+Experiment.
 """
 
-import argparse, math, sys
+import sys
 
 import matplotlib.pyplot as plt
 
-from utils import stepvals
+from utils import arghandle, stepvals
 from utils.sims import NeedleSim
 
 def plot_length(args):
@@ -99,79 +99,34 @@ MODES_TXT = [
     'mode 1: 2D scatter plot, gap width against P(E)'
 ]
 
-def get_args():
-    parser = argparse.ArgumentParser(
-        description="Graph plotter for Buffon's Needle Experiment"
-    )
+def _run_handler(args):
+    sim = NeedleSim(args.length, args.gap)
+    hits = sim.run_trials(args.trials)
 
-    parser.add_argument(
-        '-l',
-        '--length',
-        type=float,
-        required=True,
-        help='length of needle'
-    )
+    print("%d/%d" % (hits, args.trials))
+    prob = float(hits)/args.trials
+    print("observed prob: %f" % prob)
+    print("expected prob: %f" % sim.predict_prob())
 
-    parser.add_argument(
-        '-g',
-        '--gap',
-        type=float,
-        required=True,
-        help='max width of square gap'
-    )
-
-    parser.add_argument(
-        '-t',
-        '--trials',
-        type=int,
-        default=1000,
-        help='number of trials to run'
-    )
-
-    parser.add_argument(
-        '-s',
-        '--stepsize',
-        type=float,
-        default=100,
-        help='number of steps to take when increasing radius/gap'
-    )
-
-    parser.add_argument(
-        '-o',
-        '--output',
-        help='filename to output graph to'
-    )
-
-    parser.add_argument(
-        '-v',
-        '--verbose',
-        action='store_true',
-        help='enable verbose output'
-    )
-
-    parser.add_argument(
-        '-m',
-        '--mode',
-        type=int,
-        choices=[i for i in MODES],
-        required=True,
-        help="\n".join(MODES_TXT)
-    )
-
-    return parser.parse_args()
-
-def main():
-    args = get_args()
+def _plot_handler(args):
     MODES[args.mode](args)
 
-    output = args.output
-
-    if output:
-        if output == 'stdout':
+    if args.output:
+        if args.output == 'stdout':
             plt.savefig(sys.stdout)
         else:
-            plt.savefig(output)
+            plt.savefig(args.output)
     else:
         plt.show()
+
+def main():
+    args = arghandle.get_args('needle', MODES, MODES_TXT)
+
+    handlers = {
+        'run': _run_handler,
+        'plot': _plot_handler
+    }
+
+    handlers[args.command](args)
 
 main()

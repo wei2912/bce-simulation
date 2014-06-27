@@ -2,28 +2,29 @@
 # coding=utf-8
 
 """
-This script plots different types of graphs
-for Buffon's Coin Experiment.
+This script runs a simulation of Buffon's Coin
+Experiment (physics variant).
 """
 
-import argparse, sys
+import sys
 
 import matplotlib.pyplot as plt
 
-from utils import stepvals
-from utils.sims import CoinSim
+from utils import stepvals, arghandle
+from utils.sims import CoinPhysicsSim
 
 def plot_width(args):
     """
     Plots a 2D scatter plot which shows the
     relationship between the width of a square gap
-    and the probability which the coin hits the grid.
+    and the probability which the coin hits and
+    balances on the grid.
     """
 
     vals = stepvals.get_range(args.gap, 1000)
     probs = []
     for gap in vals:
-        sim = CoinSim(args.radius, gap)
+        sim = CoinPhysicsSim(args.radius, gap)
         probs.append(sim.predict_prob())
 
     plt.plot(
@@ -35,7 +36,7 @@ def plot_width(args):
 
     vals = stepvals.get_range(args.gap, args.stepsize)
     for gap in vals:
-        sim = CoinSim(args.radius, gap)
+        sim = CoinPhysicsSim(args.radius, gap)
         expprob = float(sim.run_trials(args.trials))/args.trials
 
         if args.verbose:
@@ -45,7 +46,8 @@ def plot_width(args):
     plt.axis(xmin=-1, xmax=args.gap+1, ymin=0)
     plt.xlabel("Width of square gap")
     plt.ylabel("P(E)")
-    plt.title("Buffon's Coin Experiment - Width of square gap against P(E)" +
+    plt.title("Buffon's Coin Experiment (physics variant)" +
+    	" - Width of square gap against P(E)" +
     	"\nradius = %.5g" % args.radius)
     plt.grid(True)
 
@@ -53,13 +55,14 @@ def plot_radius(args):
     """
     Plots a 2D scatter plot which shows the
     relationship between the radius of the coin
-    and the probability which the coin hits the grid.
+    and the probability which the coin hits and
+    balances on the grid.
     """
 
     vals = stepvals.get_range(args.radius, 1000)
     probs = []
     for radius in vals:
-        sim = CoinSim(radius, args.gap)
+        sim = CoinPhysicsSim(radius, args.gap)
         probs.append(sim.predict_prob())
 
     plt.plot(
@@ -71,7 +74,7 @@ def plot_radius(args):
 
     vals = stepvals.get_range(args.radius, args.stepsize)
     for radius in vals:
-        sim = CoinSim(radius, args.gap)
+        sim = CoinPhysicsSim(radius, args.gap)
         expprob = float(sim.run_trials(args.trials))/args.trials
 
         if args.verbose:
@@ -81,7 +84,8 @@ def plot_radius(args):
     plt.axis(xmin=-1, xmax=args.radius+1, ymin=0)
     plt.xlabel("Radius")
     plt.ylabel("P(E)")
-    plt.title("Buffon's Coin Experiment - Radius against P(E)" +
+    plt.title("Buffon's Coin Experiment (physics variant)" +
+    	" - Radius against P(E)" +
     	"\nwidth of square gap = %.5g" % args.gap)
     plt.grid(True)
 
@@ -96,79 +100,34 @@ MODES_TXT = [
     'mode 1: 2D scatter plot, radius against P(E)'
 ]
 
-def get_args():
-    parser = argparse.ArgumentParser(
-        description="Graph plotter for Buffon's Coin Experiment"
-    )
+def _run_handler(args):
+    sim = CoinPhysicsSim(args.radius, args.gap)
+    hits = sim.run_trials(args.trials)
 
-    parser.add_argument(
-        '-r',
-        '--radius',
-        type=float,
-        required=True,
-        help='max radius of coin'
-    )
+    print("%d/%d" % (hits, args.trials))
+    prob = float(hits)/args.trials
+    print("observed prob: %f" % prob)
+    print("expected prob: %f" % sim.predict_prob())
 
-    parser.add_argument(
-        '-g',
-        '--gap',
-        type=float,
-        required=True,
-        help='max width of square gap'
-    )
-
-    parser.add_argument(
-        '-t',
-        '--trials',
-        type=int,
-        default=1000,
-        help='number of trials to run'
-    )
-
-    parser.add_argument(
-        '-s',
-        '--stepsize',
-        type=int,
-        default=100,
-        help='number of steps to take when increasing radius/gap'
-    )
-
-    parser.add_argument(
-        '-o',
-        '--output',
-        help='filename to output graph to'
-    )
-
-    parser.add_argument(
-        '-v',
-        '--verbose',
-        action='store_true',
-        help='enable verbose output'
-    )
-
-    parser.add_argument(
-        '-m',
-        '--mode',
-        type=int,
-        choices=[i for i in MODES],
-        required=True,
-        help="\n".join(MODES_TXT)
-    )
-
-    return parser.parse_args()
-
-def main():
-    args = get_args()
+def _plot_handler(args):
     MODES[args.mode](args)
 
-    output = args.output
-
-    if output:
-        if output == 'stdout':
+    if args.output:
+        if args.output == 'stdout':
             plt.savefig(sys.stdout)
         else:
-            plt.savefig(output)
+            plt.savefig(args.output)
     else:
         plt.show()
+
+def main():
+    args = arghandle.get_args('coin_phy', MODES, MODES_TXT)
+
+    handlers = {
+        'run': _run_handler,
+        'plot': _plot_handler
+    }
+
+    handlers[args.command](args)
 
 main()
