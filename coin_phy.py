@@ -13,6 +13,8 @@ import matplotlib.pyplot as plt
 from utils import stepvals, arghandle
 from utils.sims import CoinPhysicsSim
 
+OFFSET = 2 # offset = x/stepsize * OFFSET
+
 def plot_width(args):
     """
     Plots a 2D scatter plot which shows the
@@ -43,7 +45,8 @@ def plot_width(args):
             print "radius = %.5g, gap = %.5g: %.5g" % (args.radius, gap, expprob)
         plt.scatter(gap, expprob)
 
-    plt.axis(xmin=-1, xmax=args.gap+1, ymin=0)
+    offset = args.gap/args.stepsize * OFFSET
+    plt.axis(xmin=-offset, xmax=args.gap+offset, ymin=0)
     plt.xlabel("Width of square gap")
     plt.ylabel("P(E)")
     plt.title("Buffon's Coin Experiment (physics variant)" +
@@ -81,7 +84,8 @@ def plot_radius(args):
             print "radius = %.5g, gap = %.5g: %.5g" % (radius, args.gap, expprob)
         plt.scatter(radius, expprob)
 
-    plt.axis(xmin=-1, xmax=args.radius+1, ymin=0)
+    offset = args.radius/args.stepsize * OFFSET
+    plt.axis(xmin=-offset, xmax=args.radius+offset, ymin=0)
     plt.xlabel("Radius")
     plt.ylabel("P(E)")
     plt.title("Buffon's Coin Experiment (physics variant)" +
