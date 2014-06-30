@@ -1,3 +1,6 @@
 *.pyc
 *.png
 node_modules
+build
+*.c
+*.so
