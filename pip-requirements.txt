@@ -1,4 +1,3 @@
 pytest
 pytest-bench
 numexpr
-cython
