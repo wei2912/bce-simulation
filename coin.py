@@ -109,16 +109,15 @@ def _run_handler(args):
 
 def _plot_handler(args):
     output = args.output
-    stdout = output == 'stdout'
 
     import matplotlib
-    config.mpl(matplotlib, stdout)
+    config.mpl(matplotlib, bool(output))
     import matplotlib.pyplot as plt
 
     MODES[args.mode](plt, args)
 
     if output:
-        if stdout:
+        if output == 'stdout':
             plt.savefig(sys.stdout, format='png')
         else:
             plt.savefig(output)
