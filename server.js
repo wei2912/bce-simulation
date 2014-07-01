@@ -64,8 +64,8 @@
       (isCoin ? radius + '.' + width : length + '.' + gap) +
       '.png'
     );
-    var fileToExec = path.join(__dirname, type + '_graph.py');
-    var args = ['python', fileToExec, '-o', fileName, '-m', mode, '-t', trials, '-s', step];
+    var fileToExec = path.join(__dirname, type + '.py');
+    var args = ['python', fileToExec, 'plot', '-o', fileName, '-m', mode, '-t', trials, '-s', step];
     if (isCoin) {
       args.push('-r', radius, '-g', width);
     } else {

@@ -8,14 +8,12 @@ Experiment.
 
 import sys
 
-import matplotlib.pyplot as plt
-
-from utils import arghandle, stepvals
+from utils import arghandle, config, stepvals
 from utils.sims import NeedleSim
 
 OFFSET = 2 # offset = x/stepsize * OFFSET
 
-def plot_length(args):
+def plot_length(plt, args):
     """
     Plots a 2D scatter plot which shows the
     relationship between the length of the
@@ -53,7 +51,7 @@ def plot_length(args):
         "\ngap = %.5g" % args.gap)
     plt.grid(True)
 
-def plot_gap(args):
+def plot_gap(plt, args):
     """
     Plots a 2D scatter plot which shows the
     relationship between the width of the gap
@@ -113,13 +111,19 @@ def _run_handler(args):
     print("expected prob: %f" % sim.predict_prob())
 
 def _plot_handler(args):
-    MODES[args.mode](args)
+    output = args.output
 
-    if args.output:
-        if args.output == 'stdout':
-            plt.savefig(sys.stdout)
+    import matplotlib
+    config.mpl(matplotlib, bool(output))
+    import matplotlib.pyplot as plt
+
+    MODES[args.mode](plt, args)
+
+    if output:
+        if output == 'stdout':
+            plt.savefig(sys.stdout, format='png')
         else:
-            plt.savefig(args.output)
+            plt.savefig(output)
     else:
         plt.show()
 
@@ -133,4 +137,5 @@ def main():
 
     handlers[args.command](args)
 
-main()
+if __name__ == '__main__':
+    main()
