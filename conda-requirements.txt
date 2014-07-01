@@ -12,3 +12,4 @@ python=2.7.7=2
 pytz=2014.4=py27_0
 readline=6.2=2
 six=1.7.2=py27_0
+cython=0.20.2=0
