@@ -139,4 +139,6 @@ def main():
 
     handlers[args.command](args)
 
-main()
+if __name__ == '__main__':
+    main()
+
