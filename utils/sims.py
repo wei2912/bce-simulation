@@ -196,12 +196,16 @@ class CoinPhysicsSim(object):
             sqrt = sqval**(0.5)
             pivots.append((center_x + sqrt, 0))
             pivots.append((center_x - sqrt, 0))
+        if sqval == 0: # tangent
+            pivots.append((center_x, 0))
 
         sqval = self.radius**2 - center_x**2
         if sqval > 0:
             sqrt = sqval**(0.5)
             pivots.append((0, center_y + sqrt))
             pivots.append((0, center_y - sqrt))
+        if sqval == 0:
+            pivots.append((0, center_y))
 
         return pivots
 
