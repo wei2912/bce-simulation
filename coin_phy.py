@@ -8,88 +8,75 @@ Experiment (physics variant).
 
 import sys
 
-from utils import arghandle, config, stepvals
+from utils import arghandle, config, graph, stepvals
 from utils.sims import CoinPhysicsSim
 
-OFFSET = 2 # offset = x/stepsize * OFFSET
+def _get_prob(hits, trials):
+    return float(hits)/trials
 
-def plot_width(plt, args):
+def plot_width(args):
     """
     Plots a 2D scatter plot which shows the
     relationship between the width of a square gap
-    and the probability which the coin hits and
-    balances on the grid.
+    and the probability which the coin hits the grid.
     """
 
     vals = stepvals.get_range(args.gap, 1000)
-    probs = []
+    expected = []
     for gap in vals:
         sim = CoinPhysicsSim(args.radius, gap)
-        probs.append(sim.predict_prob())
+        expected.append(sim.predict_prob())
 
-    plt.plot(
-        vals,
-        probs,
-        color='red',
-        linewidth=2.0
-    )
+    graph.line_plot(vals, expected)
 
     vals = stepvals.get_range(args.gap, args.stepsize)
     for gap in vals:
         sim = CoinPhysicsSim(args.radius, gap)
-        expprob = float(sim.run_trials(args.trials))/args.trials
+        prob = _get_prob(sim.run_trials(args.trials), args.trials)
 
         if args.verbose:
-            print "radius = %.5g, gap = %.5g: %.5g" % (args.radius, gap, expprob)
-        plt.scatter(gap, expprob)
+            print "radius = %.5g, gap width = %.5g: %.5g" % (args.radius, gap, prob)
+        graph.scatter_plot(gap, prob)
 
-    offset = args.gap/args.stepsize * OFFSET
-    plt.axis(xmin=-offset, xmax=args.gap+offset, ymin=0)
-    plt.xlabel("Width of square gap")
-    plt.ylabel("Probability")
-    plt.title("Buffon's Coin Experiment (physics variant)" +
-        "\nWidth of square gap against Probability" +
-        "\nradius = %.5g" % args.radius)
-    plt.grid(True)
+    graph.scale_plot(args.gap, args.stepsize)
+    graph.prepare_plot(
+        "Width of square gap",
+        "Probability",
+        "Buffon's Coin Experiment (physics variant)" +
+            "\nradius = %.5g" % args.radius
+    )
 
-def plot_radius(plt, args):
+def plot_radius(args):
     """
     Plots a 2D scatter plot which shows the
     relationship between the radius of the coin
-    and the probability which the coin hits and
-    balances on the grid.
+    and the probability which the coin hits the grid.
     """
 
     vals = stepvals.get_range(args.radius, 1000)
-    probs = []
+    expected = []
     for radius in vals:
         sim = CoinPhysicsSim(radius, args.gap)
-        probs.append(sim.predict_prob())
+        expected.append(sim.predict_prob())
 
-    plt.plot(
-        vals,
-        probs,
-        color='red',
-        linewidth=2.0
-    )
+    graph.line_plot(vals, expected)
 
     vals = stepvals.get_range(args.radius, args.stepsize)
     for radius in vals:
         sim = CoinPhysicsSim(radius, args.gap)
-        expprob = float(sim.run_trials(args.trials))/args.trials
+        prob = _get_prob(sim.run_trials(args.trials), args.trials)
 
         if args.verbose:
-            print "radius = %.5g, gap = %.5g: %.5g" % (radius, args.gap, expprob)
-        plt.scatter(radius, expprob)
+            print "radius = %.5g, gap width = %.5g: %.5g" % (radius, args.gap, prob)
+        graph.scatter_plot(radius, prob)
 
-    offset = args.radius/args.stepsize * OFFSET
-    plt.axis(xmin=-offset, xmax=args.radius+offset, ymin=0)
-    plt.xlabel("Radius")
-    plt.ylabel("Probability")
-    plt.title("Buffon's Coin Experiment (physics variant)" +
-        "\nRadius against Probability" +
-        "\nwidth of square gap = %.5g" % args.gap)
-    plt.grid(True)
+    graph.scale_plot(args.radius, args.stepsize)
+    graph.prepare_plot(
+        "Radius",
+        "Probability",
+        "Buffon's Coin Experiment (physics variant)" +
+            "\nwidth of square gap = %.5g" % args.gap
+    )
 
 MODES = {
     0: plot_width,
@@ -107,26 +94,13 @@ def _run_handler(args):
     hits = sim.run_trials(args.trials)
 
     print("%d/%d" % (hits, args.trials))
-    prob = float(hits)/args.trials
+    prob = _get_prob(hits, args.trials)
     print("observed prob: %f" % prob)
     print("expected prob: %f" % sim.predict_prob())
 
 def _plot_handler(args):
-    output = args.output
-
-    import matplotlib
-    config.mpl(matplotlib, bool(output))
-    import matplotlib.pyplot as plt
-
-    MODES[args.mode](plt, args)
-
-    if output:
-        if output == 'stdout':
-            plt.savefig(sys.stdout, format='png')
-        else:
-            plt.savefig(output)
-    else:
-        plt.show()
+    MODES[args.mode](args)
+    graph.display_plot(args.output)
 
 def main():
     args = arghandle.get_args('coin_phy', MODES, MODES_TXT)
@@ -140,4 +114,3 @@ def main():
 
 if __name__ == '__main__':
     main()
-

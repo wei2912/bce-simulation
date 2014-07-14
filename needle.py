@@ -8,12 +8,13 @@ Experiment.
 
 import sys
 
-from utils import arghandle, config, stepvals
+from utils import arghandle, config, graph, stepvals
 from utils.sims import NeedleSim
 
-OFFSET = 2 # offset = x/stepsize * OFFSET
+def _get_prob(hits, trials):
+    return float(hits)/trials
 
-def plot_length(plt, args):
+def plot_length(args):
     """
     Plots a 2D scatter plot which shows the
     relationship between the length of the
@@ -22,37 +23,31 @@ def plot_length(plt, args):
     """
 
     vals = stepvals.get_range(args.length, 1000)
-    probs = []
+    expected = []
     for length in vals:
         sim = NeedleSim(length, args.gap)
-        probs.append(sim.predict_prob())
+        expected.append(sim.predict_prob())
 
-    plt.plot(
-        vals,
-        probs,
-        color='red',
-        linewidth=2.0
-    )
+    graph.line_plot(vals, expected)
 
     vals = stepvals.get_range(args.length, args.stepsize)
     for length in vals:
         sim = NeedleSim(length, args.gap)
-        expprob = float(sim.run_trials(args.trials))/args.trials
+        prob = _get_prob(sim.run_trials(args.trials), args.trials)
 
         if args.verbose:
-            print "length = %.5g, gap = %.5g: %.5g" % (length, args.gap, expprob)
-        plt.scatter(length, expprob)
+            print "length = %.5g, gap width = %.5g: %.5g" % (length, args.gap, prob)
+        graph.scatter_plot(length, prob)
 
-    offset = args.length/args.stepsize * OFFSET
-    plt.axis(xmin=-offset, xmax=args.length+offset, ymin=0)
-    plt.xlabel("Length of needle")
-    plt.ylabel("Probability")
-    plt.title("Buffon's Needle Experiment" +
-        "\nLength of needle against Probability" +
-        "\ngap = %.5g" % args.gap)
-    plt.grid(True)
+    graph.scale_plot(args.length, args.stepsize)
+    graph.prepare_plot(
+        "Length of needle",
+        "Probability",
+        "Buffon's Needle Experiment" +
+            "\ngap width = %.5g" % args.gap
+    )
 
-def plot_gap(plt, args):
+def plot_gap(args):
     """
     Plots a 2D scatter plot which shows the
     relationship between the width of the gap
@@ -62,35 +57,29 @@ def plot_gap(plt, args):
     """
 
     vals = stepvals.get_range(args.gap, 1000)
-    probs = []
+    expected = []
     for gap in vals:
         sim = NeedleSim(args.length, gap)
-        probs.append(sim.predict_prob())
+        expected.append(sim.predict_prob())
 
-    plt.plot(
-        vals,
-        probs,
-        color='red',
-        linewidth=2.0
-    )
+    graph.line_plot(vals, expected)
 
     vals = stepvals.get_range(args.gap, args.stepsize)
     for gap in vals:
         sim = NeedleSim(args.length, gap)
-        expprob = float(sim.run_trials(args.trials))/args.trials
+        prob = _get_prob(sim.run_trials(args.trials), args.trials)
 
         if args.verbose:
-            print "length = %.5g, gap = %.5g: %.5g" % (args.length, gap, expprob)
-        plt.scatter(gap, expprob)
+            print "length = %.5g, gap width = %.5g: %.5g" % (args.length, gap, prob)
+        graph.scatter_plot(gap, prob)
 
-    offset = args.gap/args.stepsize * OFFSET
-    plt.axis(xmin=-offset, xmax=args.gap+offset, ymin=0)
-    plt.xlabel("Gap length")
-    plt.ylabel("Probability")
-    plt.title("Buffon's Needle Experiment" +
-        "\nGap width against Probability" +
-        "\nlength = %.5g" % args.length)
-    plt.grid(True)
+    graph.scale_plot(args.gap, args.stepsize)
+    graph.prepare_plot(
+        "Gap width",
+        "Probability",
+        "Buffon's Needle Experiment" +
+            "\nlength = %.5g" % args.length
+    )
 
 MODES = {
     0: plot_length,
@@ -108,26 +97,13 @@ def _run_handler(args):
     hits = sim.run_trials(args.trials)
 
     print("%d/%d" % (hits, args.trials))
-    prob = float(hits)/args.trials
+    prob = _get_prob(hits, args.trials)
     print("observed prob: %f" % prob)
     print("expected prob: %f" % sim.predict_prob())
 
 def _plot_handler(args):
-    output = args.output
-
-    import matplotlib
-    config.mpl(matplotlib, bool(output))
-    import matplotlib.pyplot as plt
-
-    MODES[args.mode](plt, args)
-
-    if output:
-        if output == 'stdout':
-            plt.savefig(sys.stdout, format='png')
-        else:
-            plt.savefig(output)
-    else:
-        plt.show()
+    MODES[args.mode](args)
+    graph.display_plot(args.output)
 
 def main():
     args = arghandle.get_args('needle', MODES, MODES_TXT)
