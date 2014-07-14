@@ -46,8 +46,9 @@ def plot_length(plt, args):
     offset = args.length/args.stepsize * OFFSET
     plt.axis(xmin=-offset, xmax=args.length+offset, ymin=0)
     plt.xlabel("Length of needle")
-    plt.ylabel("P(E)")
-    plt.title("Buffon's Needle Experiment - Length of needle against P(E)" +
+    plt.ylabel("Probability")
+    plt.title("Buffon's Needle Experiment" +
+        "\nLength of needle against Probability" +
         "\ngap = %.5g" % args.gap)
     plt.grid(True)
 
@@ -85,8 +86,9 @@ def plot_gap(plt, args):
     offset = args.gap/args.stepsize * OFFSET
     plt.axis(xmin=-offset, xmax=args.gap+offset, ymin=0)
     plt.xlabel("Gap length")
-    plt.ylabel("P(E)")
-    plt.title("Buffon's Needle Experiment - Gap width against P(E)" +
+    plt.ylabel("Probability")
+    plt.title("Buffon's Needle Experiment" +
+        "\nGap width against Probability" +
         "\nlength = %.5g" % args.length)
     plt.grid(True)
 
@@ -97,8 +99,8 @@ MODES = {
 
 MODES_TXT = [
     'mode determines what type of graph to plot.',
-    'mode 0: 2D scatter plot, length of needle against P(E)',
-    'mode 1: 2D scatter plot, gap width against P(E)'
+    'mode 0: 2D scatter plot, length of needle against Probability',
+    'mode 1: 2D scatter plot, gap width against Probability'
 ]
 
 def _run_handler(args):

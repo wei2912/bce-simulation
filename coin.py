@@ -45,8 +45,9 @@ def plot_width(plt, args):
     offset = args.gap/args.stepsize * OFFSET
     plt.axis(xmin=-offset, xmax=args.gap+offset, ymin=0)
     plt.xlabel("Width of square gap")
-    plt.ylabel("P(E)")
-    plt.title("Buffon's Coin Experiment - Width of square gap against P(E)" +
+    plt.ylabel("Probability")
+    plt.title("Buffon's Coin Experiment" +
+    	"\nWidth of square gap against Probability" +
         "\nradius = %.5g" % args.radius)
     plt.grid(True)
 
@@ -82,8 +83,9 @@ def plot_radius(plt, args):
     offset = args.radius/args.stepsize * OFFSET
     plt.axis(xmin=-offset, xmax=args.radius+offset, ymin=0)
     plt.xlabel("Radius")
-    plt.ylabel("P(E)")
-    plt.title("Buffon's Coin Experiment - Radius against P(E)" +
+    plt.ylabel("Probability")
+    plt.title("Buffon's Coin Experiment" +
+    	"\nRadius against Probability" +
         "\nwidth of square gap = %.5g" % args.gap)
     plt.grid(True)
 

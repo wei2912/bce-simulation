@@ -46,10 +46,10 @@ def plot_width(plt, args):
     offset = args.gap/args.stepsize * OFFSET
     plt.axis(xmin=-offset, xmax=args.gap+offset, ymin=0)
     plt.xlabel("Width of square gap")
-    plt.ylabel("P(E)")
+    plt.ylabel("Probability")
     plt.title("Buffon's Coin Experiment (physics variant)" +
-    	" - Width of square gap against P(E)" +
-    	"\nradius = %.5g" % args.radius)
+        "\nWidth of square gap against Probability" +
+        "\nradius = %.5g" % args.radius)
     plt.grid(True)
 
 def plot_radius(plt, args):
@@ -85,10 +85,10 @@ def plot_radius(plt, args):
     offset = args.radius/args.stepsize * OFFSET
     plt.axis(xmin=-offset, xmax=args.radius+offset, ymin=0)
     plt.xlabel("Radius")
-    plt.ylabel("P(E)")
+    plt.ylabel("Probability")
     plt.title("Buffon's Coin Experiment (physics variant)" +
-    	" - Radius against P(E)" +
-    	"\nwidth of square gap = %.5g" % args.gap)
+        "\nRadius against Probability" +
+        "\nwidth of square gap = %.5g" % args.gap)
     plt.grid(True)
 
 MODES = {
@@ -98,8 +98,8 @@ MODES = {
 
 MODES_TXT = [
     'mode determines what type of graph to plot.',
-    'mode 0: 2D scatter plot, width of square gap against P(E)',
-    'mode 1: 2D scatter plot, radius against P(E)'
+    'mode 0: 2D scatter plot, width of square gap against Probability',
+    'mode 1: 2D scatter plot, radius against Probability'
 ]
 
 def _run_handler(args):
