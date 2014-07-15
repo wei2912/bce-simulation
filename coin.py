@@ -99,8 +99,10 @@ def _run_handler(args):
     print("expected prob: %f" % sim.predict_prob())
 
 def _plot_handler(args):
+    output = args.output
+    graph.init(output)
     MODES[args.mode](args)
-    graph.display_plot(args.output)
+    graph.display_plot(output)
 
 def main():
     args = arghandle.get_args('coin', MODES, MODES_TXT)

@@ -3,11 +3,15 @@ This module serves as an interface to
 matplotlib.
 """
 
-import matplotlib
-import matplotlib.pyplot as plt
 from utils import config
 
 OFFSET = 2 # offset = max_x/stepsize * OFFSET
+
+def init(output):
+    import matplotlib
+    config.mpl(matplotlib, bool(output))
+    from matplotlib import pyplot
+    globals()['plt'] = pyplot
 
 def line_plot(xs, ys):
 	plt.plot(
@@ -31,8 +35,6 @@ def prepare_plot(xlabel, ylabel, title):
     plt.grid(True)
 
 def display_plot(output):
-    config.mpl(matplotlib, bool(output))
-
     if output:
         if output == 'stdout':
             plt.savefig(sys.stdout, format='png')
