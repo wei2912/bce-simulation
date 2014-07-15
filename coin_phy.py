@@ -41,7 +41,7 @@ def plot_width(args):
     graph.scale_plot(args.gap, args.stepsize)
     graph.prepare_plot(
         "Width of square gap",
-        "Probability",
+        "Probability of coin balancing on grid",
         "Buffon's Coin Experiment (physics variant)" +
             "\nradius = %.5g" % args.radius
     )

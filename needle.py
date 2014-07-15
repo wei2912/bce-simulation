@@ -42,7 +42,7 @@ def plot_length(args):
     graph.scale_plot(args.length, args.stepsize)
     graph.prepare_plot(
         "Length of needle",
-        "Probability",
+        "Probability of needle touching a line",
         "Buffon's Needle Experiment" +
             "\ngap width = %.5g" % args.gap
     )
