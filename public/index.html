@@ -12,9 +12,7 @@
     <div class="inner">
       <h1 class="center"><a href="https://github.com/wei2912/bce-simulation">bce-simulation</a></h1>
       <p>
-	bce-simulation is a set of simulations written for a research project
-	regarding Buffon's Coin Experiment and a couple of its variants. It serves
-	to verify theoretical findings through experimental methods.
+        bce-simulation is a set of simulations written for a research project regarding Buffon's Coin Experiment and a couple of its variants. It serves to verify theoretical findings through experimental methods.
       </p>
     </div>
   </div>
@@ -22,106 +20,171 @@
   <form type="get" action="/build">
     <div class="outer">
       <div class="inner">
-	<h2>Simulation</h2>
-	<div>
-	  <select name="simulation">
-	    <option value="coin" selected>Coin</option>
-	    <option value="coin_phy">Coin (Physics variant)</option>
-	    <option value="needle">Needle</option>
-	  </select>
-	</div>
+        <h2>Simulation</h2>
+        <div>
+          <select name="simulation">
+            <option value="coin" selected>Coin</option>
+            <option value="coin_phy">Coin (Physics variant)</option>
+            <option value="needle">Needle</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="inner">
+        <p class="hidden coin">
+          The <strong>Coin Simulation</strong> generates a graph of Buffon's Coin Experiment, showing the probability of a coin touching one of the lines of a square grid.
+        </p>
+
+        <p class="hidden coin_phy">
+          The <strong>Coin Simulation (Physics variant)</strong> generates a graph of Buffon's Coin Experiment with additional calculations: it detects if the coin can really balance with additional calculations, and shows the probability of the coin touching one of the lines of a square grid.
+        </p>
+
+        <p class="hidden needle">
+          The <strong>Needle Simulation</strong> generates a graph of Buffon's Needle Experiment: it shows the probability of a needle touching one of the lines of two parallel lines.
+        </p>
       </div>
     </div>
 
     <div class="outer">
       <div class="inner">
-	<h2>Type of Graph</h2>
-	<div>
-	  <select name="type">
-	    <option class="hidden coin coin_phy" value="0" selected>Increasing width of square gap</option>
-	    <option class="hidden coin coin_phy" value="1">Increasing radius</option>
-	    <option class="hidden needle" value="0">Increasing width of gap</option>
-	    <option class="hidden needle" value="1">Increasing length</option>
-	  </select>
-	</div>
+        <h2>Type of Graph</h2>
+        <div>
+          <select name="type">
+            <option class="hidden coin coin_phy" value="0" selected>Increasing width of square gap</option>
+            <option class="hidden coin coin_phy" value="1">Increasing radius</option>
+            <option class="hidden needle" value="0">Increasing width of gap</option>
+            <option class="hidden needle" value="1">Increasing length</option>
+          </select>
+        </div>
+      </div>
+      
+      <div class="inner">
+        <p class="hidden coin type_0">
+          <strong>Increasing width of square gap</strong> generates a graph plotting width of square gap against probability of coin touching a line.
+        </p>
+
+        <p class="hidden coin type_1">
+          <strong>Increasing radius</strong> generates a graph plotting radius of coin against probability of coin touching a line.
+        </p>
+
+        <p class="hidden coin_phy type_0">
+          <strong>Increasing width of square gap</strong> generates a graph plotting width of square gap against probability of coin balancing on a line.
+        </p>
+
+        <p class="hidden coin_phy type_1">
+          <strong>Increasing radius</strong> generates a graph plotting radius of coin against probability of coin balancing on a line.
+        </p>
+
+        <p class="hidden needle type_0">
+          <strong>Increasing width of gap</strong> generates a graph plotting width of gap against probability of needle touching a line.
+        </p>
+
+        <p class="hidden needle type_1">
+          <strong>Increasing length</strong> generates a graph plotting length of needle against probability of needle touching a line.
+        </p>
       </div>
     </div>
 
     <div class="outer">
       <div class="inner">
-	<h2>Number of Trials to run</h2>
-	<div>
-	  <input name="trials" type="number" value="10000">
-	</div>
+        <h2>Number of trials to run</h2>
+        <div>
+          <input name="trials" type="number" value="10000">
+        </div>
+      </div>
+
+      <div class="inner">
+        <p>
+          The <strong>number of trials to run</strong> is the number of times the simulation will be run. The greater the number of trials, the greater the accuracy of results.
+        </p>
       </div>
     </div>
 
     <div class="outer">
       <div class="inner">
-	<h2>Number of steps to take</h2>
-	<div>
-	  <input name="step" type="number" value="100">
-	</div>
+        <h2>Number of steps to take</h2>
+        <div>
+          <input name="step" type="number" value="100">
+        </div>
+      </div>
+
+      <div class="inner">
+        <p>
+          The <strong>number of steps to take</strong> specifies the number of x-axis values.
+        </p>
       </div>
     </div>
 
     <div class="outer hidden coin coin_phy">
       <div class="inner">
-	<h2>Radius of coin</h2>
-	<div>
-	  <input name="radius" type="number" value="1">
-	</div>
+        <h2>Radius of coin</h2>
+        <div>
+          <input name="radius" type="number" value="1">
+        </div>
       </div>
     </div>
 
     <div class="outer hidden coin coin_phy">
       <div class="inner">
-	<h2>Width of square gap</h2>
-	<div>
-	  <input name="width" type="number" value="5">
-	</div>
+        <h2>Width of square gap</h2>
+        <div>
+          <input name="width" type="number" value="5">
+        </div>
       </div>
     </div>
 
     <div class="outer hidden needle">
       <div class="inner">
-	<h2>Length of needle</h2>
-	<div>
-	  <input name="length" type="number" value="1">
-	</div>
+        <h2>Length of needle</h2>
+        <div>
+          <input name="length" type="number" value="1">
+        </div>
       </div>
     </div>
 
     <div class="outer hidden needle">
       <div class="inner">
-	<h2>Length of Gap between 2 lines</h2>
-	<div>
-	  <input name="gap" type="number" value="1">
-	</div>
+        <h2>Length of gap between 2 lines</h2>
+        <div>
+          <input name="gap" type="number" value="1">
+        </div>
       </div>
     </div>
 
     <div class="outer">
       <div class="inner">
-	<input class="center" type="submit" value="Generate Image">
+        <input class="center" type="submit" value="Generate Image">
       </div>
     </div>
   </form>
 
-  <footer>
-    <p>
-
+  <footer class="outer">
+    <p class="inner">
+      Created by <a href="https://twitter.com/demoneaux">@d10</a> and <a href="https://github.com/wei2912">@wei2912</a> | Code licensed under MIT License
     </p>
   </footer>
 
 
   <script>
-  var body = document.body,
-      sim = document.getElementsByName('simulation')[0];
+  var doc = document,
+      body = doc.body,
+      sim = doc.getElementsByName('simulation')[0],
+      graphType = doc.getElementsByName('type')[0];
+
+  body.className += ' js';
+
   sim.onchange = function (e) {
-    var simType = sim.options[sim.selectedIndex].value;
-    body.className = 'show_' + simType;
-    console.log(simType);
+    var simType = sim.options[sim.selectedIndex].value,
+        className = body.className;
+    body.className = className.replace(/\bshow_(?:coin|coin_phy|needle)\b/, ' ').replace(/\s+/, ' ').replace(/^\s+|\s+$/, '') + 
+    ' show_' + simType;
+  };
+
+  graphType.onchange = function (e) {
+    var type = graphType.options[graphType.selectedIndex].value,
+        className = body.className;
+    body.className = className.replace(/\s+/, ' ').replace(/^\s+|\s+$/, '') + 
+    ' show_' + type;
   };
   </script>
 </body>

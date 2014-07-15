@@ -13,7 +13,8 @@
 html {
   color: #222;
   font-size: 1em;
-  font-family: Helvetica, arial, freesans, clean, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol";
+  font-family: 
+  'Segoe WP', 'Segoe UI', 'Helvetica Neue', Helvetica, Arial, freesans, clean, sans-serif, 'Segoe UI Emoji', 'Segoe UI Symbol';
   font-weight: 300;
   line-height: 1.4;
 }
@@ -92,14 +93,21 @@ p {
 
 body.show_coin .coin,
 body.show_coin_phy .coin_phy,
-body.show_needle .needle {
+body.show_needle .needle,
+.show_0 .type_0,
+.show_1 .type_1 {
   display: block;
 }
 
 .outer {
   width: 100%;
-  margin: 0;
-  padding: 0;
+  margin: 0 0 15px 0;
+  padding: 0 0 10px 0;
+  border-bottom: 1px solid #eee;
+}
+
+footer.outer {
+  border-bottom: none;
 }
 
 .inner {
@@ -114,6 +122,10 @@ body.show_needle .needle {
   font-weight: 300;
 }
 
+.inner p {
+  margin: 0;
+}
+
 /* ==========================================================================
    Helper classes
    ========================================================================== */
@@ -122,7 +134,7 @@ body.show_needle .needle {
  * Hide visually and from screen readers: h5bp.com/u
  */
 
-.hidden {
+.js .hidden {
   display: none;
 }
 
