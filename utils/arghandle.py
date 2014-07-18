@@ -75,13 +75,23 @@ def _needle_length(parser):
         help='length of needle'
     )
 
+def _diameter(parser):
+    parser.add_argument(
+        '-d',
+        '--diameter',
+        type=float,
+        required=True,
+        help='diameter of coin/length of needle'
+    )
+
 def _setup_run(subparsers, mode):
     parser_run = subparsers.add_parser('run')
 
     mode_specific = {
         'coin': _coin_radius,
         'needle': _needle_length,
-        'coin_phy': _coin_radius
+        'coin_phy': _coin_radius,
+        'coin_phy_needle': lambda x: x
     }
 
     mode_specific[mode](parser_run)
@@ -98,7 +108,8 @@ def _setup_plot(subparsers, mode, plot_modes, plot_modes_txt):
     mode_specific = {
         'coin': _coin_radius,
         'needle': _needle_length,
-        'coin_phy': _coin_radius
+        'coin_phy': _coin_radius,
+        'coin_phy_needle': _diameter
     }
 
     mode_specific[mode](parser_plot)
@@ -114,7 +125,8 @@ def get_args(mode, plot_modes, plot_modes_txt):
     descriptions = {
         'coin': "Buffon's Coin Experiment",
         'needle': "Buffon's Needle Experiment",
-        'coin_phy': "Buffon's Coin Experiment (physics variant)"
+        'coin_phy': "Buffon's Coin Experiment (physics variant)",
+        'coin_phy_needle': "Comparison of the 3 experiments"
     }
 
     parser = argparse.ArgumentParser(

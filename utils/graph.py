@@ -13,16 +13,19 @@ def init(output):
     from matplotlib import pyplot
     globals()['plt'] = pyplot
 
-def line_plot(xs, ys):
+def line_plot(xs, ys, color='red'):
 	plt.plot(
         xs,
         ys,
-        color='red',
+        color=color,
         linewidth=2.0
     )
 
-def scatter_plot(x, y):
-	plt.scatter(x, y)
+def legend(*args):
+    plt.legend(args, loc='best')
+
+def scatter_plot(x, y, color='red'):
+	plt.scatter(x, y, color=color)
 
 def scale_plot(max_x, stepsize):
     offset = max_x/stepsize * OFFSET
