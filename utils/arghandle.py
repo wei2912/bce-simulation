@@ -91,7 +91,7 @@ def _setup_run(subparsers, mode):
         'coin': _coin_radius,
         'needle': _needle_length,
         'coin_phy': _coin_radius,
-        'coin_phy_needle': lambda x: x
+        'all': lambda x: x
     }
 
     mode_specific[mode](parser_run)
@@ -109,7 +109,7 @@ def _setup_plot(subparsers, mode, plot_modes, plot_modes_txt):
         'coin': _coin_radius,
         'needle': _needle_length,
         'coin_phy': _coin_radius,
-        'coin_phy_needle': _diameter
+        'all': _diameter
     }
 
     mode_specific[mode](parser_plot)
@@ -125,8 +125,8 @@ def get_args(mode, plot_modes, plot_modes_txt):
     descriptions = {
         'coin': "Buffon's Coin Experiment",
         'needle': "Buffon's Needle Experiment",
-        'coin_phy': "Buffon's Coin Experiment (physics variant)",
-        'coin_phy_needle': "Comparison of the 3 experiments"
+        'coin_phy': "Buffon's Coin Experiment (a variation)",
+        'all': "Comparison of the 3 experiments"
     }
 
     parser = argparse.ArgumentParser(
@@ -137,7 +137,8 @@ def get_args(mode, plot_modes, plot_modes_txt):
         dest='command'
     )
 
-    _setup_run(subparsers, mode)
+    if not mode == "all":
+        _setup_run(subparsers, mode)
     _setup_plot(subparsers, mode, plot_modes, plot_modes_txt)
 
     return parser.parse_args()

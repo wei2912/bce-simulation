@@ -110,7 +110,7 @@ def _plot_handler(args):
     graph.display_plot(output)
 
 def main():
-    args = arghandle.get_args('coin_phy_needle', MODES, MODES_TXT)
+    args = arghandle.get_args('all', MODES, MODES_TXT)
     _plot_handler(args)
 
 if __name__ == '__main__':
