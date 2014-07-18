@@ -41,7 +41,7 @@ def plot_width(args):
     graph.scale_plot(args.gap, args.stepsize)
     graph.prepare_plot(
     	"Width of square gap",
-    	"Probability of coin touching a line",
+    	"Probability of coin touching the grid",
     	"Buffon's Coin Experiment" +
         	"\nradius = %.5g" % args.radius
     )
@@ -73,7 +73,7 @@ def plot_radius(args):
     graph.scale_plot(args.radius, args.stepsize)
     graph.prepare_plot(
     	"Radius",
-    	"Probability",
+    	"Probability of coin touching the grid",
     	"Buffon's Coin Experiment" +
         	"\nwidth of square gap = %.5g" % args.gap
     )
@@ -85,8 +85,8 @@ MODES = {
 
 MODES_TXT = [
     'mode determines what type of graph to plot.',
-    'mode 0: 2D scatter plot, width of square gap against P(E)',
-    'mode 1: 2D scatter plot, radius against P(E)'
+    'mode 0: 2D scatter plot, width of square gap against probability of coin touching grid',
+    'mode 1: 2D scatter plot, radius against probability of coin touching grid'
 ]
 
 def _run_handler(args):

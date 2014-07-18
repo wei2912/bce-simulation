@@ -48,7 +48,7 @@ def plot_width(args):
     graph.scale_plot(args.gap, args.stepsize)
     graph.prepare_plot(
         "Width of gap",
-        "Probability of coin/needle balancing on grid",
+        "Probability of coin/needle touching/balancing on lines",
         "Comparison of the 3 experiments" +
             "\nlength/diameter = %.5g" % args.diameter
     )
@@ -87,7 +87,7 @@ def plot_diameter(args):
     graph.scale_plot(args.diameter, args.stepsize)
     graph.prepare_plot(
         "Length/Diameter",
-        "Probability of coin/needle balancing on grid",
+        "Probability of coin/needle touching/balancing on lines",
         "Comparison of the 3 experiments" +
             "\nwidth of square gap = %.5g" % args.gap
     )
@@ -99,8 +99,8 @@ MODES = {
 
 MODES_TXT = [
     'mode determines what type of graph to plot.',
-    'mode 0: 2D scatter plot, width of square gap against Probability',
-    'mode 1: 2D scatter plot, radius against Probability'
+    'mode 0: 2D scatter plot, width of square gap against probability of coin/needle touching/balancing on lines',
+    'mode 1: 2D scatter plot, radius against probability of coin/needle touching/balancing on lines'
 ]
 
 def _plot_handler(args):

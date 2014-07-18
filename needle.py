@@ -76,7 +76,7 @@ def plot_gap(args):
     graph.scale_plot(args.gap, args.stepsize)
     graph.prepare_plot(
         "Gap width",
-        "Probability",
+        "Probability of needle touching a line",
         "Buffon's Needle Experiment" +
             "\nlength = %.5g" % args.length
     )
@@ -88,8 +88,8 @@ MODES = {
 
 MODES_TXT = [
     'mode determines what type of graph to plot.',
-    'mode 0: 2D scatter plot, length of needle against Probability',
-    'mode 1: 2D scatter plot, gap width against Probability'
+    'mode 0: 2D scatter plot, length of needle against probability of needle touching a line',
+    'mode 1: 2D scatter plot, gap width against probability of needle touching a line'
 ]
 
 def _run_handler(args):
