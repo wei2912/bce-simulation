@@ -30,7 +30,6 @@ def plot_width(args):
 
     graph.line_plot(vals, expected)
 
-    vals = stepvals.get_range(args.gap, 1000)
     expected = []
     for gap in vals:
         sim = CoinSim(args.diameter/2, gap)
@@ -38,7 +37,6 @@ def plot_width(args):
 
     graph.line_plot(vals, expected, color='green')
 
-    vals = stepvals.get_range(args.gap, 1000)
     expected = []
     for gap in vals:
         sim = CoinPhysicsSim(args.diameter/2, gap)
@@ -70,7 +68,6 @@ def plot_diameter(args):
 
     graph.line_plot(vals, expected)
 
-    vals = stepvals.get_range(args.diameter, 1000)
     expected = []
     for diameter in vals:
         sim = CoinSim(diameter/2, args.gap)
@@ -78,7 +75,6 @@ def plot_diameter(args):
 
     graph.line_plot(vals, expected, color='green')
 
-    vals = stepvals.get_range(args.diameter, 1000)
     expected = []
     for diameter in vals:
         sim = CoinPhysicsSim(diameter/2, args.gap)
