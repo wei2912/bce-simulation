@@ -89,7 +89,7 @@ def plot_diameter(args):
         "Length/Diameter",
         "Probability of coin/needle touching/balancing on lines",
         "Comparison of the 3 experiments" +
-            "\nwidth of square gap = %.5g" % args.gap
+            "\nwidth of gap = %.5g" % args.gap
     )
 
 MODES = {
