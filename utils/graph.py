@@ -24,7 +24,7 @@ def line_plot(xs, ys, color='red'):
 def legend(*args):
     plt.legend(args, loc='best')
 
-def scatter_plot(x, y, color='red'):
+def scatter_plot(x, y, color='blue'):
 	plt.scatter(x, y, color=color)
 
 def scale_plot(max_x, stepsize):
