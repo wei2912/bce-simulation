@@ -41,8 +41,8 @@ def plot_width(args):
     graph.scale_plot(args.gap, args.stepsize)
     graph.prepare_plot(
         "Width of square gap",
-        "Probability",
-        "Buffon's Coin Experiment (physics variant)" +
+        "Probability of coin balancing on grid",
+        "Buffon's Coin Experiment (a variation)" +
             "\nradius = %.5g" % args.radius
     )
 
@@ -73,8 +73,8 @@ def plot_radius(args):
     graph.scale_plot(args.radius, args.stepsize)
     graph.prepare_plot(
         "Radius",
-        "Probability",
-        "Buffon's Coin Experiment (physics variant)" +
+        "Probability of coin balancing on grid",
+        "Buffon's Coin Experiment (a variation)" +
             "\nwidth of square gap = %.5g" % args.gap
     )
 
@@ -85,8 +85,8 @@ MODES = {
 
 MODES_TXT = [
     'mode determines what type of graph to plot.',
-    'mode 0: 2D scatter plot, width of square gap against Probability',
-    'mode 1: 2D scatter plot, radius against Probability'
+    'mode 0: 2D scatter plot, width of square gap against probability of coin balancing on grid',
+    'mode 1: 2D scatter plot, radius against probability of coin balancing on grid'
 ]
 
 def _run_handler(args):
@@ -99,8 +99,10 @@ def _run_handler(args):
     print("expected prob: %f" % sim.predict_prob())
 
 def _plot_handler(args):
+    output = args.output
+    graph.init(output)
     MODES[args.mode](args)
-    graph.display_plot(args.output)
+    graph.display_plot(output)
 
 def main():
     args = arghandle.get_args('coin_phy', MODES, MODES_TXT)

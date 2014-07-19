@@ -42,7 +42,7 @@ def plot_length(args):
     graph.scale_plot(args.length, args.stepsize)
     graph.prepare_plot(
         "Length of needle",
-        "Probability",
+        "Probability of needle touching a line",
         "Buffon's Needle Experiment" +
             "\ngap width = %.5g" % args.gap
     )
@@ -76,7 +76,7 @@ def plot_gap(args):
     graph.scale_plot(args.gap, args.stepsize)
     graph.prepare_plot(
         "Gap width",
-        "Probability",
+        "Probability of needle touching a line",
         "Buffon's Needle Experiment" +
             "\nlength = %.5g" % args.length
     )
@@ -88,8 +88,8 @@ MODES = {
 
 MODES_TXT = [
     'mode determines what type of graph to plot.',
-    'mode 0: 2D scatter plot, length of needle against Probability',
-    'mode 1: 2D scatter plot, gap width against Probability'
+    'mode 0: 2D scatter plot, length of needle against probability of needle touching a line',
+    'mode 1: 2D scatter plot, gap width against probability of needle touching a line'
 ]
 
 def _run_handler(args):
@@ -102,8 +102,10 @@ def _run_handler(args):
     print("expected prob: %f" % sim.predict_prob())
 
 def _plot_handler(args):
+    output = args.output
+    graph.init(output)
     MODES[args.mode](args)
-    graph.display_plot(args.output)
+    graph.display_plot(output)
 
 def main():
     args = arghandle.get_args('needle', MODES, MODES_TXT)

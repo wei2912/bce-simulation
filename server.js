@@ -16,6 +16,8 @@
 
   var root = path.join(__dirname, 'public');
 
+  fs.mkdirSync(path.join(__dirname, 'output'));
+
   function reqListener(req, res) {
     console.log(req.url);
     var url = parseURL(req.url, true);

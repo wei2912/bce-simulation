@@ -3,22 +3,29 @@ This module serves as an interface to
 matplotlib.
 """
 
-import matplotlib
-import matplotlib.pyplot as plt
 from utils import config
 
 OFFSET = 2 # offset = max_x/stepsize * OFFSET
 
-def line_plot(xs, ys):
+def init(output):
+    import matplotlib
+    config.mpl(matplotlib, bool(output))
+    from matplotlib import pyplot
+    globals()['plt'] = pyplot
+
+def line_plot(xs, ys, color='red'):
 	plt.plot(
         xs,
         ys,
-        color='red',
+        color=color,
         linewidth=2.0
     )
 
-def scatter_plot(x, y):
-	plt.scatter(x, y)
+def legend(*args):
+    plt.legend(args, loc='best')
+
+def scatter_plot(x, y, color='red'):
+	plt.scatter(x, y, color=color)
 
 def scale_plot(max_x, stepsize):
     offset = max_x/stepsize * OFFSET
@@ -31,8 +38,6 @@ def prepare_plot(xlabel, ylabel, title):
     plt.grid(True)
 
 def display_plot(output):
-    config.mpl(matplotlib, bool(output))
-
     if output:
         if output == 'stdout':
             plt.savefig(sys.stdout, format='png')
