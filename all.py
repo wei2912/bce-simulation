@@ -84,7 +84,7 @@ def plot_diameter(args):
 
     graph.legend("Needle", "Coin", "Coin (Physics)")
 
-    graph.scale_plot(args.diameter, args.stepsize)
+    graph.scale_plot(args.diameter, 100)
     graph.prepare_plot(
         "Length/Diameter",
         "Probability of coin/needle touching/balancing on lines",
