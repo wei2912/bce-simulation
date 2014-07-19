@@ -115,10 +115,11 @@ def _setup_plot(subparsers, mode, plot_modes, plot_modes_txt):
     mode_specific[mode](parser_plot)
 
     _gap(parser_plot)
-    _trials(parser_plot, 1000)
-    _stepsize(parser_plot, 100)
+    if not mode == 'all':
+        _trials(parser_plot, 1000)
+        _stepsize(parser_plot, 100)
+        _verbose(parser_plot)
     _output(parser_plot)
-    _verbose(parser_plot)
     _modes(parser_plot, plot_modes, plot_modes_txt)
 
 def get_args(mode, plot_modes, plot_modes_txt):
