@@ -45,7 +45,7 @@
 
   function build(req, res, query) {
     var type = query.simulation;
-    if (!/^(?:coin(?:_phy)?|needle)$/.test(type)) {
+    if (!/^(?:coin(?:_phy)?|needle|all)$/.test(type)) {
       res.end("unsupported");
     }
 
@@ -53,23 +53,28 @@
         trials = query.trials,
         step = query.step,
         isCoin = /^coin/.test(type),
+        isAll = /^all$/.test(type),
         // Coin experiments
         radius = query.radius,
         width = query.width,
         // Needle experiments
         length = query.length,
-        gap = query.gap;
+        gap = query.gap,
+        // Comparison of 3 graphs
+        diameter = query.diameter;
 
     var fileName = path.join(
       __dirname,
       'output/' + type + '.' + mode + '.' + trials + '.' + step + '.' +
-      (isCoin ? radius + '.' + width : length + '.' + gap) +
+      (isCoin ? radius + '.' + width : isAll ? diameter + '.' + width : length + '.' + gap) +
       '.png'
     );
     var fileToExec = path.join(__dirname, type + '.py');
     var args = ['python', fileToExec, 'plot', '-o', fileName, '-m', mode, '-t', trials, '-s', step];
     if (isCoin) {
       args.push('-r', radius, '-g', width);
+    } else if (isAll) {
+      args.push('-d', diameter, '-g', width);
     } else {
       args.push('-l', length, '-g', gap);
     }
