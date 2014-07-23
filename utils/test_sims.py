@@ -12,8 +12,10 @@ import math
 from utils.sims import InvalidInput, CoinSim, NeedleSim, CoinPhysicsSim
 
 TRIALS = 10000 # number of trials to run per test case
-NUM_TESTS = 5 # number of tests to run per test case
+NUM_TESTS = 10 # number of tests to run per test case
 MAX_STAT = 3.841 # p < 0.05 for a df of 1
+MAX_FAILS = 0.5 # percentage of Chi-Square tests that can fail
+                # before the test is reported to have failed
 
 BENCH_TRIALS = 1000000 # number of trials to run for benchmarking
 
@@ -26,17 +28,104 @@ def _non_zero_rand():
     """
     return 1.0 - random.random()
 
-def _is_pass_chi2(hits, pred_prob, trials):
+def _is_pass_chi2(results, trials):
     """
     Calculates a chi-square statistic and
     return a boolean value indicating if
     the test is passed.
     """
-    if pred_prob == 1.0 and hits == trials:
-        return True # this definitely passes
 
-    return ((hits - trials*pred_prob)**2 / 
-        (trials*pred_prob * (1 - pred_prob))) < MAX_STAT
+    fails = 0
+    for result in results:
+        hits, pred_hits = result
+
+        if pred_hits == hits:
+            continue
+        if pred_hits == 0 or pred_hits == trials:
+            # if the predicted number of hits reaches an extreme value
+            # it should fail automatically if pred_hits != hits.
+            fails += 1
+            continue
+
+        stats = [
+            (hits - pred_hits)**2 / pred_hits,
+            ((trials - hits) - (trials - pred_hits))**2 / (trials-pred_hits)
+        ]
+
+        if sum(stats) > MAX_STAT:
+            fails += 1
+
+        if fails >= MAX_FAILS*NUM_TESTS:
+            return False
+    return True
+
+class TestNeedleSim:
+    """
+    Test suite for NeedleSim.
+    """
+
+    def test_bad_input(self):
+        """
+        If bad input is passed to the simulation,
+        the simulation should raise an exception.
+        """
+
+        with pytest.raises(InvalidInput):
+            NeedleSim(0, 1)
+        with pytest.raises(InvalidInput):
+            NeedleSim(1, 0)
+
+        with pytest.raises(InvalidInput):
+            NeedleSim(-1, 1)
+        with pytest.raises(InvalidInput):
+            NeedleSim(1, -1)
+
+        sim = NeedleSim(1, 1)
+        with pytest.raises(InvalidInput):
+            sim.run_trials(0)
+        with pytest.raises(InvalidInput):
+            sim.run_trials(-1)
+
+    def test_match_theoretical(self):
+        """
+        When the chi-square statistic is calculated,
+        the p-value should be < 0.05.
+        """
+
+        results = []
+        for _ in range(NUM_TESTS):
+            length = _non_zero_rand()
+            gap = _non_zero_rand()
+
+            sim = NeedleSim(length, gap)
+
+            hits = sim.run_trials(TRIALS)
+            pred_hits = sim.predict_prob()*TRIALS
+
+            results.append((hits, pred_hits))
+
+        assert _is_pass_chi2(
+            results,
+            TRIALS
+        )
+
+class TestBenchNeedleSim:
+    """
+    Benchmarks for NeedleSim.
+    """
+
+    @mark.bench('NeedleSim.run_trials')
+    def test_general(self):
+        """
+        Benchmark the general performance
+        of NeedleSim.
+        """
+
+        length = _non_zero_rand()
+        gap = _non_zero_rand()
+
+        sim = NeedleSim(length, gap)
+        sim.run_trials(BENCH_TRIALS)
 
 class TestCoinSim:
     """
@@ -87,6 +176,7 @@ class TestCoinSim:
         the p-value should be < 0.05.
         """
 
+        results = []
         for _ in range(NUM_TESTS):
             radius = _non_zero_rand()/2
             gap = _non_zero_rand()
@@ -94,12 +184,14 @@ class TestCoinSim:
             sim = CoinSim(radius, gap)
 
             hits = sim.run_trials(TRIALS)
-            pred_prob = sim.predict_prob()
-            assert _is_pass_chi2(
-                hits,
-                pred_prob,
-                TRIALS
-            )
+            pred_hits = sim.predict_prob()*TRIALS
+
+            results.append((hits, pred_hits))
+
+        assert _is_pass_chi2(
+            results,
+            TRIALS
+        )
 
 class TestBenchCoinSim:
     """
@@ -119,70 +211,6 @@ class TestBenchCoinSim:
         sim = CoinSim(radius, gap)
         sim.run_trials(BENCH_TRIALS)
 
-class TestNeedleSim:
-    """
-    Test suite for NeedleSim.
-    """
-
-    def test_bad_input(self):
-        """
-        If bad input is passed to the simulation,
-        the simulation should raise an exception.
-        """
-
-        with pytest.raises(InvalidInput):
-            NeedleSim(0, 1)
-        with pytest.raises(InvalidInput):
-            NeedleSim(1, 0)
-
-        with pytest.raises(InvalidInput):
-            NeedleSim(-1, 1)
-        with pytest.raises(InvalidInput):
-            NeedleSim(1, -1)
-
-        sim = NeedleSim(1, 1)
-        with pytest.raises(InvalidInput):
-            sim.run_trials(0)
-        with pytest.raises(InvalidInput):
-            sim.run_trials(-1)
-
-    def test_match_theoretical(self):
-        """
-        When the chi-square statistic is calculated,
-        the p-value should be < 0.05.
-        """
-
-        for _ in range(NUM_TESTS):
-            length = _non_zero_rand()
-            gap = _non_zero_rand()
-
-            sim = NeedleSim(length, gap)
-
-            hits = sim.run_trials(TRIALS)
-            pred_prob = sim.predict_prob()
-            assert _is_pass_chi2(
-                hits,
-                pred_prob,
-                TRIALS
-            )
-
-class TestBenchNeedleSim:
-    """
-    Benchmarks for NeedleSim.
-    """
-
-    @mark.bench('NeedleSim.run_trials')
-    def test_general(self):
-        """
-        Benchmark the general performance
-        of NeedleSim.
-        """
-
-        length = _non_zero_rand()
-        gap = _non_zero_rand()
-
-        sim = NeedleSim(length, gap)
-        sim.run_trials(BENCH_TRIALS)
 
 class TestCoinPhysicsSim:
     """
@@ -235,19 +263,22 @@ class TestCoinPhysicsSim:
         the p-value should be < 0.05.
         """
 
+        results = []
         for _ in range(NUM_TESTS):
-            radius = _non_zero_rand()/2
+            radius = _non_zero_rand()
             gap = _non_zero_rand()
 
             sim = CoinPhysicsSim(radius, gap)
 
             hits = sim.run_trials(TRIALS)
-            pred_prob = sim.predict_prob()
-            assert _is_pass_chi2(
-                hits,
-                pred_prob,
-                TRIALS
-            )
+            pred_hits = sim.predict_prob()*TRIALS
+
+            results.append((hits, pred_hits))
+
+        assert _is_pass_chi2(
+            results,
+            TRIALS
+        )
 
 class TestBenchCoinPhysicsSim:
     """
