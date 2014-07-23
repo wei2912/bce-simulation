@@ -40,7 +40,8 @@ def plot_gap(args):
             print "length = %.5g, gap width = %.5g: %.5g" % (args.length, gap, prob)
         graph.scatter_plot(gap, prob)
 
-    graph.scale_plot(args.gap, args.stepsize)
+    graph.scale_x_plot(args.gap, args.stepsize)
+    graph.scale_y_plot(1.0, args.stepsize)
     graph.prepare_plot(
         "Gap width",
         "Probability of needle touching a line",
@@ -73,7 +74,8 @@ def plot_length(args):
             print "length = %.5g, gap width = %.5g: %.5g" % (length, args.gap, prob)
         graph.scatter_plot(length, prob)
 
-    graph.scale_plot(args.length, args.stepsize)
+    graph.scale_x_plot(args.length, args.stepsize)
+    graph.scale_y_plot(1.0, args.stepsize)
     graph.prepare_plot(
         "Length of needle",
         "Probability of needle touching a line",

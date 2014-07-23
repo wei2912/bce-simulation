@@ -25,42 +25,43 @@ def plot_width(args):
     vals = stepvals.get_range(args.gap, 1000)
     expected = []
     for gap in vals:
-        sim = NeedleSim(args.diameter, gap)
+        sim = NeedleSim(args.length, gap)
         expected.append(sim.predict_prob())
 
     graph.line_plot(vals, expected)
 
     expected = []
     for gap in vals:
-        sim = CoinSim(args.diameter/2, gap)
+        sim = CoinSim(args.length/2, gap)
         expected.append(sim.predict_prob())
 
     graph.line_plot(vals, expected, color='green')
 
     expected = []
     for gap in vals:
-        sim = CoinPhysicsSim(args.diameter/2, gap)
+        sim = CoinPhysicsSim(args.length/2, gap)
         expected.append(sim.predict_prob())
 
     graph.line_plot(vals, expected, color='blue')
 
     graph.legend("Needle", "Coin", "Coin (Physics)")
-    graph.scale_plot(args.gap, args.stepsize)
+    graph.scale_x_plot(args.gap, 100)
+    graph.scale_y_plot(1.0, 100)
     graph.prepare_plot(
         "Width of gap",
-        "Probability of coin/needle touching/balancing on lines",
+        "Probability of needle/coin touching/balancing on lines",
         "Comparison of the 3 experiments" +
-            "\nlength/diameter = %.5g" % args.diameter
+            "\nlength/diameter = %.5g" % args.length
     )
 
-def plot_diameter(args):
+def plot_length(args):
     """
     Plots a 2D scatter plot which shows the
-    relationship between the radius of the coin
-    and the probability which the coin hits the grid.
+    relationship between the diameter/length against
+    probability of coin/needle touching/balancing on lines.
     """
 
-    vals = stepvals.get_range(args.diameter, 1000)
+    vals = stepvals.get_range(args.length, 1000)
     expected = []
     for diameter in vals:
         sim = NeedleSim(diameter, args.gap)
@@ -84,23 +85,24 @@ def plot_diameter(args):
 
     graph.legend("Needle", "Coin", "Coin (Physics)")
 
-    graph.scale_plot(args.diameter, 100)
+    graph.scale_x_plot(args.length, 100)
+    graph.scale_y_plot(1.0, 100)
     graph.prepare_plot(
         "Length/Diameter",
-        "Probability of coin/needle touching/balancing on lines",
+        "Probability of needle/coin touching/balancing on lines",
         "Comparison of the 3 experiments" +
             "\nwidth of gap = %.5g" % args.gap
     )
 
 MODES = {
     0: plot_width,
-    1: plot_diameter
+    1: plot_length
 }
 
 MODES_TXT = [
     'mode determines what type of graph to plot.',
-    'mode 0: 2D scatter plot, width of square gap against probability of coin/needle touching/balancing on lines',
-    'mode 1: 2D scatter plot, radius against probability of coin/needle touching/balancing on lines'
+    'mode 0: 2D scatter plot, width of gap against probability of needle/coin touching/balancing on lines',
+    'mode 1: 2D scatter plot, length/diameter against probability of needle/coin touching/balancing on lines'
 ]
 
 def _plot_handler(args):

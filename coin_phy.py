@@ -38,7 +38,8 @@ def plot_width(args):
             print "diameter = %.5g, gap width = %.5g: %.5g" % (args.diameter, gap, prob)
         graph.scatter_plot(gap, prob)
 
-    graph.scale_plot(args.gap, args.stepsize)
+    graph.scale_x_plot(args.gap, args.stepsize)
+    graph.scale_y_plot(1.0, args.stepsize)
     graph.prepare_plot(
         "Width of square gap",
         "Probability of coin balancing on grid",
@@ -70,7 +71,8 @@ def plot_diameter(args):
             print "diameter = %.5g, gap width = %.5g: %.5g" % (diameter, args.gap, prob)
         graph.scatter_plot(diameter, prob)
 
-    graph.scale_plot(args.diameter, args.stepsize)
+    graph.scale_x_plot(args.diameter, args.stepsize)
+    graph.scale_y_plot(1.0, args.stepsize)
     graph.prepare_plot(
         "Diameter",
         "Probability of coin balancing on grid",

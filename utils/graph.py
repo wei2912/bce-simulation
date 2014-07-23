@@ -27,9 +27,13 @@ def legend(*args):
 def scatter_plot(x, y, color='blue'):
 	plt.scatter(x, y, color=color)
 
-def scale_plot(max_x, stepsize):
+def scale_x_plot(max_x, stepsize):
     offset = max_x/stepsize * OFFSET
-    plt.axis(xmin=-offset, xmax=max_x+offset, ymin=0)
+    plt.axis(xmin=-offset, xmax=max_x+offset)
+
+def scale_y_plot(max_y, stepsize):
+    offset = max_y/stepsize * OFFSET
+    plt.axis(ymin=-offset, ymax=max_y+offset)
 
 def prepare_plot(xlabel, ylabel, title):
     plt.xlabel(xlabel)

@@ -75,13 +75,13 @@ def _needle_length(parser):
         help='length of needle'
     )
 
-def _diameter(parser):
+def _all_length(parser):
     parser.add_argument(
-        '-d',
-        '--diameter',
+        '-l',
+        '--length',
         type=float,
         required=True,
-        help='diameter of coin/length of needle'
+        help='length/diameter of needle/coin'
     )
 
 def _setup_run(subparsers, mode):
@@ -109,7 +109,7 @@ def _setup_plot(subparsers, mode, plot_modes, plot_modes_txt):
         'coin': _coin_diameter,
         'needle': _needle_length,
         'coin_phy': _coin_diameter,
-        'all': _diameter
+        'all': _all_length
     }
 
     mode_specific[mode](parser_plot)
