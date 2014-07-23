@@ -100,7 +100,7 @@ class TestNeedleSim:
             sim = NeedleSim(length, gap)
 
             hits = sim.run_trials(TRIALS)
-            pred_hits = sim.predict_prob()*TRIALS
+            pred_hits = sim.predict_hits(TRIALS)
 
             results.append((hits, pred_hits))
 
@@ -161,11 +161,17 @@ class TestCoinSim:
         """
 
         for _ in range(NUM_TESTS):
-            radius = _non_zero_rand()
-            diameter = radius*2
+            diameter = _non_zero_rand()
             less_gap = diameter - _non_zero_rand()*diameter
 
-            sim = CoinSim(radius, less_gap)
+            # diameter > gap
+            sim = CoinSim(diameter, less_gap)
+            hits = sim.run_trials(TRIALS)
+            assert hits == TRIALS
+            assert sim.predict_prob() == 1.0
+
+            # diameter = gap
+            sims = CoinSim(diameter, diameter)
             hits = sim.run_trials(TRIALS)
             assert hits == TRIALS
             assert sim.predict_prob() == 1.0
@@ -178,13 +184,13 @@ class TestCoinSim:
 
         results = []
         for _ in range(NUM_TESTS):
-            radius = _non_zero_rand()/2
+            diameter = _non_zero_rand()
             gap = _non_zero_rand()
 
-            sim = CoinSim(radius, gap)
+            sim = CoinSim(diameter, gap)
 
             hits = sim.run_trials(TRIALS)
-            pred_hits = sim.predict_prob()*TRIALS
+            pred_hits = sim.predict_hits(TRIALS)
 
             results.append((hits, pred_hits))
 
@@ -205,10 +211,10 @@ class TestBenchCoinSim:
         of CoinSim.
         """
 
-        radius = _non_zero_rand()/2
+        diameter = _non_zero_rand()
         gap = _non_zero_rand()
 
-        sim = CoinSim(radius, gap)
+        sim = CoinSim(diameter, gap)
         sim.run_trials(BENCH_TRIALS)
 
 
@@ -247,10 +253,11 @@ class TestCoinPhysicsSim:
         """
 
         for _ in range(NUM_TESTS):
-            radius = _non_zero_rand()/2
+            diameter = _non_zero_rand()
+            radius = diameter/2
             less_gap = _non_zero_rand() * (radius*SQRT_2)
 
-            sim = CoinPhysicsSim(radius, less_gap)
+            sim = CoinPhysicsSim(diameter, less_gap)
             hits = sim.run_trials(TRIALS)
             assert hits == TRIALS
             assert sim.predict_prob() == 1.0
@@ -265,13 +272,13 @@ class TestCoinPhysicsSim:
 
         results = []
         for _ in range(NUM_TESTS):
-            radius = _non_zero_rand()
+            diameter = _non_zero_rand()
             gap = _non_zero_rand()
 
-            sim = CoinPhysicsSim(radius, gap)
+            sim = CoinPhysicsSim(diameter, gap)
 
             hits = sim.run_trials(TRIALS)
-            pred_hits = sim.predict_prob()*TRIALS
+            pred_hits = sim.predict_hits(TRIALS)
 
             results.append((hits, pred_hits))
 
@@ -292,8 +299,8 @@ class TestBenchCoinPhysicsSim:
         of CoinPhysicsSim.
         """
 
-        radius = _non_zero_rand()/2
+        diameter = _non_zero_rand()
         gap = _non_zero_rand()
 
-        sim = CoinPhysicsSim(radius, gap)
+        sim = CoinPhysicsSim(diameter, gap)
         sim.run_trials(BENCH_TRIALS)

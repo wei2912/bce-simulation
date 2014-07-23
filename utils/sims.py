@@ -24,19 +24,21 @@ class CoinSim(object):
     """
     Simulation of Buffon's Coin Experiment.
     """
-    def __init__(self, radius, gap):
-        if radius <= 0:
-            raise InvalidInput("radius must not be <= 0")
+    def __init__(self, diameter, gap):
+        if diameter <= 0:
+            raise InvalidInput("diameter must not be <= 0")
         if gap <= 0:
             raise InvalidInput("gap must not be <= 0")
 
-        self.radius = float(radius)
+        self.diameter = float(diameter)
+        self.radius = self.diameter/2
         self.gap = float(gap)
 
     def run_trials(self, trials):
         """
         Run the simulation a specified number of times.
         """
+
         if trials <= 0:
             raise InvalidInput("trials must not be<= 0")
 
@@ -63,13 +65,11 @@ class CoinSim(object):
         predict the probability that the coin will hit
         the grid.
         """
-        diameter = self.radius*2
-        if diameter >= self.gap:
+
+        if self.diameter >= self.gap:
             return 1.0
 
-        area = self.gap**2
-        return ((area - (self.gap-diameter) * (self.gap-diameter)) /
-            area)
+        return (self.gap**2 - (self.gap-self.diameter)**2) / self.gap**2
 
     def predict_hits(self, trials):
         """
@@ -128,11 +128,17 @@ class NeedleSim(object):
         """
 
         if self.length <= self.gap:
-            return (2*self.length)/(self.gap*math.pi)
+            return (2*self.length) / (self.gap*math.pi)
         else:
             needle_ratio = self.length/self.gap
-            return (2/math.pi)*(needle_ratio - (needle_ratio**2 - 1)**0.5
-                + math.acos(self.gap/self.length))
+            return (
+                (2/math.pi) * 
+                (
+                    self.length/self.gap
+                    - (needle_ratio**2 - 1)**0.5
+                    + math.acos(self.gap/self.length)
+                )
+            )
 
     def predict_hits(self, trials):
         """
@@ -152,13 +158,14 @@ class CoinPhysicsSim(object):
     The program checks if the coin will balance in addition
     to touching one of the lines of the grid.
     """
-    def __init__(self, radius, gap):
-        if radius <= 0:
-            raise InvalidInput("radius must not be <= 0")
+    def __init__(self, diameter, gap):
+        if diameter <= 0:
+            raise InvalidInput("diameter must not be <= 0")
         if gap <= 0:
             raise InvalidInput("gap must not be <= 0")
 
-        self.radius = float(radius)
+        self.diameter = float(diameter)
+        self.radius = self.diameter/2
         self.gap = float(gap)
 
     def __transform_center(self, x_pos, y_pos):
@@ -174,11 +181,11 @@ class CoinPhysicsSim(object):
 
         center_x = x_pos
         if x_pos > split:
-            center_x = self.gap-x_pos
+            center_x = self.gap - x_pos
 
         center_y = y_pos
         if y_pos > split:
-            center_y = self.gap-y_pos
+            center_y = self.gap - y_pos
 
         return (center_x, center_y)
 
@@ -261,13 +268,18 @@ class CoinPhysicsSim(object):
         at least one of the two parallel lines.
         """
 
-        radius_ratio = (self.radius/self.gap)**2
-        if self.gap >= self.radius*2:
-            return math.pi * radius_ratio
+        if self.gap >= self.diameter:
+            return math.pi * (self.radius/self.gap)**2
         elif self.gap > self.radius*SQRT_2:
-            return ((4*radius_ratio - 1)**0.5
-                + (radius_ratio * (math.pi -
-                4*math.acos(self.gap/(2*self.radius)))))
+            return (
+                (4 * (self.radius/self.gap)**2 - 1)**0.5 + (
+                    (self.radius/self.gap)**2 * (
+                        math.pi - 4*math.acos(
+                            self.gap / self.diameter
+                        )
+                    )
+                )
+            )
         else:
             return 1.0
 

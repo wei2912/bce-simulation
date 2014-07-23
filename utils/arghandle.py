@@ -57,13 +57,13 @@ def _modes(parser, modes, modes_txt):
         help="\n".join(modes_txt)
     )
 
-def _coin_radius(parser):
+def _coin_diameter(parser):
     parser.add_argument(
-        '-r',
-        '--radius',
+        '-d',
+        '--diameter',
         type=float,
         required=True,
-        help='radius of coin'
+        help='diameter of coin'
     )
 
 def _needle_length(parser):
@@ -88,9 +88,9 @@ def _setup_run(subparsers, mode):
     parser_run = subparsers.add_parser('run')
 
     mode_specific = {
-        'coin': _coin_radius,
+        'coin': _coin_diameter,
         'needle': _needle_length,
-        'coin_phy': _coin_radius,
+        'coin_phy': _coin_diameter,
         'all': lambda x: x
     }
 
@@ -106,9 +106,9 @@ def _setup_plot(subparsers, mode, plot_modes, plot_modes_txt):
     parser_plot = subparsers.add_parser('plot')
 
     mode_specific = {
-        'coin': _coin_radius,
+        'coin': _coin_diameter,
         'needle': _needle_length,
-        'coin_phy': _coin_radius,
+        'coin_phy': _coin_diameter,
         'all': _diameter
     }
 

@@ -24,18 +24,18 @@ def plot_width(args):
     vals = stepvals.get_range(args.gap, 1000)
     expected = []
     for gap in vals:
-        sim = CoinSim(args.radius, gap)
+        sim = CoinSim(args.diameter, gap)
         expected.append(sim.predict_prob())
 
     graph.line_plot(vals, expected)
 
     vals = stepvals.get_range(args.gap, args.stepsize)
     for gap in vals:
-        sim = CoinSim(args.radius, gap)
+        sim = CoinSim(args.diameter, gap)
         prob = _get_prob(sim.run_trials(args.trials), args.trials)
 
         if args.verbose:
-            print "radius = %.5g, gap width = %.5g: %.5g" % (args.radius, gap, prob)
+            print "diameter = %.5g, gap width = %.5g: %.5g" % (args.diameter, gap, prob)
         graph.scatter_plot(gap, prob)
 
     graph.scale_plot(args.gap, args.stepsize)
@@ -43,34 +43,34 @@ def plot_width(args):
     	"Width of square gap",
     	"Probability of coin touching the grid",
     	"Buffon's Coin Experiment" +
-        	"\nradius = %.5g" % args.radius
+        	"\ndiameter = %.5g" % args.diameter
     )
 
-def plot_radius(args):
+def plot_diameter(args):
     """
     Plots a 2D scatter plot which shows the
-    relationship between the radius of the coin
+    relationship between the diameter of the coin
     and the probability which the coin hits the grid.
     """
 
-    vals = stepvals.get_range(args.radius, 1000)
+    vals = stepvals.get_range(args.diameter, 1000)
     expected = []
-    for radius in vals:
-        sim = CoinSim(radius, args.gap)
+    for diameter in vals:
+        sim = CoinSim(diameter, args.gap)
         expected.append(sim.predict_prob())
 
     graph.line_plot(vals, expected)
 
-    vals = stepvals.get_range(args.radius, args.stepsize)
-    for radius in vals:
-        sim = CoinSim(radius, args.gap)
+    vals = stepvals.get_range(args.diameter, args.stepsize)
+    for diameter in vals:
+        sim = CoinSim(diameter, args.gap)
         prob = _get_prob(sim.run_trials(args.trials), args.trials)
 
         if args.verbose:
-            print "radius = %.5g, gap width = %.5g: %.5g" % (radius, args.gap, prob)
-        graph.scatter_plot(radius, prob)
+            print "diameter = %.5g, gap width = %.5g: %.5g" % (diameter, args.gap, prob)
+        graph.scatter_plot(diameter, prob)
 
-    graph.scale_plot(args.radius, args.stepsize)
+    graph.scale_plot(args.diameter, args.stepsize)
     graph.prepare_plot(
     	"Radius",
     	"Probability of coin touching the grid",
@@ -80,17 +80,17 @@ def plot_radius(args):
 
 MODES = {
     0: plot_width,
-    1: plot_radius
+    1: plot_diameter
 }
 
 MODES_TXT = [
     'mode determines what type of graph to plot.',
     'mode 0: 2D scatter plot, width of square gap against probability of coin touching grid',
-    'mode 1: 2D scatter plot, radius against probability of coin touching grid'
+    'mode 1: 2D scatter plot, diameter against probability of coin touching grid'
 ]
 
 def _run_handler(args):
-    sim = CoinSim(args.radius, args.gap)
+    sim = CoinSim(args.diameter, args.gap)
     hits = sim.run_trials(args.trials)
 
     print("%d/%d" % (hits, args.trials))
