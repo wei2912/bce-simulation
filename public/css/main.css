@@ -13,7 +13,7 @@
 html {
   color: #222;
   font-size: 1em;
-  font-family: 
+  font-family:
   'Segoe WP', 'Segoe UI', 'Helvetica Neue', Helvetica, Arial, freesans, clean, sans-serif, 'Segoe UI Emoji', 'Segoe UI Symbol';
   font-weight: 300;
   line-height: 1.4;
@@ -94,6 +94,7 @@ p {
 body.show_coin .coin,
 body.show_coin_phy .coin_phy,
 body.show_needle .needle,
+body.show_all .all,
 .show_0 .type_0,
 .show_1 .type_1 {
   display: block;

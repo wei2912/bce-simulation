@@ -26,6 +26,7 @@
             <option value="coin" selected>Coin</option>
             <option value="coin_phy">Coin (A variation)</option>
             <option value="needle">Needle</option>
+            <option value="all">Comparison of 3 experiments</option>
           </select>
         </div>
       </div>
@@ -42,6 +43,10 @@
         <p class="hidden needle">
           The <strong>Needle Simulation</strong> generates a graph of Buffon's Needle Experiment: it shows the probability of a needle touching one of the lines of two parallel lines.
         </p>
+
+        <p class="hidden all">
+          The <strong>comparison of 3 experiments</strong> generates a graph of the theoretical probability of each of the simulations touching/balancing on one of the lines.
+        </p>
       </div>
     </div>
 
@@ -50,17 +55,17 @@
         <h2>Type of Graph</h2>
         <div>
           <select name="type">
-            <option class="hidden coin coin_phy" value="0" selected>Increasing width of square gap</option>
-            <option class="hidden coin coin_phy" value="1">Increasing radius</option>
-            <option class="hidden needle" value="0">Increasing width of gap</option>
-            <option class="hidden needle" value="1">Increasing length</option>
+            <option value="0">Increasing width of gap</option>
+            <option value="1">Increasing radius</option>
+            <option value="1">Increasing length</option>
+            <option value="1">Increasing diameter</option>
           </select>
         </div>
       </div>
-      
+
       <div class="inner">
         <p class="hidden coin type_0">
-          <strong>Increasing width of square gap</strong> generates a graph plotting width of square gap against probability of coin touching the square grid.
+          <strong>Increasing width of gap</strong> generates a graph plotting width of gap against probability of coin touching the square grid.
         </p>
 
         <p class="hidden coin type_1">
@@ -68,7 +73,7 @@
         </p>
 
         <p class="hidden coin_phy type_0">
-          <strong>Increasing width of square gap</strong> generates a graph plotting width of square gap against probability of coin balancing on the square grid.
+          <strong>Increasing width of gap</strong> generates a graph plotting width of gap against probability of coin balancing on the square grid.
         </p>
 
         <p class="hidden coin_phy type_1">
@@ -81,6 +86,14 @@
 
         <p class="hidden needle type_1">
           <strong>Increasing length</strong> generates a graph plotting length of needle against probability of needle touching at least one of the lines.
+        </p>
+
+        <p class="hidden all type_0">
+          <strong>Increasing gap width</strong> generates a graph plotting width of gap against probability of coin/needle touching/balancing on at least one of the lines.
+        </p>
+
+        <p class="hidden all type_1">
+          <strong>Increasing length</strong> generates a graph plotting length of needle against probability of coin/needle touching/balancing on at least one of the lines.
         </p>
       </div>
     </div>
@@ -124,9 +137,9 @@
       </div>
     </div>
 
-    <div class="outer hidden coin coin_phy">
+    <div class="outer hidden coin coin_phy all">
       <div class="inner">
-        <h2>Width of square gap</h2>
+        <h2>Width of gap</h2>
         <div>
           <input name="width" type="number" value="5">
         </div>
@@ -147,6 +160,15 @@
         <h2>Gap width between 2 lines</h2>
         <div>
           <input name="gap" type="number" value="1">
+        </div>
+      </div>
+    </div>
+
+    <div class="outer all needle">
+      <div class="inner">
+        <h2>Diameter of coin/Length of needle</h2>
+        <div>
+          <input name="diameter" type="number" value="1">
         </div>
       </div>
     </div>
@@ -173,17 +195,31 @@
 
   body.className += ' js';
 
-  sim.onchange = function (e) {
+  (sim.onchange = function (e) {
     var simType = sim.options[sim.selectedIndex].value,
         className = body.className;
-    body.className = className.replace(/\bshow_(?:coin|coin_phy|needle)\b/, ' ').replace(/\s+/, ' ').replace(/^\s+|\s+$/, '') + 
+    body.className = className.replace(/\bshow_(?:coin|coin_phy|needle)\b/, ' ').replace(/\s+/, ' ').replace(/^\s+|\s+$/, '') +
     ' show_' + simType;
-  };
+    graphType.selectedIndex = 0;
+    if (simType.indexOf('coin') > -1) {
+      graphType.options[1].disabled = false;
+      graphType.options[2].disabled = true;
+      graphType.options[3].disabled = true;
+    } else if (simType != 'all') {
+      graphType.options[1].disabled = true;
+      graphType.options[2].disabled = false;
+      graphType.options[3].disabled = true;
+    } else {
+      graphType.options[1].disabled = true;
+      graphType.options[2].disabled = true;
+      graphType.options[3].disabled = false;
+    }
+  })();
 
   graphType.onchange = function (e) {
     var type = graphType.options[graphType.selectedIndex].value,
         className = body.className;
-    body.className = className.replace(/\s+/, ' ').replace(/^\s+|\s+$/, '') + 
+    body.className = className.replace(/\s+/, ' ').replace(/^\s+|\s+$/, '') +
     ' show_' + type;
   };
   </script>
