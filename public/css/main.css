@@ -100,6 +100,10 @@ body.show_all .all,
   display: block;
 }
 
+body.show_all span.all {
+  display: inline;
+}
+
 .outer {
   width: 100%;
   margin: 0 0 15px 0;

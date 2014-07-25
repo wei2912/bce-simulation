@@ -16,7 +16,13 @@
 
   var root = path.join(__dirname, 'public');
 
-  fs.mkdirSync(path.join(__dirname, 'output'));
+  var outputFolder = path.join(__dirname, 'output');
+
+  if (fs.existsSync(outputFolder)) {
+    fs.rmdirSync(outputFolder);
+  }
+
+  fs.mkdirSync(outputFolder);
 
   function reqListener(req, res) {
     console.log(req.url);
@@ -55,26 +61,25 @@
         isCoin = /^coin/.test(type),
         isAll = /^all$/.test(type),
         // Coin experiments
-        radius = query.radius,
+        diameter = query.diameter,
         width = query.width,
         // Needle experiments
         length = query.length,
-        gap = query.gap,
-        // Comparison of 3 graphs
-        diameter = query.diameter;
+        gap = query.gap;
 
     var fileName = path.join(
       __dirname,
       'output/' + type + '.' + mode + '.' + trials + '.' + step + '.' +
-      (isCoin ? radius + '.' + width : isAll ? diameter + '.' + width : length + '.' + gap) +
+      (isCoin ? diameter + '.' + width : isAll ? diameter + '.' + width : length + '.' + gap) +
       '.png'
     );
     var fileToExec = path.join(__dirname, type + '.py');
-    var args = ['python', fileToExec, 'plot', '-o', fileName, '-m', mode, '-t', trials, '-s', step];
-    if (isCoin) {
-      args.push('-r', radius, '-g', width);
-    } else if (isAll) {
-      args.push('-d', diameter, '-g', width);
+    var args = ['python', fileToExec, 'plot', '-o', fileName, '-m', mode];
+    if (!isAll) {
+      args.push('-t', trials, '-s', step);
+    }
+    if (isCoin || isAll) {
+      args.push(isAll ? '-l' : '-d', diameter, '-g', width);
     } else {
       args.push('-l', length, '-g', gap);
     }

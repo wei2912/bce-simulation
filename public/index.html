@@ -56,9 +56,8 @@
         <div>
           <select name="type">
             <option value="0">Increasing width of gap</option>
-            <option value="1">Increasing radius</option>
-            <option value="1">Increasing length</option>
             <option value="1">Increasing diameter</option>
+            <option value="1">Increasing length</option>
           </select>
         </div>
       </div>
@@ -69,7 +68,7 @@
         </p>
 
         <p class="hidden coin type_1">
-          <strong>Increasing radius</strong> generates a graph plotting radius of coin against probability of coin touching the square grid.
+          <strong>Increasing diameter</strong> generates a graph plotting diameter of coin against probability of coin touching the square grid.
         </p>
 
         <p class="hidden coin_phy type_0">
@@ -77,11 +76,11 @@
         </p>
 
         <p class="hidden coin_phy type_1">
-          <strong>Increasing radius</strong> generates a graph plotting radius of coin against probability of coin balancing on the square grid.
+          <strong>Increasing diameter</strong> generates a graph plotting diameter of coin against probability of coin balancing on the square grid.
         </p>
 
         <p class="hidden needle type_0">
-          <strong>Increasing gap width</strong> generates a graph plotting width of gap against probability of needle touching at least one of the lines.
+          <strong>Increasing width of gap</strong> generates a graph plotting width of gap against probability of needle touching at least one of the lines.
         </p>
 
         <p class="hidden needle type_1">
@@ -89,11 +88,11 @@
         </p>
 
         <p class="hidden all type_0">
-          <strong>Increasing gap width</strong> generates a graph plotting width of gap against probability of coin/needle touching/balancing on at least one of the lines.
+          <strong>Increasing width of gap</strong> generates a graph plotting width of gap against probability of coin/needle touching/balancing on at least one of the lines.
         </p>
 
         <p class="hidden all type_1">
-          <strong>Increasing length</strong> generates a graph plotting length of needle against probability of coin/needle touching/balancing on at least one of the lines.
+          <strong>Increasing length</strong> generates a graph plotting length of needle/diameter of coin against probability of needle/coin touching/balancing on at least one of the lines.
         </p>
       </div>
     </div>
@@ -130,9 +129,9 @@
 
     <div class="outer hidden coin coin_phy">
       <div class="inner">
-        <h2>Radius of coin</h2>
+        <h2>Diameter of coin</h2>
         <div>
-          <input name="radius" type="number" value="1">
+          <input name="diameter" type="number" value="1">
         </div>
       </div>
     </div>
@@ -146,9 +145,9 @@
       </div>
     </div>
 
-    <div class="outer hidden needle">
+    <div class="outer hidden needle all">
       <div class="inner">
-        <h2>Length of needle</h2>
+        <h2>Length of needle<span class="hidden all">/Diameter of coin</span></h2>
         <div>
           <input name="length" type="number" value="1">
         </div>
@@ -157,18 +156,9 @@
 
     <div class="outer hidden needle">
       <div class="inner">
-        <h2>Gap width between 2 lines</h2>
+        <h2>Width of gap between 2 lines</h2>
         <div>
           <input name="gap" type="number" value="1">
-        </div>
-      </div>
-    </div>
-
-    <div class="outer all needle">
-      <div class="inner">
-        <h2>Diameter of coin/Length of needle</h2>
-        <div>
-          <input name="diameter" type="number" value="1">
         </div>
       </div>
     </div>
@@ -198,21 +188,18 @@
   (sim.onchange = function (e) {
     var simType = sim.options[sim.selectedIndex].value,
         className = body.className;
-    body.className = className.replace(/\bshow_(?:coin|coin_phy|needle)\b/, ' ').replace(/\s+/, ' ').replace(/^\s+|\s+$/, '') +
+    body.className = className.replace(/\bshow_(?:coin|coin_phy|needle|all)\b/, ' ').replace(/\s+/, ' ').replace(/^\s+|\s+$/, '') +
     ' show_' + simType;
     graphType.selectedIndex = 0;
     if (simType.indexOf('coin') > -1) {
       graphType.options[1].disabled = false;
       graphType.options[2].disabled = true;
-      graphType.options[3].disabled = true;
     } else if (simType != 'all') {
       graphType.options[1].disabled = true;
       graphType.options[2].disabled = false;
-      graphType.options[3].disabled = true;
     } else {
       graphType.options[1].disabled = true;
-      graphType.options[2].disabled = true;
-      graphType.options[3].disabled = false;
+      graphType.options[2].disabled = false;
     }
   })();
 
