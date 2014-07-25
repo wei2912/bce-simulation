@@ -17,6 +17,6 @@
   },
   "homepage": "https://wei2912.github.io/bce-simulation",
   "dependencies": {
-    "send": "0.3.0"
+    "send": "0.7.0"
   }
 }
