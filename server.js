@@ -5,8 +5,7 @@
   var fs = require('fs'),
       path = require('path'),
       parseURL = require('url').parse,
-      exec = require('child_process').exec,
-      http = require('http');
+      exec = require('child_process').exec;
 
   /** Load other modules */
   var send = require('send');
@@ -99,8 +98,12 @@
     });
   }
 
-  http.createServer(reqListener).listen(port, function() {
-    console.log('Listening on port ' + port);
-  });
+  if (!module.parent) {
+    require('http').createServer(reqListener).listen(port, function() {
+      console.log('Listening on port ' + port);
+    });
+  } else {
+    module.exports = reqListener;
+  }
 
 }.call(this));
