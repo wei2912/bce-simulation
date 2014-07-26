@@ -78,7 +78,7 @@ def plot_length(args):
 
     expected = []
     for diameter in vals:
-        sim = CoinPhysicsSim(diameter/2, args.gap)
+        sim = CoinPhysicsSim(diameter, args.gap)
         expected.append(sim.predict_prob())
 
     graph.line_plot(vals, expected, color='blue')
