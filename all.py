@@ -44,7 +44,11 @@ def plot_width(args):
 
     graph.line_plot(vals, expected, color='blue')
 
-    graph.legend("Needle", "Coin", "Coin (A variation)")
+    graph.legend(
+    	"Buffon's Needle Experiment",
+    	"Buffon's Coin Experiment",
+    	"Buffon's Coin Experiment (A variation)"
+    )
     graph.scale_x_plot(args.gap, 100)
     graph.scale_y_plot(1.0, 100)
     graph.prepare_plot(
@@ -83,7 +87,11 @@ def plot_length(args):
 
     graph.line_plot(vals, expected, color='blue')
 
-    graph.legend("Needle", "Coin", "Coin (A variation)")
+    graph.legend(
+    	"Buffon's Needle Experiment",
+    	"Buffon's Coin Experiment",
+    	"Buffon's Coin Experiment (A variation)"
+    )
 
     graph.scale_x_plot(args.length, 100)
     graph.scale_y_plot(1.0, 100)
