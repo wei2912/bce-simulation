@@ -32,14 +32,14 @@ def plot_width(args):
 
     expected = []
     for gap in vals:
-        sim = CoinSim(args.length/2, gap)
+        sim = CoinSim(args.length, gap)
         expected.append(sim.predict_prob())
 
     graph.line_plot(vals, expected, color='green')
 
     expected = []
     for gap in vals:
-        sim = CoinPhysicsSim(args.length/2, gap)
+        sim = CoinPhysicsSim(args.length, gap)
         expected.append(sim.predict_prob())
 
     graph.line_plot(vals, expected, color='blue')
@@ -71,7 +71,7 @@ def plot_length(args):
 
     expected = []
     for diameter in vals:
-        sim = CoinSim(diameter/2, args.gap)
+        sim = CoinSim(diameter, args.gap)
         expected.append(sim.predict_prob())
 
     graph.line_plot(vals, expected, color='green')

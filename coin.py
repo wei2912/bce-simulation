@@ -74,7 +74,7 @@ def plot_diameter(args):
     graph.scale_x_plot(args.diameter, args.stepsize)
     graph.scale_y_plot(1.0, args.stepsize)
     graph.prepare_plot(
-    	"Radius",
+    	"Diameter",
     	"Probability of coin touching the grid",
     	"Buffon's Coin Experiment" +
         	"\nwidth of square gap = %.5g" % args.gap
