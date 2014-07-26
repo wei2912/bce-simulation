@@ -69,7 +69,7 @@ class CoinSim(object):
         if self.diameter >= self.gap:
             return 1.0
 
-        return (self.gap**2 - (self.gap-self.diameter)**2) / self.gap**2
+        return 1 - (self.gap-self.diameter)**2 / self.gap**2
 
     def predict_hits(self, trials):
         """
