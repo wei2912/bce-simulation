@@ -43,9 +43,6 @@ def prepare_plot(xlabel, ylabel, title):
 
 def display_plot(output):
     if output:
-        if output == 'stdout':
-            plt.savefig(sys.stdout, format='png')
-        else:
-            plt.savefig(output)
+        plt.savefig(output)
     else:
         plt.show()
