@@ -4,7 +4,7 @@ bce-simulation is a set of simulations written for a research project regarding 
 
 ## Website
 
-The [website](http://bce-simulation.herokuapp.com/) for the simulation is currently a WIP and is available on the master branch.
+The [website](http://bce-simulation.herokuapp.com/) for the simulation is based on the `production` branch, while the [WIP site](http://bce-simulation-dev.herokuapp.com/) is based on the `master` branch.
 
 ## Dependencies
 
@@ -13,4 +13,3 @@ To install dependencies on a Debian system, run `scripts/install.sh`.
 ## Test suite
 
 To test the simulations, run `py.test`.
-
