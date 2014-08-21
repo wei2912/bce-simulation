@@ -45,7 +45,7 @@ def plot_gap(args):
     graph.prepare_plot(
         "Gap width",
         "Probability of needle touching a line",
-        "Buffon's Needle Experiment" +
+        "Buffon’s Needle Experiment" +
             "\nlength = %.5g" % args.length
     )
 
@@ -79,7 +79,7 @@ def plot_length(args):
     graph.prepare_plot(
         "Length of needle",
         "Probability of needle touching a line",
-        "Buffon's Needle Experiment" +
+        "Buffon’s Needle Experiment" +
             "\ngap width = %.5g" % args.gap
     )
 
