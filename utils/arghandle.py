@@ -23,23 +23,6 @@ def _gap(parser):
         help='width of square gap'
     )
 
-def _stepsize(parser, stepsize):
-    parser.add_argument(
-        '-s',
-        '--stepsize',
-        type=int,
-        default=stepsize,
-        help='number of steps to take'
-    )
-
-def _verbose(parser):
-    parser.add_argument(
-        '-v',
-        '--verbose',
-        action='store_true',
-        help='enable verbose output'
-    )
-
 def _output(parser):
     parser.add_argument(
         '-o',
@@ -51,7 +34,6 @@ def _modes(parser, modes, modes_txt):
     parser.add_argument(
         '-m',
         '--mode',
-        type=int,
         choices=[i for i in modes],
         required=True,
         help="\n".join(modes_txt)
@@ -117,8 +99,6 @@ def _setup_plot(subparsers, mode, plot_modes, plot_modes_txt):
     _gap(parser_plot)
     if not mode == 'all':
         _trials(parser_plot, 1000)
-        _stepsize(parser_plot, 100)
-        _verbose(parser_plot)
     _output(parser_plot)
     _modes(parser_plot, plot_modes, plot_modes_txt)
 
