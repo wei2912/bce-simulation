@@ -7,8 +7,7 @@ This script compares all 3 simulations.
 
 import sys
 
-from utils import arghandle, graph
-from utils import needle, coin, coin_phy
+from utils import arghandle, coin, coin_phy, graph, needle
 
 def plot_length(l, w):
     """

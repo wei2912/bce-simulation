@@ -8,8 +8,7 @@ Experiment.
 
 import sys
 
-from utils import arghandle, graph, misc
-from utils import coin
+from utils import arghandle, coin, graph, misc
 
 def plot_diameter(d, w, trials):
     """
@@ -27,8 +26,8 @@ def plot_diameter(d, w, trials):
     graph.line_plot(xs, ys)
 
     for x in xs:
-	y = float(coin.run_trials(x, w, trials))/trials
-	graph.scatter_plot(x, y)
+    	y = float(coin.run_trials(x, w, trials))/trials
+    	graph.scatter_plot(x, y)
 
     graph.scale_x_plot(d)
     graph.scale_y_plot(1.0)
@@ -55,8 +54,8 @@ def plot_width(d, w, trials):
     graph.line_plot(xs, ys)
 
     for x in xs:
-	y = float(coin.run_trials(d, x, trials))/trials
-	graph.scatter_plot(x, y)
+    	y = float(coin.run_trials(d, x, trials))/trials
+    	graph.scatter_plot(x, y)
 
     graph.scale_x_plot(w)
     graph.scale_y_plot(1.0)
@@ -68,24 +67,23 @@ def plot_width(d, w, trials):
     )
 
 MODES = {
-    'd': plot_diameter,
+    'l': plot_diameter,
     'w': plot_width
 }
 
 MODES_TXT = [
     'mode determines what type of graph to plot.',
-    'mode d: varying diameter of coin',
+    'mode l: varying diameter of coin',
     'mode w: varying width of gap',
 ]
 
 def _run_handler(args):
-    sim = CoinSim(args.diameter, args.gap)
-    hits = sim.run_trials(args.trials)
+    hits = coin.run_trials(args.diameter, args.gap, args.trials)
 
     print("%d/%d" % (hits, args.trials))
-    prob = _get_prob(hits, args.trials)
+    prob = misc.get_prob(hits, args.trials)
     print("observed prob: %f" % prob)
-    print("expected prob: %f" % sim.predict_prob())
+    print("expected prob: %f" % coin.predict_prob(args.diameter, args.gap))
 
 def _plot_handler(args):
     graph.init(args.output)
