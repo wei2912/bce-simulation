@@ -3,111 +3,101 @@
 
 """
 This script runs a simulation of Buffon's Coin
-Experiment (physics variant).
+Experiment.
 """
 
 import sys
 
-from utils import arghandle, config, graph, stepvals
-from utils.sims import CoinPhysicsSim
+from utils import arghandle, coin_phy, graph, misc
 
-def _get_prob(hits, trials):
-    return float(hits)/trials
-
-def plot_width(args):
-    """
-    Plots a 2D scatter plot which shows the
-    relationship between the width of a square gap
-    and the probability which the coin hits the grid.
-    """
-
-    vals = stepvals.get_range(args.gap, 1000)
-    expected = []
-    for gap in vals:
-        sim = CoinPhysicsSim(args.diameter, gap)
-        expected.append(sim.predict_prob())
-
-    graph.line_plot(vals, expected)
-
-    vals = stepvals.get_range(args.gap, args.stepsize)
-    for gap in vals:
-        sim = CoinPhysicsSim(args.diameter, gap)
-        prob = _get_prob(sim.run_trials(args.trials), args.trials)
-
-        if args.verbose:
-            print "diameter = %.5g, gap width = %.5g: %.5g" % (args.diameter, gap, prob)
-        graph.scatter_plot(gap, prob)
-
-    graph.scale_x_plot(args.gap, args.stepsize)
-    graph.scale_y_plot(1.0, args.stepsize)
-    graph.prepare_plot(
-        "Width of square gap",
-        "Probability of coin balancing on grid",
-        u"Buffon’s Coin Experiment (a variation)" +
-            u"\ndiameter = %.5g" % args.diameter
-    )
-
-def plot_diameter(args):
+def plot_diameter(d, w, trials):
     """
     Plots a 2D scatter plot which shows the
     relationship between the diameter of the coin
     and the probability which the coin hits the grid.
+
+    d = diameter of coin
+    w = width of gap
     """
 
-    vals = stepvals.get_range(args.diameter, 1000)
-    expected = []
-    for diameter in vals:
-        sim = CoinPhysicsSim(diameter, args.gap)
-        expected.append(sim.predict_prob())
+    xs = list(graph.get_range(d))
 
-    graph.line_plot(vals, expected)
+    ys = coin_phy.predict_prob(xs, w)
+    graph.line_plot(xs, ys)
 
-    vals = stepvals.get_range(args.diameter, args.stepsize)
-    for diameter in vals:
-        sim = CoinPhysicsSim(diameter, args.gap)
-        prob = _get_prob(sim.run_trials(args.trials), args.trials)
+    for x in xs:
+        y = float(coin_phy.run_trials(x, w, trials))/trials
+        graph.scatter_plot(x, y)
 
-        if args.verbose:
-            print "diameter = %.5g, gap width = %.5g: %.5g" % (diameter, args.gap, prob)
-        graph.scatter_plot(diameter, prob)
-
-    graph.scale_x_plot(args.diameter, args.stepsize)
-    graph.scale_y_plot(1.0, args.stepsize)
+    graph.scale_x_plot(d)
+    graph.scale_y_plot(1.0)
     graph.prepare_plot(
-        "Diameter",
-        "Probability of coin balancing on grid",
-        u"Buffon’s Coin Experiment (a variation)" +
-            u"\nwidth of square gap = %.5g" % args.gap
+    	"Diameter",
+    	"Probability of coin touching the grid",
+    	u"Buffon’s Coin Experiment" +
+    	    u"\nwidth of square gap = %.5g" % w
+    )
+
+def plot_width(d, w, trials):
+    """
+    Plots a 2D scatter plot which shows the
+    relationship between the width of a square gap
+    and the probability which the coin hits the grid.
+
+    d = diameter of coin
+    w = width of gap
+    """
+
+    xs = list(graph.get_range(w))
+
+    ys = coin_phy.predict_prob(d, xs)
+    graph.line_plot(xs, ys)
+
+    for x in xs:
+	y = float(coin_phy.run_trials(d, x, trials))/trials
+	graph.scatter_plot(x, y)
+
+    graph.scale_x_plot(w)
+    graph.scale_y_plot(1.0)
+    graph.prepare_plot(
+    	"Width of square gap",
+    	"Probability of coin touching the grid",
+    	u"Buffon’s Coin Experiment" +
+    		u"\ndiameter = %.5g" % d
     )
 
 MODES = {
-    0: plot_width,
-    1: plot_diameter
+    'l': plot_diameter,
+    'w': plot_width
 }
 
 MODES_TXT = [
     'mode determines what type of graph to plot.',
-    'mode 0: 2D scatter plot, width of square gap against probability of coin balancing on grid',
-    'mode 1: 2D scatter plot, diameter against probability of coin balancing on grid'
+    'mode l: varying diameter of coin',
+    'mode w: varying width of gap',
 ]
 
 def _run_handler(args):
-    sim = CoinPhysicsSim(args.diameter, args.gap)
-    hits = sim.run_trials(args.trials)
+    hits = coin_phy.run_trials(args.diameter, args.gap, args.trials)
 
     print("%d/%d" % (hits, args.trials))
-    prob = _get_prob(hits, args.trials)
+    prob = misc.get_prob(hits, args.trials)
     print("observed prob: %f" % prob)
-    print("expected prob: %f" % sim.predict_prob())
+    print("expected prob: %f" % coin_phy.predict_prob(args.diameter, args.gap))
 
 def _plot_handler(args):
-    output = args.output
-    graph.init(output)
-    MODES[args.mode](args)
-    graph.display_plot(output)
+    graph.init(args.output)
+
+    d = misc.validate_diameter(args.diameter)
+    w = misc.validate_width(args.gap)
+    trials = misc.validate_trials(args.trials)
+
+    MODES[args.mode](d, w, trials)
+
+    graph.display_plot(args.output)
 
 def main():
-    args = arghandle.get_args('coin_phy', MODES, MODES_TXT)
+    args = arghandle.get_args('coin', MODES, MODES_TXT)
 
     handlers = {
         'run': _run_handler,
