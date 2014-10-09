@@ -43,8 +43,8 @@ def plot_width(args):
     graph.prepare_plot(
     	"Width of square gap",
     	"Probability of coin touching the grid",
-    	"Buffon's Coin Experiment" +
-        	"\ndiameter = %.5g" % args.diameter
+    	u"Buffon’s Coin Experiment" +
+        	u"\ndiameter = %.5g" % args.diameter
     )
 
 def plot_diameter(args):
@@ -76,8 +76,8 @@ def plot_diameter(args):
     graph.prepare_plot(
     	"Diameter",
     	"Probability of coin touching the grid",
-    	"Buffon's Coin Experiment" +
-        	"\nwidth of square gap = %.5g" % args.gap
+    	u"Buffon’s Coin Experiment" +
+        	u"\nwidth of square gap = %.5g" % args.gap
     )
 
 MODES = {
