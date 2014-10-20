@@ -6,13 +6,8 @@ This script runs a simulation of Buffon's Needle
 Experiment.
 """
 
-import sys
-
-from utils import arghandle, config, graph, stepvals
-from utils.sims import NeedleSim
-
-def _get_prob(hits, trials):
-    return float(hits)/trials
+from utils import arghandle, graph, misc
+from utils import needle
 
 def plot_gap(args):
     """
@@ -23,30 +18,26 @@ def plot_gap(args):
     at least one of the lines.
     """
 
-    vals = stepvals.get_range(args.gap, 1000)
+    vals = []
     expected = []
-    for gap in vals:
-        sim = NeedleSim(args.length, gap)
-        expected.append(sim.predict_prob())
+    for gap in graph.get_range(args.gap):
+        vals.append(gap)
+        expected.append(needle.predict_prob(args.length, gap))
+
+        trials = needle.run_trials(args.length, gap, args.trials)
+        prob = misc.get_prob(trials, args.trials)
+
+        graph.scatter_plot(gap, prob)
 
     graph.line_plot(vals, expected)
 
-    vals = stepvals.get_range(args.gap, args.stepsize)
-    for gap in vals:
-        sim = NeedleSim(args.length, gap)
-        prob = _get_prob(sim.run_trials(args.trials), args.trials)
-
-        if args.verbose:
-            print "length = %.5g, gap width = %.5g: %.5g" % (args.length, gap, prob)
-        graph.scatter_plot(gap, prob)
-
-    graph.scale_x_plot(args.gap, args.stepsize)
-    graph.scale_y_plot(1.0, args.stepsize)
+    graph.scale_x_plot(args.gap)
+    graph.scale_y_plot(1.0)
     graph.prepare_plot(
-        "Gap width",
-        "Probability of needle touching a line",
-        "Buffon’s Needle Experiment" +
-            "\nlength = %.5g" % args.length
+        u"Gap width",
+        u"Probability of needle touching a line",
+        u"Buffon’s Needle Experiment" +
+            u"\nlength = %.5g" % args.length
     )
 
 def plot_length(args):
@@ -57,51 +48,47 @@ def plot_length(args):
     hits at least one of the two parallel lines.
     """
 
-    vals = stepvals.get_range(args.length, 1000)
+    vals = []
     expected = []
-    for length in vals:
-        sim = NeedleSim(length, args.gap)
-        expected.append(sim.predict_prob())
+    for length in graph.get_range(args.length):
+        vals.append(length)
+        expected.append(needle.predict_prob(length, args.gap))
+
+        trials = needle.run_trials(length, args.gap, args.trials)
+        prob = misc.get_prob(trials, args.trials)
+
+        graph.scatter_plot(length, prob)
 
     graph.line_plot(vals, expected)
 
-    vals = stepvals.get_range(args.length, args.stepsize)
-    for length in vals:
-        sim = NeedleSim(length, args.gap)
-        prob = _get_prob(sim.run_trials(args.trials), args.trials)
-
-        if args.verbose:
-            print "length = %.5g, gap width = %.5g: %.5g" % (length, args.gap, prob)
-        graph.scatter_plot(length, prob)
-
-    graph.scale_x_plot(args.length, args.stepsize)
-    graph.scale_y_plot(1.0, args.stepsize)
+    graph.scale_x_plot(args.length)
+    graph.scale_y_plot(1.0)
     graph.prepare_plot(
-        "Length of needle",
-        "Probability of needle touching a line",
-        "Buffon’s Needle Experiment" +
-            "\ngap width = %.5g" % args.gap
+        u"Length of needle",
+        u"Probability of needle touching a line",
+        u"Buffon’s Needle Experiment" +
+            u"\ngap width = %.5g" % args.gap
     )
 
 MODES = {
-    0: plot_gap,
-    1: plot_length
+    'l': plot_length,
+    'w': plot_gap
 }
 
 MODES_TXT = [
     'mode determines what type of graph to plot.',
-    'mode 0: 2D scatter plot, gap width against probability of needle touching a line',
-    'mode 1: 2D scatter plot, length of needle against probability of needle touching a line'
+    'mode l: 2D scatter plot, length of needle against probability of needle touching a line'
+
+    'mode w: 2D scatter plot, gap width against probability of needle touching a line'
 ]
 
 def _run_handler(args):
-    sim = NeedleSim(args.length, args.gap)
-    hits = sim.run_trials(args.trials)
+    hits = needle.run_trials(args.length, args.gap, args.trials)
 
     print("%d/%d" % (hits, args.trials))
-    prob = _get_prob(hits, args.trials)
+    prob = misc.get_prob(hits, args.trials)
     print("observed prob: %f" % prob)
-    print("expected prob: %f" % sim.predict_prob())
+    print("expected prob: %f" % needle.predict_prob(args.length, args.gap))
 
 def _plot_handler(args):
     output = args.output

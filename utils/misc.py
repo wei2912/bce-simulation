@@ -57,6 +57,7 @@ def is_pass_chi2(results, trials):
     fails = 0
     for result in results:
         hits, pred_hits = result
+        hits = int(hits)
 
         if pred_hits == hits:
             continue
@@ -77,3 +78,6 @@ def is_pass_chi2(results, trials):
         if fails >= MAX_FAILS*len(results):
             return False
     return True
+
+def get_prob(hits, trials):
+    return float(hits)/trials

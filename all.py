@@ -5,10 +5,8 @@
 This script compares all 3 simulations.
 """
 
-import sys
-
 from utils import arghandle, graph
-from utils import needle, coin, coin_phy
+from utils import coin, coin_phy, needle
 
 def plot_length(l, w):
     """
@@ -18,7 +16,7 @@ def plot_length(l, w):
     """
 
     xs = list(graph.get_range(l))
-    
+
     ys = needle.predict_prob(xs, w)
     graph.line_plot(xs, ys, color='red')
 
@@ -29,9 +27,9 @@ def plot_length(l, w):
     graph.line_plot(xs, ys, color='blue')
 
     graph.legend(
-        "Buffon’s Needle Experiment",
-        "Buffon’s Coin Experiment",
-        "Buffon’s Coin Experiment (A variation)"
+    	u"Buffon’s Needle Experiment",
+    	u"Buffon’s Coin Experiment",
+    	u"Buffon’s Coin Experiment (A variation)"
     )
 
     graph.scale_x_plot(l)
@@ -54,7 +52,7 @@ def plot_width(l, w):
     """
 
     xs = list(graph.get_range(w))
-    
+
     ys = needle.predict_prob(l, xs)
     graph.line_plot(xs, ys, color='red')
 
@@ -65,9 +63,9 @@ def plot_width(l, w):
     graph.line_plot(xs, ys, color='blue')
 
     graph.legend(
-    	"Buffon’s Needle Experiment",
-    	"Buffon’s Coin Experiment",
-    	"Buffon’s Coin Experiment (A variation)"
+    	u"Buffon’s Needle Experiment",
+    	u"Buffon’s Coin Experiment",
+    	u"Buffon’s Coin Experiment (A variation)"
     )
     graph.scale_x_plot(w)
     graph.scale_y_plot(1.0)
@@ -83,6 +81,7 @@ MODES = {
     'w': plot_width
 }
     
+
 
 MODES_TXT = [
     'mode determines what type of graph to plot.',

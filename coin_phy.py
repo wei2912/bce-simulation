@@ -22,7 +22,7 @@ def plot_diameter(d, w, trials):
     """
 
     xs = list(graph.get_range(d))
-    
+
     ys = coin_phy.predict_prob(xs, w)
     graph.line_plot(xs, ys)
 
@@ -33,10 +33,10 @@ def plot_diameter(d, w, trials):
     graph.scale_x_plot(d)
     graph.scale_y_plot(1.0)
     graph.prepare_plot(
-        "Diameter",
-        "Probability of coin touching the grid",
-        "Buffon’s Coin Experiment" +
-            "\nwidth of square gap = %.5g" % w
+    	u"Diameter",
+    	u"Probability of coin touching the grid",
+    	u"Buffon’s Coin Experiment" +
+    	    u"\nwidth of square gap = %.5g" % w
     )
 
 def plot_width(d, w, trials):
@@ -61,31 +61,30 @@ def plot_width(d, w, trials):
     graph.scale_x_plot(w)
     graph.scale_y_plot(1.0)
     graph.prepare_plot(
-    	"Width of square gap",
-    	"Probability of coin touching the grid",
-    	"Buffon’s Coin Experiment" +
-        	"\ndiameter = %.5g" % d
+    	u"Width of square gap",
+    	u"Probability of coin touching the grid",
+    	u"Buffon’s Coin Experiment" +
+    		u"\ndiameter = %.5g" % d
     )
 
 MODES = {
-    'd': plot_diameter,
+    'l': plot_diameter,
     'w': plot_width
 }
 
 MODES_TXT = [
     'mode determines what type of graph to plot.',
-    'mode d: varying diameter of coin',
+    'mode l: varying diameter of coin',
     'mode w: varying width of gap',
 ]
 
 def _run_handler(args):
-    sim = CoinSim(args.diameter, args.gap)
-    hits = sim.run_trials(args.trials)
+    hits = coin_phy.run_trials(args.diameter, args.gap, args.trials)
 
     print("%d/%d" % (hits, args.trials))
-    prob = _get_prob(hits, args.trials)
+    prob = misc.get_prob(hits, args.trials)
     print("observed prob: %f" % prob)
-    print("expected prob: %f" % sim.predict_prob())
+    print("expected prob: %f" % coin_phy.predict_prob(args.diameter, args.gap))
 
 def _plot_handler(args):
     graph.init(args.output)
