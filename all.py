@@ -80,8 +80,6 @@ MODES = {
     'l': plot_length,
     'w': plot_width
 }
-    
-
 
 MODES_TXT = [
     'mode determines what type of graph to plot.',

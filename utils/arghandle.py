@@ -71,15 +71,16 @@ def _setup_run(subparsers, mode):
 
     mode_specific = {
         'coin': _coin_diameter,
-        'needle': _needle_length,
         'coin_phy': _coin_diameter,
+        'needle': _needle_length,
+        'needle_phy': _needle_length,
         'all': lambda x: x
     }
 
     mode_specific[mode](parser_run)
 
     _gap(parser_run)
-    if mode == 'coin' or mode == 'needle':
+    if mode == 'coin' or mode == 'needle' or mode == 'needle_phy':
         _trials(parser_run, 1000000)
     elif mode == 'coin_phy': # more resource intensive
         _trials(parser_run, 100000)
@@ -89,8 +90,9 @@ def _setup_plot(subparsers, mode, plot_modes, plot_modes_txt):
 
     mode_specific = {
         'coin': _coin_diameter,
-        'needle': _needle_length,
         'coin_phy': _coin_diameter,
+        'needle': _needle_length,
+        'needle_phy': _needle_length,
         'all': _all_length
     }
 
@@ -105,8 +107,9 @@ def _setup_plot(subparsers, mode, plot_modes, plot_modes_txt):
 def get_args(mode, plot_modes, plot_modes_txt):
     descriptions = {
         'coin': "Buffon's Coin Experiment",
-        'needle': "Buffon's Needle Experiment",
         'coin_phy': "Buffon's Coin Experiment (a variation)",
+        'needle': "Buffon's Needle Experiment",
+        'needle_phy': "Buffon's Needle Experiment (a variation)",
         'all': "Comparison of the 3 experiments"
     }
 
