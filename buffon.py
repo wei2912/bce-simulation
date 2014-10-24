@@ -9,6 +9,11 @@ from argh import arg, wrap_errors, dispatch_commands
 
 from utils import graph, SIMULATIONS
 
+MODES = [
+    'length',
+    'gap_width'
+]
+
 GRAPH_CAPTIONS = {
     'coin': {
         'length': [
@@ -79,9 +84,9 @@ def plot_experiment(experiment, mode, max_x, trials):
 
     graph.prepare_plot(*GRAPH_CAPTIONS[experiment][mode])
 
-@arg('experiment', help='type of experiment to run')
-@arg('-l', '--length', help='length of needle or diameter of coin')
-@arg('-g', '--gap-width', help='width of gap')
+@arg('experiment', choices=SIMULATIONS.keys(), help='type of experiment to run')
+@arg('-l', '--length', type=float, help='length of needle or diameter of coin')
+@arg('-g', '--gap-width', type=float, help='width of gap')
 @arg('-t', '--trials', default=1000000, help='number of trials to run')
 @wrap_errors([ValueError])
 def run(experiment, **kwargs):
@@ -101,10 +106,10 @@ def run(experiment, **kwargs):
     yield "observed prob: %f" % prob
     yield "expected prob: %f" % sim.predict_prob(length, gap_width)
 
-@arg('experiment', help='type of experiment to run')
-@arg('mode', help='variables to vary')
-@arg('-m', '--max-x', help='maximum x value')
-@arg('-t', '--trials', help='number of trials to run')
+@arg('experiment', choices=SIMULATIONS.keys(), help='type of experiment to run')
+@arg('mode', choices=MODES, help='variable to vary (by default all other variables are set to 1)')
+@arg('-m', '--max-x', type=float, help='maximum x value')
+@arg('-t', '--trials', default=1000, help='number of trials to run')
 @arg('-o', '--output', help='filename to output graph to')
 @wrap_errors([ValueError])
 def plot(experiment, mode, **kwargs):
