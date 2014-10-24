@@ -2,8 +2,7 @@
 # coding=utf-8
 
 """
-This script runs a simulation of Buffon's Coin
-Experiment.
+This script runs a simulation of the experiments.
 """
 
 from argh import arg, wrap_errors, dispatch_commands
