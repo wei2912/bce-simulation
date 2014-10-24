@@ -47,7 +47,7 @@ def test_bad_input():
 
 def test_always_hit():
     """
-    If the w < r*sqrt(2),
+    If the D < r * sqrt(2),
     the coin should always balance
     on the grid.
     """
@@ -61,34 +61,11 @@ def test_always_hit():
         assert hits == TRIALS
         assert coin_phy.predict_prob(diameter, less_gap_width) == 1.0
 
-def test_match_theoretical():
-    """
-    test_match_theoretical
-    ===
-    When the chi-square statistic is calculated,
-    the p-value should be < 0.05.
-    """
-
-    results = []
-    for _ in range(NUM_TESTS):
-        diameter = misc.non_zero_rand()
-        gap_width = misc.non_zero_rand()
-
-        hits = coin_phy.run_trials(diameter, gap_width, TRIALS)
-        pred_hits = coin_phy.predict_prob(diameter, gap_width) * TRIALS
-
-        results.append((hits, pred_hits))
-
-    assert misc.is_pass_chi2(
-        results,
-        TRIALS
-    )
-
-@mark.bench('CoinPhysicscoin_phy.run_trials')
+@mark.bench('coin_phy.run_trials')
 def test_general():
     """
     Benchmark the general performance
-    of CoinPhysicscoin_phy.
+    of the simulation.
     """
 
     diameter = misc.non_zero_rand()

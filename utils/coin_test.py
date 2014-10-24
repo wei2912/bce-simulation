@@ -51,39 +51,18 @@ def test_always_hit():
     """
 
     for _ in range(NUM_TESTS):
-        d = misc.non_zero_rand()
-        less_w = d - misc.non_zero_rand()*d
+        diameter = misc.non_zero_rand()
+        less_gap_width = diameter - misc.non_zero_rand() * diameter
 
-        # diameter > gap
-        hits = coin.run_trials(d, less_w, TRIALS)
+        # diameter > gap width
+        hits = coin.run_trials(diameter, less_gap_width, TRIALS)
         assert hits == TRIALS
-        assert coin.predict_prob(d, less_w) == 1.0
+        assert coin.predict_prob(diameter, less_gap_width) == 1.0
 
-        # diameter = gap
-        hits = coin.run_trials(d, d, TRIALS)
+        # diameter = gap width
+        hits = coin.run_trials(diameter, diameter, TRIALS)
         assert hits == TRIALS
-        assert coin.predict_prob(d, d) == 1.0
-
-def test_match_theoretical():
-    """
-    When the chi-square statistic is calculated,
-    the p-value should be < 0.05.
-    """
-
-    results = []
-    for _ in range(NUM_TESTS):
-        d = misc.non_zero_rand()
-        w = misc.non_zero_rand()
-
-        hits = coin.run_trials(d, w, TRIALS)
-        pred_hits = coin.predict_prob(d, w) * TRIALS
-
-        results.append((hits, pred_hits))
-
-    assert misc.is_pass_chi2(
-        results,
-        TRIALS
-    )
+        assert coin.predict_prob(diameter, diameter) == 1.0
 
 @mark.bench('coin.run_trials')
 def test_general():
@@ -92,7 +71,7 @@ def test_general():
     of CoinSim.
     """
 
-    d = misc.non_zero_rand()
-    w = misc.non_zero_rand()
+    diameter = misc.non_zero_rand()
+    gap_width = misc.non_zero_rand()
 
-    coin.run_trials(d, w, BENCH_TRIALS)
+    coin.run_trials(diameter, gap_width, BENCH_TRIALS)

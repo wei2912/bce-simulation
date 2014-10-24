@@ -44,35 +44,14 @@ def test_bad_input():
     with pytest.raises(ValueError):
         needle.predict_prob(1, -1)
 
-def test_match_theoretical():
-    """
-    When the chi-square statistic is calculated,
-    the p-value should be < 0.05.
-    """
-
-    results = []
-    for _ in range(NUM_TESTS):
-        l = misc.non_zero_rand()
-        w = misc.non_zero_rand()
-
-        hits = needle.run_trials(l, w, TRIALS)
-        pred_hits = needle.predict_prob(l, w) * TRIALS
-
-        results.append((hits, pred_hits))
-
-    assert misc.is_pass_chi2(
-        results,
-        TRIALS
-    )
-
 @mark.bench('needle.run_trials')
 def test_general():
     """
     Benchmark the general performance
-    of NeedleSim.
+    of the needle simulation.
     """
 
-    l = misc.non_zero_rand()
-    w = misc.non_zero_rand()
+    length = misc.non_zero_rand()
+    gap_width = misc.non_zero_rand()
 
-    sim = needle.run_trials(l, w, BENCH_TRIALS)
+    sim = needle.run_trials(length, gap_width, BENCH_TRIALS)
