@@ -2,7 +2,7 @@
 # coding=utf-8
 
 """
-This script compares all 3 simulations.
+This script compares the experiments.
 """
 
 from utils import arghandle, graph
