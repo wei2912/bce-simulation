@@ -3,11 +3,7 @@ This module serves as an interface to
 matplotlib.
 """
 
-import math
-
-import numpy as np
-
-from utils import misc
+from matplotlib import pyplot as plt
 
 STEPSIZE = 100
 OFFSET = 2 # offset = max_x/stepsize * OFFSET
@@ -19,11 +15,8 @@ def init(output):
         matplotlib.use('Agg')
     matplotlib.rc('savefig', dpi=150)
 
-    from matplotlib import pyplot
-    globals()['plt'] = pyplot
-
 def line_plot(xs, ys, color='red'):
-	plt.plot(
+    plt.plot(
         xs,
         ys,
         color=color,
@@ -33,8 +26,9 @@ def line_plot(xs, ys, color='red'):
 def legend(*args):
     plt.legend(args, loc='best')
 
-def scatter_plot(x, y, color='blue'):
-	plt.scatter(x, y, color=color)
+def scatter_plot(xs, ys, color='blue'):
+    for x, y in zip(xs, ys):
+        plt.scatter(x, y, color=color)
 
 def scale_x_plot(max_x):
     offset = max_x/STEPSIZE * OFFSET

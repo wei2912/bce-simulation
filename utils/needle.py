@@ -2,7 +2,6 @@
 Simulation of Buffon's Needle Experiment.
 """
 
-import random
 import math
 
 import numpy as np
@@ -10,52 +9,60 @@ import numexpr as ne
 
 from utils import misc
 
-def run_trials(l, w, trials):
+def run_trials(length, gap_width, trials):
     """
     Runs the simulation a specified number of times.
-
-    l = length of needle
-    w = width of gap
     """
 
-    l = misc.validate_length(l)
-    w = misc.validate_width(w)
+    length = misc.validate_length(length)
+    gap_width = misc.validate_width(gap_width)
     trials = misc.validate_trials(trials)
 
-    pi = math.pi
     angles = np.random.random(size=trials)
-    y_pos = np.random.random(size=trials)
+    y = np.random.random(size=trials)
 
     clauses = [
-        'w - y_pos*w < l/2 * sin(angles*pi)',
-        'y_pos*w < l/2 * sin(angles*pi)'
+        'D - y*D < l/2 * sin(x*pi)',
+        'y*D < l/2 * sin(x*pi)'
     ]
 
     return ne.evaluate(
         'sum(where (%s, 1, 0))' %
-            ' | '.join(['(%s)' % i for i in clauses])
+            ' | '.join(['(%s)' % i for i in clauses]),
+        local_dict={
+            'l': length,
+            'D': gap_width,
+            'x': angles,
+            'y': y
+        },
+        global_dict={
+            'pi': math.pi
+        }
     )
 
-def predict_prob(l, w):
+def predict_prob(length, gap_width):
     """
     Predicts the probability that the needle will hit
     one of the two parallel lines.
 
-    l = length of needle
-    w = width of gap
-
-    l and w can be scalars or arrays.
+    length and gap_width can be scalars or arrays.
     """
 
-    l = misc.validate_length(l)
-    w = misc.validate_width(w)
+    length = misc.validate_length(length)
+    gap_width = misc.validate_width(gap_width)
 
-    pi = math.pi
     clauses = [
-        "l <= w", "(2*l)/(pi*w)",
-        "(2/pi)*(-sqrt((l/w)**2-1)+l/w+arccos(w/l))",
+        "l <= D", "(2 * l) / (pi * D)",
+        "(2 / pi) * (-sqrt((l / D)**2 - 1) + l/D + arccos(D / l))",
     ]
 
     return ne.evaluate(
-        'where(%s, %s, %s)' % tuple(clauses)
+        'where(%s, %s, %s)' % tuple(clauses),
+        local_dict={
+            'l': length,
+            'D': gap_width
+        },
+        global_dict={
+            'pi': math.pi
+        }
     )

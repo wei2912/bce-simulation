@@ -8,7 +8,7 @@ from pytest import mark
 from utils import misc, coin
 
 TRIALS = 10000 # number of trials to run per test
-NUM_TESTS = 20 # number of tests to run per test case
+NUM_TESTS = 5 # number of tests to run per test case
 BENCH_TRIALS = 1000000 # number of trials to run for benchmarking
 
 def test_bad_input():

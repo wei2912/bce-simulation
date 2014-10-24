@@ -78,6 +78,3 @@ def is_pass_chi2(results, trials):
         if fails >= MAX_FAILS*len(results):
             return False
     return True
-
-def get_prob(hits, trials):
-    return float(hits)/trials
