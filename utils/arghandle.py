@@ -3,7 +3,20 @@ This module serves as an interface to
 argparse.
 """
 
-import argparse
+import argparse, sys
+
+MODES_TXT = {
+    'coin': [
+        'mode determines what type of graph to plot.',
+        'mode l: varying diameter of coin',
+        'mode w: varying width of gap',
+    ],
+    'needle': [
+        'mode determines what type of graph to plot.',
+        'mode l: 2D scatter plot, length of needle against probability of needle touching a line',
+        'mode w: 2D scatter plot, gap width against probability of needle touching a line'
+    ]
+}
 
 def _trials(parser, trials):
     parser.add_argument(
@@ -66,10 +79,10 @@ def _all_length(parser):
         help='length/diameter of needle/coin'
     )
 
-def _setup_run(subparsers, mode):
+def _setup_run(subparsers, experiment):
     parser_run = subparsers.add_parser('run')
 
-    mode_specific = {
+    experiments = {
         'coin': _coin_diameter,
         'coin_phy': _coin_diameter,
         'needle': _needle_length,
@@ -77,18 +90,18 @@ def _setup_run(subparsers, mode):
         'all': lambda x: x
     }
 
-    mode_specific[mode](parser_run)
+    experiments[experiment](parser_run)
 
     _gap(parser_run)
-    if mode == 'coin' or mode == 'needle' or mode == 'needle_phy':
+    if experiment == 'coin' or experiment == 'needle' or experiment == 'needle_phy':
         _trials(parser_run, 1000000)
-    elif mode == 'coin_phy': # more resource intensive
+    elif experiment == 'coin_phy': # more resource intensive
         _trials(parser_run, 100000)
 
-def _setup_plot(subparsers, mode, plot_modes, plot_modes_txt):
+def _setup_plot(subparsers, experiment, plot_modes, plot_modes_txt):
     parser_plot = subparsers.add_parser('plot')
 
-    mode_specific = {
+    experiments = {
         'coin': _coin_diameter,
         'coin_phy': _coin_diameter,
         'needle': _needle_length,
@@ -96,15 +109,24 @@ def _setup_plot(subparsers, mode, plot_modes, plot_modes_txt):
         'all': _all_length
     }
 
-    mode_specific[mode](parser_plot)
+    experiments[experiment](parser_plot)
 
     _gap(parser_plot)
-    if not mode == 'all':
+    if not experiment == 'all':
         _trials(parser_plot, 1000)
     _output(parser_plot)
     _modes(parser_plot, plot_modes, plot_modes_txt)
 
-def get_args(mode, plot_modes, plot_modes_txt):
+def _error(parser):
+    parser.add_argument(
+        'command',
+        type=str,
+        choices=['run', 'plot'],
+        help='command to run'
+    )
+    parser.parse_args()
+
+def get_args(plot_modes):
     descriptions = {
         'coin': "Buffon's Coin Experiment",
         'coin_phy': "Buffon's Coin Experiment (a variation)",
@@ -114,15 +136,35 @@ def get_args(mode, plot_modes, plot_modes_txt):
     }
 
     parser = argparse.ArgumentParser(
-        description=descriptions[mode]
+        description="Simulations of Buffon's Experiments"
     )
+
+    parser.add_argument(
+        'experiment',
+        type=str,
+        choices=list(descriptions.iterkeys()),
+        help='experiment to run'
+    )
+
+    experiment = None
+
+    # Error if invalid or no command is given
+    length = len(sys.argv)
+    if length > 1:
+        experiment = sys.argv[1]
+        if experiment not in descriptions:
+            _error(parser)
+    elif length == 1:
+        _error(parser)
 
     subparsers = parser.add_subparsers(
         dest='command'
     )
 
-    if not mode == "all":
-        _setup_run(subparsers, mode)
-    _setup_plot(subparsers, mode, plot_modes, plot_modes_txt)
+    plot_modes_txt = MODES_TXT[experiment.replace('_phy', '')]
+
+    if not experiment == "all":
+        _setup_run(subparsers, experiment)
+    _setup_plot(subparsers, experiment, plot_modes, plot_modes_txt)
 
     return parser.parse_args()
