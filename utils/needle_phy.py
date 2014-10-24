@@ -52,5 +52,12 @@ def predict_prob(length, gap_width):
     gap_width = misc.validate_width(gap_width)
 
     # TODO: Add in probability calculation.
-
-    return
+    # placeholder to ensure that a full array of zeroes
+    # is returned
+    return ne.evaluate(
+        'l * D * 0',
+        local_dict={
+            'l': length,
+            'D': gap_width
+        }
+    )
