@@ -7,12 +7,12 @@ import numexpr as ne
 
 from utils import misc
 
-def run_trials(diameter, width, trials):
+def run_trials(diameter, width, trials=1000000):
     """
     Runs the simulation a specified number of times.
     """
     diameter = misc.validate_diameter(diameter)
-    gap_width = misc.validate_width(width)
+    width = misc.validate_width(width)
     trials = misc.validate_trials(trials)
 
     x = np.random.random(size=trials)
@@ -30,22 +30,22 @@ def run_trials(diameter, width, trials):
             ' | '.join(['(%s)' % i for i in clauses]),
         local_dict={
             'd': diameter,
-            'D': gap_width,
+            'D': width,
             'x': x,
             'y': y
         }
     )
 
-def predict_prob(diameter, gap_width):
+def predict_prob(diameter, width):
     """
     Predicts the probability that the coin will hit
     the grid.
 
-    diameter and gap_width can be scalars or arrays.
+    diameter and width can be scalars or arrays.
     """
 
     diameter = misc.validate_diameter(diameter)
-    gap_width = misc.validate_width(gap_width)
+    width = misc.validate_width(gap_width)
 
     clauses = [
         "d >= D", "1",
@@ -56,6 +56,6 @@ def predict_prob(diameter, gap_width):
         'where(%s, %s, %s)' % tuple(clauses),
         local_dict={
             'd': diameter,
-            'D': gap_width
+            'D': width
         }
     )

@@ -50,17 +50,12 @@ def display_plot(output):
     else:
         plt.show()
 
-def get_range(val):
+def get_range(min_val, max_val):
     """
     This function will return a range of values
     given the size of the range.
-
-    For a value of 100.0 with a size of 10,
-    the following range is yielded:
-
-    [10.0, 20.0, 30.0, ..., 100.0]
     """
     i = 1
-    while i < STEPSIZE+1:
-        yield i*(val/STEPSIZE)
+    while i < STEPSIZE + 1:
+        yield i * (max_val - min_val) / STEPSIZE + min_val
         i += 1

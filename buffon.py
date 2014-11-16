@@ -65,10 +65,40 @@ GRAPH_CAPTIONS = {
     }
 }
 
-def plot_experiment(experiment, mode, max_x, trials):
+@arg('experiment', choices=SIMULATIONS.keys(), help='type of experiment to run')
+@arg('-l', '--length', type=float, required=True, help='length of needle or diameter of coin')
+@arg('-g', '--gap', type=float, required=True, help='width of gap')
+@arg('-t', '--trials', type=int, help='number of trials to run')
+@wrap_errors([ValueError])
+def run(experiment, length, gap, trials=1000000):
+    """
+    Argument handler for the `run` subcommand.
+    """
     sim = SIMULATIONS[experiment]
 
-    xs = list(graph.get_range(max_x))
+    hits = sim.run_trials(length, gap, trials)
+
+    yield "%d/%d" % (hits, trials)
+    prob = float(hits) / trials
+    yield "observed prob: %f" % prob
+    yield "expected prob: %f" % sim.predict_prob(length, gap)
+
+@arg('experiment', choices=SIMULATIONS.keys(), help='type of experiment to run')
+@arg('mode', choices=MODES, help='variable to vary (all other variables are set to 1)')
+@arg('--xmin', type=float, default=0.0, help='minimum x value')
+@arg('--xmax', type=float, required=True, help='maximum x value')
+@arg('-t', '--trials', type=int, default=1000, help='number of trials to run')
+@arg('-o', '--output', type=str, help='filename to output graph to')
+@wrap_errors([ValueError])
+def plot(experiment, mode, xmin, xmax, trials, output):
+    """
+    Argument handler for the `plot` subcommand.
+    """
+    sim = SIMULATIONS[experiment]
+
+    graph.init(output)
+
+    xs = list(graph.get_range(xmin, xmax))
     if mode == 'length':
         predict_prob = lambda xs: sim.predict_prob(xs, 1.0)
         run_trials = lambda x: sim.run_trials(x, 1.0, trials)
@@ -84,44 +114,6 @@ def plot_experiment(experiment, mode, max_x, trials):
 
     graph.prepare_plot(*GRAPH_CAPTIONS[experiment][mode])
 
-@arg('experiment', choices=SIMULATIONS.keys(), help='type of experiment to run')
-@arg('-l', '--length', type=float, help='length of needle or diameter of coin')
-@arg('-g', '--gap-width', type=float, help='width of gap')
-@arg('-t', '--trials', default=1000000, help='number of trials to run')
-@wrap_errors([ValueError])
-def run(experiment, **kwargs):
-    """
-    Argument handler for the `run` subcommand.
-    """
-    sim = SIMULATIONS[experiment]
-
-    length = kwargs['length']
-    gap_width = kwargs['gap_width']
-    trials = kwargs['trials']
-
-    hits = sim.run_trials(length, gap_width, trials)
-
-    yield "%d/%d" % (hits, trials)
-    prob = float(hits) / trials
-    yield "observed prob: %f" % prob
-    yield "expected prob: %f" % sim.predict_prob(length, gap_width)
-
-@arg('experiment', choices=SIMULATIONS.keys(), help='type of experiment to run')
-@arg('mode', choices=MODES, help='variable to vary (by default all other variables are set to 1)')
-@arg('-m', '--max-x', type=float, help='maximum x value')
-@arg('-t', '--trials', default=1000, help='number of trials to run')
-@arg('-o', '--output', help='filename to output graph to')
-@wrap_errors([ValueError])
-def plot(experiment, mode, **kwargs):
-    """
-    Argument handler for the `plot` subcommand.
-    """
-    output = kwargs['output']
-    trials = kwargs['trials']
-    max_x = kwargs['max_x']
-
-    graph.init(output)
-    plot_experiment(experiment, mode, max_x, trials)
     graph.display_plot(output)
 
 dispatch_commands([run, plot])
