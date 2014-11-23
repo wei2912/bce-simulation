@@ -7,17 +7,10 @@ import math
 import numpy as np
 import numexpr as ne
 
-from utils import misc
-
 def run_trials(length, gap_width, trials):
     """
     Runs the simulation a specified number of times.
     """
-
-    length = misc.validate_length(length)
-    gap_width = misc.validate_width(gap_width)
-    trials = misc.validate_trials(trials)
-
     angles = np.random.random(size=trials)
     y = np.random.random(size=trials)
 
@@ -47,17 +40,19 @@ def predict_prob(length, gap_width):
 
     length and gap_width can be scalars or arrays.
     """
+    clauses = [
+        "l > 2*D", "D*(pi + 2*arcsin(D/l) - 4*arcsin(2*D/l)) + 2*(sqrt(l*l - D*D) - sqrt(l*l + D*D))",
+        "l > D", "2*sqrt(l*l - D*D) + D*(2*arcsin(D/l) - pi)",
+        "0"
+    ]
 
-    length = misc.validate_length(length)
-    gap_width = misc.validate_width(gap_width)
-
-    # TODO: Add in probability calculation.
-    # placeholder to ensure that a full array of zeroes
-    # is returned
     return ne.evaluate(
-        'l * D * 0',
+        'where(%s, %s, where(%s, %s, %s))' % tuple(clauses),
         local_dict={
             'l': length,
             'D': gap_width
+        },
+        global_dict={
+            'pi': math.pi
         }
     )

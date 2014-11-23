@@ -7,7 +7,14 @@ This script runs a simulation of the experiments.
 
 from argh import arg, wrap_errors, dispatch_commands
 
-from utils import graph, SIMULATIONS
+from utils import graph, coin, coin_phy, needle, needle_phy
+
+SIMULATIONS = {
+    'coin': coin,
+    'coin_phy': coin_phy,
+    'needle': needle,
+    'needle_phy': needle_phy
+}
 
 MODES = [
     'length',
@@ -76,12 +83,20 @@ def run(experiment, length, gap, trials=1000000):
     """
     sim = SIMULATIONS[experiment]
 
-    hits = sim.run_trials(length, gap, trials)
+    pred_hits = sim.predict_prob(length, gap) * trials
+    yield "predicted hits: %f" % pred_hits
 
-    yield "%d/%d" % (hits, trials)
-    prob = float(hits) / trials
-    yield "observed prob: %f" % prob
-    yield "expected prob: %f" % sim.predict_prob(length, gap)
+    if experiment == 'coin_phy' or experiment == 'needle_phy':
+        hits = sim.run_trials(length, gap, trials)
+
+        yield "observed hits: %f" % hits
+
+        stat = sum([
+            (hits - pred_hits)**2 / pred_hits,
+            ((trials - hits) - (trials - pred_hits))**2 / (trials-pred_hits)
+        ])
+
+        yield "chi-square stat: %f" % stat
 
 @arg('experiment', choices=SIMULATIONS.keys(), help='type of experiment to run')
 @arg('mode', choices=MODES, help='variable to vary (all other variables are set to 1)')
