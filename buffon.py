@@ -89,7 +89,7 @@ def run(experiment, length, gap, trials=1000000):
     if experiment == 'coin_phy' or experiment == 'needle_phy':
         hits = sim.run_trials(length, gap, trials)
 
-        yield "observed hits: %f" % hits
+        yield "observed hits: %d" % hits
 
         stat = sum([
             (hits - pred_hits)**2 / pred_hits,
