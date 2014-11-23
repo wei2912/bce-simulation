@@ -41,8 +41,8 @@ def predict_prob(length, gap_width):
     length and gap_width can be scalars or arrays.
     """
     clauses = [
-        "l > 2*D", "D*(pi + 2*arcsin(D/l) - 4*arcsin(2*D/l)) + 2*(sqrt(l*l - D*D) - sqrt(l*l + D*D))",
-        "l > D", "2*sqrt(l*l - D*D) + D*(2*arcsin(D/l) - pi)",
+        "l > 2*D", "(D*(pi + 2*arcsin(D/l) - 4*arcsin(2*D/l)) + 2*(sqrt(l*l - D*D) - sqrt(l*l - 4*D*D))) / (pi * D)",
+        "l > D", "(2*sqrt(l*l - D*D) + D*(2*arcsin(D/l) - pi)) / (pi * D)",
         "0"
     ]
 
