@@ -1,5 +1,5 @@
 """
-Simulation of Buffon's Needle Experiment.
+Simulation of a variation of Buffon's Needle Problem.
 """
 
 import math
@@ -7,7 +7,9 @@ import math
 import numpy as np
 import numexpr as ne
 
-def run_trials(length, gap_width, trials):
+DEFAULT_TRIALS=10000000
+
+def run_trials(length=1.0, gap_width=1.0, trials=DEFAULT_TRIALS):
     """
     Runs the simulation a specified number of times.
     """
@@ -33,7 +35,7 @@ def run_trials(length, gap_width, trials):
         }
     )
 
-def predict_prob(length, gap_width):
+def predict_prob(length=1.0, gap_width=1.0):
     """
     Predicts the probability that the needle will hit
     one of the two parallel lines.

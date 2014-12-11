@@ -1,25 +1,20 @@
 """
-Simulation of Buffon's Coin Experiment.
+Simulation of Buffon's Coin Problem.
 """
 
-import numexpr as ne
-
-def predict_prob(diameter, width):
+def predict_prob(diameter=1.0, gap_width=1.0):
     """
     Predicts the probability that the coin will hit
     the grid.
-
-    diameter and width can be scalars or arrays.
     """
-    clauses = [
-        "d >= D", "1",
-        "1 - ((D - d) ** 2) / (D ** 2)"
-    ]
+    d = diameter
+    D = gap_width
 
-    return ne.evaluate(
-        'where(%s, %s, %s)' % tuple(clauses),
-        local_dict={
-            'd': diameter,
-            'D': width
-        }
-    )
+    if d >= D:
+        return 1.0
+    else:
+        return (
+            1.0 -
+            (D - d) ** 2 /
+            D ** 2
+        )

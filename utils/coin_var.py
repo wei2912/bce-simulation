@@ -9,7 +9,8 @@ import random
 import math
 
 from scipy.spatial import ConvexHull 
-import numexpr as ne
+
+DEFAULT_TRIALS = 100000
 
 def __transform_center(gap_width, x, y):
     """
@@ -57,7 +58,7 @@ def __get_pivots(diameter, x, y):
 
     return pivots
 
-def run_trials(diameter, gap_width, trials):
+def run_trials(diameter=1.0, gap_width=1.0, trials=DEFAULT_TRIALS):
     """
     Run the simulation a specified number of times.
     """
@@ -97,7 +98,7 @@ def run_trials(diameter, gap_width, trials):
 
     return hits
 
-def predict_prob(diameter, gap_width):
+def predict_prob(diameter=1.0, gap_width=1.0):
     """
     For the variables passed into the simulation,
     predict the probability that the needle will hit
@@ -105,19 +106,21 @@ def predict_prob(diameter, gap_width):
 
     diameter and gap_width can be scalars or arrays.
     """
-    clauses = [
-        "D >= d", "pi * (d / (2 * D))**2",
-        "D > (d/2) * sqrt(2)", "sqrt(4 * (d / (2 * D))**2 - 1) + (d / (2 * D))**2 * (pi - 4*arccos(D / d))",
-        "1"
-    ]
+    d = diameter
+    D = gap_width
 
-    return ne.evaluate(
-        'where(%s, %s, where(%s, %s, %s))' % tuple(clauses),
-        local_dict={
-            'd': diameter,
-            'D': gap_width
-        },
-        global_dict={
-            'pi': math.pi
-        }
-    )
+    if D >= d:
+        return (
+            math.pi *
+            (d / (2 * D)) ** 2
+        )
+    elif D > (d / 2) * math.sqrt(2):
+        return (
+            math.sqrt(
+                4 *
+                (d / (2 * D)) ** 2
+                - 1
+            ) +
+            (d / (2 * D)) ** 2 *
+            (math.pi - 4 * math.acos(D / d))
+        )
