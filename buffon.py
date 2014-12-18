@@ -85,11 +85,11 @@ def run(problem, length, gap, trials=None):
             yield "chi-square stat: %f" % stat
 
 @arg('gtype', choices=list(GRAPHS.keys()), help='type of graph')
-@arg('xmin', type=float, default=0.0, help='minimum x value')
+@arg('xmin', type=float, help='minimum x value')
 @arg('xmax', type=float, help='maximum x value')
-@arg('output', type=str, help='filename to output graph to')
+@arg('-o', '--output', type=str, help='filename to output graph to')
 @wrap_errors([ValueError])
-def plot(gtype, xmin, xmax, output):
+def plot(gtype, xmin, xmax, output=None):
     """
     Argument handler for the `plot` subcommand.
     """
