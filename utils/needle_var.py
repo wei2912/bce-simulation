@@ -42,19 +42,27 @@ def predict_prob(length=1.0, gap_width=1.0):
 
     length and gap_width can be scalars or arrays.
     """
-    clauses = [
-        "l > 2*D", "(D*(pi + 2*arcsin(D/l) - 4*arcsin(2*D/l)) + 2*(sqrt(l*l - D*D) - sqrt(l*l - 4*D*D))) / (pi * D)",
-        "l > D", "(2*sqrt(l*l - D*D) + D*(2*arcsin(D/l) - pi)) / (pi * D)",
-        "0"
-    ]
+    L = length
+    D = gap_width
 
-    return ne.evaluate(
-        'where(%s, %s, where(%s, %s, %s))' % tuple(clauses),
-        local_dict={
-            'l': length,
-            'D': gap_width
-        },
-        global_dict={
-            'pi': math.pi
-        }
-    )
+    if L > 2 * D:
+        return (
+            (D * (
+                math.pi + 2 * math.asin(D / L) -
+                4 * math.asin(2 * D / L)
+            ) +
+            2 * (
+                math.sqrt(L * L - D * D) -
+                math.sqrt(L * L - 4 * D * D)
+            )) /
+            (math.pi * D)
+        )
+    elif L > D:
+        return (
+            (
+                2 * math.sqrt(L * L - D * D) +
+                D * (2 * math.asin(D / L) - math.pi)
+            ) / (math.pi * D)
+        )
+    else:
+        return float('NaN')
