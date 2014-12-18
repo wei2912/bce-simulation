@@ -47,9 +47,9 @@ LABELS = {
     'needle_var': u"Variation of Buffon's Needle Problem"
 }
 
-@arg('problem', choices=SIMULATIONS.keys(), help='type of problem')
-@arg('-l', '--length', type=float, required=True, help='length of needle or diameter of coin')
-@arg('-g', '--gap', type=float, required=True, help='width of gap')
+@arg('problem', choices=list(SIMULATIONS.keys()), help='type of problem')
+@arg('length', type=float, help='length of needle or diameter of coin')
+@arg('gap', type=float, help='width of gap')
 @arg('-t', '--trials', type=int, help='number of trials to run')
 @wrap_errors([ValueError])
 def run(problem, length, gap, trials=None):
@@ -84,10 +84,10 @@ def run(problem, length, gap, trials=None):
             ])
             yield "chi-square stat: %f" % stat
 
-@arg('gtype', choices=GRAPHS.keys(), help='type of graph')
-@arg('--xmin', type=float, default=0.0, help='minimum x value')
-@arg('--xmax', type=float, required=True, help='maximum x value')
-@arg('-o', '--output', type=str, help='filename to output graph to')
+@arg('gtype', choices=list(GRAPHS.keys()), help='type of graph')
+@arg('xmin', type=float, default=0.0, help='minimum x value')
+@arg('xmax', type=float, help='maximum x value')
+@arg('output', type=str, help='filename to output graph to')
 @wrap_errors([ValueError])
 def plot(gtype, xmin, xmax, output):
     """
