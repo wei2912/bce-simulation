@@ -140,7 +140,7 @@ def plot(gtype, xmin, xmax, output):
     offset = (xmax - xmin) * OFFSET
     pylab.xlim(xmin - offset, xmax + offset)
     offset = OFFSET
-    pylab.ylim(-offset, 1 + offset)
+    pylab.ylim(0, 1 + offset)
 
     pylab.xlabel(GRAPHS[gtype]['xlabel'])
     pylab.ylabel(GRAPHS[gtype]['ylabel'])
