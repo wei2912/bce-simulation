@@ -18,12 +18,12 @@ SIMULATIONS = {
 }
 
 GRAPHS = {
-    'length': {
+    'all_length': {
         'xlabel': u"Diameter/Length",
         'ylabel': u"Probability of coin/needle balancing",
         'title': u"Buffon's Coin Problem and Buffon's Needle Problem"
     },
-    'gap_width': {
+    'all_gap_width': {
         'xlabel': u"Width of gap",
         'ylabel': u"Probability of coin/needle balancing",
         'title': u"Buffon's Coin Problem and Buffon's Needle Problem"
@@ -94,14 +94,6 @@ def plot(gtype, xmin, xmax, output):
     Argument handler for the `plot` subcommand.
     """
 
-    pylab.plot(
-        [1, 1],
-        [0, 1],
-        color='black',
-        linestyle='dashed',
-        linewidth=1
-    )
-
     def get_range(min_val, max_val):
         """
         This function will return a range of values
@@ -112,17 +104,25 @@ def plot(gtype, xmin, xmax, output):
             yield i * (max_val - min_val) / STEPSIZE + min_val
             i += 1
 
+    pylab.plot(
+        [1, 1],
+        [0, 1],
+        color='black',
+        linestyle='dashed',
+        linewidth=1
+    )
+
     xs = list(get_range(xmin, xmax))
     for problem, sim in sorted(SIMULATIONS.items()):
         ys = []
         for x in xs:
             data = {}
-            if gtype == 'length':
+            if gtype.endswith('length'):
                 if problem.startswith("coin"):
                     data['diameter'] = x
                 elif problem.startswith("needle"):
                     data['length'] = x
-            elif gtype == 'gap_width':
+            elif gtype.endswith('gap_width'):
                 data['gap_width'] = x
 
             ys.append(sim.predict_prob(**data))
