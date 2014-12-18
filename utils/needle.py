@@ -11,12 +11,12 @@ def predict_prob(length=1.0, gap_width=1.0):
 
     length and gap_width can be scalars or arrays.
     """
-    l = length
+    L = length
     D = gap_width
 
-    if l <= D:
+    if L <= D:
         return (
-            (2 * l) /
+            (2 * L) /
             (math.pi * D)
         )
     else:
@@ -24,9 +24,9 @@ def predict_prob(length=1.0, gap_width=1.0):
             (2 / math.pi) *
             (
                 -math.sqrt(
-                    (l / D) ** 2 - 1
+                    (L / D) ** 2 - 1
                 ) +
-                l / D +
-                math.acos(D / l)
+                L / D +
+                math.acos(D / L)
             )
         )
