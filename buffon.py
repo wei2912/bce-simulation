@@ -6,7 +6,7 @@ This script runs a simulation of the experiments.
 """
 
 from argh import arg, wrap_errors, dispatch_commands
-import pylab
+from matplotlib import pyplot as plt
 
 from utils import coin, coin_var, needle, needle_var
 
@@ -104,7 +104,7 @@ def plot(gtype, xmin, xmax, output=None):
             yield i * (max_val - min_val) / STEPSIZE + min_val
             i += 1
 
-    pylab.plot(
+    plt.plot(
         [1, 1],
         [0, 1],
         color='black',
@@ -127,7 +127,7 @@ def plot(gtype, xmin, xmax, output=None):
 
             ys.append(sim.predict_prob(**data))
 
-        pylab.plot(
+        plt.plot(
             xs,
             ys,
             color=COLORS[problem],
@@ -135,21 +135,21 @@ def plot(gtype, xmin, xmax, output=None):
             linewidth=2.0
         )
 
-    pylab.legend(loc='best')
+    plt.legend(loc='best')
 
     offset = (xmax - xmin) * OFFSET
-    pylab.xlim(xmin - offset, xmax + offset)
+    plt.xlim(xmin - offset, xmax + offset)
     offset = OFFSET
-    pylab.ylim(0, 1 + offset)
+    plt.ylim(0, 1 + offset)
 
-    pylab.xlabel(GRAPHS[gtype]['xlabel'])
-    pylab.ylabel(GRAPHS[gtype]['ylabel'])
-    pylab.title(GRAPHS[gtype]['title'])
-    pylab.grid(True)
+    plt.xlabel(GRAPHS[gtype]['xlabel'])
+    plt.ylabel(GRAPHS[gtype]['ylabel'])
+    plt.title(GRAPHS[gtype]['title'])
+    plt.grid(True)
 
     if output:
-        pylab.savefig(output)
+        plt.savefig(output)
     else:
-        pylab.show()
+        plt.show()
 
 dispatch_commands([run, plot])
