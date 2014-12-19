@@ -10,5 +10,4 @@ pyparsing=2.0.1=py34_0
 python=3.4.2=0
 pytz=2014.9=py34_0
 readline=6.2=2
-scipy=0.14.0=np19py34_0
 six=1.8.0=py34_0
