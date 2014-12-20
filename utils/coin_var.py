@@ -84,18 +84,18 @@ def __get_pivots(diameter, x, y):
     sqval = radius**2 - y**2
     if sqval > 0: # no imaginary numbers!
         sqrt = sqval**(0.5)
-        pivots.append([x + sqrt, 0])
-        pivots.append([x - sqrt, 0])
+        pivots.append((x + sqrt, 0))
+        pivots.append((x - sqrt, 0))
     elif sqval == 0: # tangent
-        pivots.append([x, 0])
+        pivots.append((x, 0))
 
     sqval = radius**2 - x**2
     if sqval > 0:
         sqrt = sqval**(0.5)
-        pivots.append([0, y + sqrt])
-        pivots.append([0, y - sqrt])
+        pivots.append((0, y + sqrt))
+        pivots.append((0, y - sqrt))
     elif sqval == 0:
-        pivots.append([0, y])
+        pivots.append((0, y))
 
     return pivots
 
@@ -118,23 +118,21 @@ def run_trials(diameter=1.0, gap_width=1.0, trials=DEFAULT_TRIALS):
 
         pivots = __get_pivots(diameter, x, y)
 
-        # if it isn't touching the axes at at least 3 points
-        # it will definitely not balance
-        # other than in the case above where it lies on the edge
-        if not len(pivots) > 2:
+        # if it is a tangent to either of the axes
+        # it won't balance
+        if len(pivots) < 4:
             continue
 
         # convex hull of pivots and center
         # check if the center of gravity is a point in the shape
         # if it is, the coin does not balance.
         # otherwise, the coin does.
-        pivots.append([x, y])
+        pivots.append((x, y))
         hull = __convex__hull(pivots)
 
         # if center is in the convex hull
         # whee we have a hit
-        center_index = len(pivots) - 1
-        if not center_index in hull:
+        if not (x, y) in hull:
             hits += 1
 
     return hits
@@ -147,21 +145,23 @@ def predict_prob(diameter=1.0, gap_width=1.0):
 
     diameter and gap_width can be scalars or arrays.
     """
-    d = diameter
+    R = diameter / 2
     D = gap_width
 
-    if D >= d:
+    if D >= 2 * R:
         return (
             math.pi *
-            (d / (2 * D)) ** 2
+            (R / D) ** 2
         )
-    elif D > (d / 2) * math.sqrt(2):
+    elif D > R * math.sqrt(2):
         return (
             math.sqrt(
                 4 *
-                (d / (2 * D)) ** 2
+                (R / D) ** 2
                 - 1
             ) +
-            (d / (2 * D)) ** 2 *
-            (math.pi - 4 * math.acos(D / d))
+            (R / D) ** 2 *
+            (math.pi - 4 * math.acos(D / (2*R)))
         )
+    else:
+        return 1

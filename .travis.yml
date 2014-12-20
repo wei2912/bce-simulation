@@ -4,7 +4,7 @@ python:
 
 # before_install: sudo apt-get update -qq
 install: scripts/install.sh
-script: npm test
+script: python test.py && npm test
 
 deploy:
   provider: heroku
