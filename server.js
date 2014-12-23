@@ -50,38 +50,22 @@
 
   function build(req, res, query) {
     var type = query.simulation;
-    if (!/^(?:coin(?:_phy)?|needle|all)$/.test(type)) {
-      res.end("unsupported");
+    if (!/^all_(?:length|gap_width)$/.test(type)) {
+      res.end("Unsupported");
     }
 
-    var mode = query['type'],
-        trials = query.trials,
-        step = query.step,
-        isCoin = /^coin/.test(type),
-        isAll = /^all$/.test(type),
-        // Coin experiments
-        diameter = query.diameter,
-        width = query.width,
-        // Needle experiments
-        length = query.length,
-        gap = query.gap;
+    var xmin = query.xmin,
+        xmax = query.xmax;
 
     var fileName = path.join(
       __dirname,
-      'output/' + type + '.' + mode + '.' + trials + '.' + step + '.' +
-      (isCoin ? diameter + '.' + width : isAll ? diameter + '.' + width : length + '.' + gap) +
-      '.png'
+      'output/' +
+      type + '.' +
+      xmin + '.' +
+      xmax + '.' +
+      'png'
     );
-    var fileToExec = path.join(__dirname, type + '.py');
-    var args = ['python', fileToExec, 'plot', '-o', fileName, '-m', mode];
-    if (!isAll) {
-      args.push('-t', trials, '-s', step);
-    }
-    if (isCoin || isAll) {
-      args.push(isAll ? '-l' : '-d', diameter, '-g', width);
-    } else {
-      args.push('-l', length, '-g', gap);
-    }
+    var args = ['python', 'buffon.py', 'plot', '--xmin', xmin, '--xmax', xmax, '-o', fileName, type];
     console.log(args = args.join(' '));
     exec(args, function(err, stderr, stdout) {
       if (err || stderr) {

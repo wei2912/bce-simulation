@@ -23,6 +23,36 @@
         <h2>Simulation</h2>
         <div>
           <select name="simulation">
+            <option value="all_length" selected>Length</option>
+            <option value="all_gap_width">Gap Width</option>
+          </select>
+        </div>
+      </div>
+    </div>
+
+    <div class="outer">
+      <div class="inner">
+        <h2> Maximum X Value </h2>
+        <div>
+          <input name="xmin" type="number" value="5">
+        </div>
+      </div>
+    </div>
+    
+    <div class="outer">
+      <div class="inner">
+        <h2>Maximum X Value</h2>
+        <div>
+          <input name="xmax" type="number" value="100">
+        </div>
+      </div>
+    </div>
+    <!--
+    <div class="outer">
+      <div class="inner">
+        <h2>Simulation</h2>
+        <div>
+          <select name="simulation">
             <option value="coin" selected>Coin</option>
             <option value="coin_phy">Coin (A variation)</option>
             <option value="needle">Needle</option>
@@ -162,6 +192,7 @@
         </div>
       </div>
     </div>
+    -->
 
     <div class="outer">
       <div class="inner">
@@ -172,11 +203,11 @@
 
   <footer class="outer">
     <p class="inner">
-      Created by <a href="https://twitter.com/demoneaux">@d10</a> and <a href="https://github.com/wei2912">@wei2912</a> | Code licensed under MIT License
+      Created by <a href="https://twitter.com/demoneaux">@demoneaux</a> and <a href="https://twitter.com/wei2912">@wei2912</a> | Code licensed under MIT License
     </p>
   </footer>
 
-
+  <!--
   <script>
   var doc = document,
       body = doc.body,
@@ -210,5 +241,6 @@
     ' show_' + type;
   };
   </script>
+  -->
 </body>
 </html>
