@@ -18,12 +18,12 @@ SIMULATIONS = {
 }
 
 GRAPHS = {
-    'all_length': {
+    'length': {
         'xlabel': u"Diameter/Length",
         'ylabel': u"Probability of coin/needle balancing",
         'title': u"Buffon's Coin Problem and Buffon's Needle Problem"
     },
-    'all_gap_width': {
+    'gap_width': {
         'xlabel': u"Width of gap",
         'ylabel': u"Probability of coin/needle balancing",
         'title': u"Buffon's Coin Problem and Buffon's Needle Problem"
@@ -34,10 +34,10 @@ STEPSIZE = 1000
 OFFSET = 0.01
 
 COLORS = {
-    'coin': 'purple',
+    'coin': 'red',
     'coin_var': 'red',
     'needle': 'blue',
-    'needle_var': 'green'
+    'needle_var': 'blue'
 }
 
 LABELS = {
@@ -117,22 +117,27 @@ def plot(gtype, xmin, xmax, output=None):
         ys = []
         for x in xs:
             data = {}
-            if gtype.endswith('length'):
+            if gtype == 'length':
                 if problem.startswith("coin"):
                     data['diameter'] = x
                 elif problem.startswith("needle"):
                     data['length'] = x
-            elif gtype.endswith('gap_width'):
+            elif gtype == 'gap_width':
                 data['gap_width'] = x
 
             ys.append(sim.predict_prob(**data))
 
+        data = {}
+        data['color'] = COLORS[problem]
+        data['label'] = LABELS[problem]
+        data['linewidth'] = 2.0
+        if not problem.endswith("var"):
+            data['linestyle'] = '--'
+
         plt.plot(
             xs,
             ys,
-            color=COLORS[problem],
-            label=LABELS[problem],
-            linewidth=2.0
+            **data
         )
 
     plt.legend(loc='best')
