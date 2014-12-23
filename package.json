@@ -1,7 +1,7 @@
 {
   "name": "bce-simulation",
   "private": true,
-  "description": "A set of simulations of Buffon's Coin Experiments.",
+  "description": "A set of simulations of Buffon’s Coin Experiments.",
   "main": "server.js",
   "scripts": {
     "test": "lab -v test/tests.js",
@@ -10,17 +10,16 @@
   "repository": "wei2912/bce-simulation",
   "author": "Ng Wei En <wei2912.support@gmail.com> (http://wei2912.github.io/)",
   "contributors": [
-    "Benjamin Tan <demoneaux@gmail.com> (http://d10.github.io/)"
+    "Benjamin Tan <demoneaux@gmail.com> (https://d10.github.io/)"
   ],
   "bugs": {
     "url": "https://github.com/wei2912/bce-simulation/issues"
   },
-  "homepage": "https://wei2912.github.io/bce-simulation",
+  "homepage": "https://bce-simulation.heroku.com/",
   "dependencies": {
-    "send": "0.7.0"
+    "hapi": "^8.0.0"
   },
   "devDependencies": {
-    "supertest": "~0.13.0",
-    "lab": "~3.2.1"
+    "lab": "^5.1.1"
   }
 }
