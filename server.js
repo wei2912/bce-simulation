@@ -71,12 +71,12 @@
       'png'
     );
 
-    var args = ['python', 'buffon.py', 'plot', '--xmin', xmin, '--xmax', xmax, '-o', fileName, type];
+    var args = ['python', 'buffon.py', 'plot', type, /* xmin */ xmin, /* xmax */ xmax, '--output', fileName];
     console.log(args = args.join(' '));
 
     exec(args, function(err, stderr, stdout) {
       if (err || stderr) {
-        return reply(err || Error(stderr));
+        return reply((err || stderr).toString());
       }
       reply
         .file(fileName)
@@ -92,6 +92,7 @@
   }
 
   if (!module.parent) {
+    process.env.SERVER = true;
     server.start();
   } else {
     module.exports = server;

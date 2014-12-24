@@ -13,6 +13,11 @@ var describe = lab.experiment,
 var server = require('../server');
 
 describe('server', function () {
+  before(function (done) {
+    process.env.SERVER = true;
+    done();
+  });
+
   var contentTypes = {
     'text': /^text\/plain(?:; charset=.+)?$/,
     'html': /^text\/html(?:; charset=.+)?$/,

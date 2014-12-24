@@ -5,6 +5,12 @@
 This script runs a simulation of the experiments.
 """
 
+# Use Agg if running Matplotlib from a server
+import os
+if os.environ.get('SERVER'):
+  import matplotlib
+  matplotlib.use('Agg')
+
 from argh import arg, wrap_errors, dispatch_commands
 from matplotlib import pyplot as plt
 
