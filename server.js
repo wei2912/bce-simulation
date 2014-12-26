@@ -36,6 +36,12 @@ server.connection({
 
 server.route({
   method: 'GET',
+  path: '/api',
+  handler: api
+});
+
+server.route({
+  method: 'GET',
   path: '/build.png',
   handler: build
 });
@@ -49,6 +55,28 @@ server.route({
     }
   }
 });
+
+function api(request, reply) {
+  var query = request.query;
+  
+  var problem = query.problem;
+  if (!/^(?:coin|needle)(?:_var)?$/.test(problem)) {
+    reply("Unsupported");
+  }
+  var length = query.length,
+      gap = query.gap,
+      trials = query.trials;
+
+  var args = ['python', 'buffon.py', 'run', problem, length, gap, '--trials', trials];
+  console.log(args = args.join(' '));
+
+  exec(args, function(err, stderr, stdout) {
+    if (err || stderr) {
+      return reply((err || stderr).toString());
+    }
+    reply(stdout);
+  });
+}
 
 function build(request, reply) {
   var query = request.query;
@@ -86,7 +114,7 @@ function build(request, reply) {
             console.error(err);
           }
         });
-    });
+      });
   });
 }
 

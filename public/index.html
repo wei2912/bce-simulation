@@ -17,10 +17,16 @@
     </div>
   </div>
 
+  <div class="outer">
+    <div class="inner">
+      <h2>Graphs</h2>
+    </div>
+  </div>
+
   <form type="get" action="/build.png">
     <div class="outer">
       <div class="inner">
-        <h2>Simulation</h2>
+        <h3>Simulation</h3>
         <div>
           <select name="simulation">
             <option value="length" selected>Length</option>
@@ -31,7 +37,7 @@
 
       <div class="inner">
         <p>
-          <strong>Increasing length</strong> generates a graph plotting length of needle against probability of needle touching at least one of the lines.
+          <strong>Increasing length</strong> generates a graph plotting diameter of coin/length of needle against probability of coin/needle touching/balancing on at least one of the lines.
         </p>
 
         <p>
@@ -42,7 +48,7 @@
 
     <div class="outer">
       <div class="inner">
-        <h2> Minimum X Value </h2>
+        <h3>Minimum X Value</h3>
         <div>
           <input name="xmin" type="number" value="5">
         </div>
@@ -51,22 +57,36 @@
     
     <div class="outer">
       <div class="inner">
-        <h2>Maximum X Value</h2>
+        <h3>Maximum X Value</h3>
         <div>
           <input name="xmax" type="number" value="100">
         </div>
       </div>
     </div>
-    <!--
+
     <div class="outer">
       <div class="inner">
-        <h2>Simulation</h2>
+        <input class="center" type="submit" value="Generate Image">
+      </div>
+    </div>
+  </form>
+
+  <div class="outer">
+    <div class="inner">
+      <h2>Program</h2>
+    </div>
+  </div>
+
+  <form type="get" action="/api">
+    <div class="outer">
+      <div class="inner">
+        <h3>Simulation</h3>
         <div>
-          <select name="simulation">
+          <select name="problem">
             <option value="coin" selected>Coin</option>
-            <option value="coin_phy">Coin (A variation)</option>
+            <option value="coin_var">Coin (Variation)</option>
             <option value="needle">Needle</option>
-            <option value="all">Comparison of 3 experiments</option>
+            <option value="needle_var">Needle (Variation)</option>
           </select>
         </div>
       </div>
@@ -83,63 +103,30 @@
         <p class="hidden needle">
           The <strong>Needle Simulation</strong> generates a graph of Buffon’s Needle Experiment: it shows the probability of a needle touching one of the lines of two parallel lines.
         </p>
-
-        <p class="hidden all">
-          The <strong>comparison of 3 experiments</strong> generates a graph of the theoretical probability of each of the simulations touching/balancing on one of the lines.
-        </p>
       </div>
     </div>
 
     <div class="outer">
       <div class="inner">
-        <h2>Type of Graph</h2>
+        <h3>Length of needle/Diameter of coin</h3>
         <div>
-          <select name="type">
-            <option value="0">Increasing width of gap</option>
-            <option value="1">Increasing diameter</option>
-            <option value="1">Increasing length</option>
-          </select>
+          <input name="length" type="number" value="1">
         </div>
       </div>
+    </div>
 
+    <div class="outer">
       <div class="inner">
-        <p class="hidden coin type_0">
-          <strong>Increasing width of gap</strong> generates a graph plotting width of gap against probability of coin touching the square grid.
-        </p>
-
-        <p class="hidden coin type_1">
-          <strong>Increasing diameter</strong> generates a graph plotting diameter of coin against probability of coin touching the square grid.
-        </p>
-
-        <p class="hidden coin_phy type_0">
-          <strong>Increasing width of gap</strong> generates a graph plotting width of gap against probability of coin balancing on the square grid.
-        </p>
-
-        <p class="hidden coin_phy type_1">
-          <strong>Increasing diameter</strong> generates a graph plotting diameter of coin against probability of coin balancing on the square grid.
-        </p>
-
-        <p class="hidden needle type_0">
-          <strong>Increasing width of gap</strong> generates a graph plotting width of gap against probability of needle touching at least one of the lines.
-        </p>
-
-        <p class="hidden needle type_1">
-          <strong>Increasing length</strong> generates a graph plotting length of needle against probability of needle touching at least one of the lines.
-        </p>
-
-        <p class="hidden all type_0">
-          <strong>Increasing width of gap</strong> generates a graph plotting width of gap against probability of coin/needle touching/balancing on at least one of the lines.
-        </p>
-
-        <p class="hidden all type_1">
-          <strong>Increasing length</strong> generates a graph plotting length of needle/diameter of coin against probability of needle/coin touching/balancing on at least one of the lines.
-        </p>
+        <h3>Width of gap between 2 lines</h3>
+        <div>
+          <input name="gap" type="number" value="1">
+        </div>
       </div>
     </div>
 
     <div class="outer">
       <div class="inner">
-        <h2>Number of trials to run</h2>
+        <h3>Number of trials to run</h3>
         <div>
           <input name="trials" type="number" value="1000">
         </div>
@@ -154,59 +141,7 @@
 
     <div class="outer">
       <div class="inner">
-        <h2>Number of steps to take</h2>
-        <div>
-          <input name="step" type="number" value="100">
-        </div>
-      </div>
-
-      <div class="inner">
-        <p>
-          The <strong>number of steps to take</strong> specifies the number of x-axis values.
-        </p>
-      </div>
-    </div>
-
-    <div class="outer hidden coin coin_phy">
-      <div class="inner">
-        <h2>Diameter of coin</h2>
-        <div>
-          <input name="diameter" type="number" value="1">
-        </div>
-      </div>
-    </div>
-
-    <div class="outer hidden coin coin_phy all">
-      <div class="inner">
-        <h2>Width of gap</h2>
-        <div>
-          <input name="width" type="number" value="5">
-        </div>
-      </div>
-    </div>
-
-    <div class="outer hidden needle all">
-      <div class="inner">
-        <h2>Length of needle<span class="hidden all">/Diameter of coin</span></h2>
-        <div>
-          <input name="length" type="number" value="1">
-        </div>
-      </div>
-    </div>
-
-    <div class="outer hidden needle">
-      <div class="inner">
-        <h2>Width of gap between 2 lines</h2>
-        <div>
-          <input name="gap" type="number" value="1">
-        </div>
-      </div>
-    </div>
-    -->
-
-    <div class="outer">
-      <div class="inner">
-        <input class="center" type="submit" value="Generate Image">
+        <input class="center" type="submit" value="View Results">
       </div>
     </div>
   </form>
@@ -216,41 +151,5 @@
       Created by <a href="https://twitter.com/demoneaux">@demoneaux</a> and <a href="https://twitter.com/wei2912">@wei2912</a> | Code licensed under MIT License
     </p>
   </footer>
-
-  <!--
-  <script>
-  var doc = document,
-      body = doc.body,
-      sim = doc.getElementsByName('simulation')[0],
-      graphType = doc.getElementsByName('type')[0];
-
-  body.className += ' js';
-
-  (sim.onchange = function (e) {
-    var simType = sim.options[sim.selectedIndex].value,
-        className = body.className;
-    body.className = className.replace(/\bshow_(?:coin|coin_phy|needle|all)\b/, ' ').replace(/\s+/, ' ').replace(/^\s+|\s+$/, '') +
-    ' show_' + simType;
-    graphType.selectedIndex = 0;
-    if (simType.indexOf('coin') > -1) {
-      graphType.options[1].disabled = false;
-      graphType.options[2].disabled = true;
-    } else if (simType != 'all') {
-      graphType.options[1].disabled = true;
-      graphType.options[2].disabled = false;
-    } else {
-      graphType.options[1].disabled = true;
-      graphType.options[2].disabled = false;
-    }
-  })();
-
-  graphType.onchange = function (e) {
-    var type = graphType.options[graphType.selectedIndex].value,
-        className = body.className;
-    body.className = className.replace(/\s+/, ' ').replace(/^\s+|\s+$/, '') +
-    ' show_' + type;
-  };
-  </script>
-  -->
 </body>
 </html>
