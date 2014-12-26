@@ -30,21 +30,22 @@ GRAPHS = {
     }
 }
 
-STEPSIZE = 1000
-OFFSET = 0.01
-
 COLORS = {
     'coin': 'red',
     'coin_var': 'red',
+    'coin_var_sim': 'red',
     'needle': 'blue',
-    'needle_var': 'blue'
+    'needle_var': 'blue',
+    'needle_var_sim': 'blue'
 }
 
 LABELS = {
     'coin': u"Buffon's Coin Problem",
     'coin_var': u"Variation of Buffon's Coin Problem",
+    'coin_var_sim': u"Variation of Buffon's Coin Problem (simulated)",
     'needle': u"Buffon's Needle Problem",
-    'needle_var': u"Variation of Buffon's Needle Problem"
+    'needle_var': u"Variation of Buffon's Needle Problem",
+    'needle_var_sim': u"Variation of Buffon's Needle Problem (simulated)"
 }
 
 @arg('problem', choices=list(SIMULATIONS.keys()), help='type of problem')
@@ -94,57 +95,71 @@ def plot(gtype, xmin, xmax, output=None):
     Argument handler for the `plot` subcommand.
     """
 
-    def get_range(min_val, max_val):
+    def get_range(min_val, max_val, stepsize):
         """
         This function will return a range of values
         given the size of the range.
         """
         i = 1
-        while i < STEPSIZE + 1:
-            yield i * (max_val - min_val) / STEPSIZE + min_val
+        while i < stepsize + 1:
+            yield i * (max_val - min_val) / stepsize + min_val
             i += 1
+
+    def get_data(gtype, problem, x):
+        data = {}
+        if gtype == 'length':
+            if problem.startswith("coin"):
+                data['diameter'] = x
+            elif problem.startswith("needle"):
+                data['length'] = x
+        elif gtype == 'gap_width':
+            data['gap_width'] = x
+        return data
 
     plt.plot(
         [1, 1],
         [0, 1],
         color='black',
-        linestyle='dashed',
+        linestyle='--',
         linewidth=1
     )
 
-    xs = list(get_range(xmin, xmax))
+    xs = list(get_range(xmin, xmax, 10000))
+    trials_xs = list(get_range(xmin, xmax, 200))
     for problem, sim in sorted(SIMULATIONS.items()):
         ys = []
         for x in xs:
-            data = {}
-            if gtype == 'length':
-                if problem.startswith("coin"):
-                    data['diameter'] = x
-                elif problem.startswith("needle"):
-                    data['length'] = x
-            elif gtype == 'gap_width':
-                data['gap_width'] = x
-
+            data = get_data(gtype, problem, x)
             ys.append(sim.predict_prob(**data))
-
-        data = {}
-        data['color'] = COLORS[problem]
-        data['label'] = LABELS[problem]
-        data['linewidth'] = 2.0
-        if not problem.endswith("var"):
-            data['linestyle'] = '--'
 
         plt.plot(
             xs,
             ys,
-            **data
+            color=COLORS[problem],
+            label=LABELS[problem],
+            linewidth=2,
+            linestyle='-' if problem.endswith("var") else '--'
         )
 
-    plt.legend(loc='best')
+        if problem.endswith('var'):
+            trials_ys = []
+            for x in trials_xs:
+                data = get_data(gtype, problem, x)
+                data['trials'] = 1000
+                trials_ys.append(sim.run_trials(**data) / 1000.0)
 
-    offset = (xmax - xmin) * OFFSET
+            plt.scatter(
+                trials_xs,
+                trials_ys,
+                color=COLORS[problem + "_sim"],
+                label=LABELS[problem + "_sim"]
+            )
+
+    plt.legend(loc='best', prop={'size': 10})
+
+    offset = (xmax - xmin) * 0.01
     plt.xlim(xmin - offset, xmax + offset)
-    offset = OFFSET
+    offset = 0.01
     plt.ylim(0, 1 + offset)
 
     plt.xlabel(GRAPHS[gtype]['xlabel'])
