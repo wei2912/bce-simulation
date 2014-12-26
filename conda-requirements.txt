@@ -1,13 +1,13 @@
 # This file may be used to create an environment using:
 # $ conda create --name <env> --file <this file>
-dateutil=2.1=py34_2
+dateutil=2.1=py27_2
 freetype=2.4.10=0
 libpng=1.5.13=1
-matplotlib=1.4.2=np19py34_0
-numexpr=2.3.1=np19py34_0
-numpy=1.9.1=py34_0
-pyparsing=2.0.1=py34_0
-python=3.4.2=0
-pytz=2014.9=py34_0
+matplotlib=1.4.2=np19py27_0
+numexpr=2.3.1=np19py27_0
+numpy=1.9.1=py27_0
+pyparsing=2.0.1=py27_0
+python=2.7.9=0
+pytz=2014.9=py27_0
 readline=6.2=2
-six=1.8.0=py34_0
+six=1.8.0=py27_0

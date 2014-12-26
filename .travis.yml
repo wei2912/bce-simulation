@@ -1,8 +1,8 @@
 language: python
 python:
-  - "3.4"
+  - "2.7"
 
-# before_install: sudo apt-get update -qq
+before_install: sudo apt-get update -qq
 install: scripts/install.sh
 script: python test.py && npm test
 
