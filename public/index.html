@@ -23,16 +23,26 @@
         <h2>Simulation</h2>
         <div>
           <select name="simulation">
-            <option value="all_length" selected>Length</option>
-            <option value="all_gap_width">Gap Width</option>
+            <option value="length" selected>Length</option>
+            <option value="gap_width">Gap Width</option>
           </select>
         </div>
+      </div>
+
+      <div class="inner">
+        <p>
+          <strong>Increasing length</strong> generates a graph plotting length of needle against probability of needle touching at least one of the lines.
+        </p>
+
+        <p>
+          <strong>Increasing gap width</strong> generates a graph plotting width of gap against probability of coin/needle touching/balancing on at least one of the lines.
+        </p>
       </div>
     </div>
 
     <div class="outer">
       <div class="inner">
-        <h2> Maximum X Value </h2>
+        <h2> Minimum X Value </h2>
         <div>
           <input name="xmin" type="number" value="5">
         </div>
