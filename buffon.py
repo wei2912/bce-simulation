@@ -150,6 +150,12 @@ def plot(gtype, xmin, xmax, output=None):
         if problem.endswith('var'):
             trials_ys = []
             for x in trials_xs:
+            	if problem == 'needle_var':
+            		length = x if gtype == 'length' else 1
+            		gap_width = x if gtype == 'gap_width' else 1
+            		if length <= gap_width:
+            			trials_ys.append(None)
+            			continue
                 data = get_data(gtype, problem, x)
                 data['trials'] = 1000
                 trials_ys.append(sim.run_trials(**data) / 1000.0)
