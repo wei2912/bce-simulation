@@ -27,12 +27,12 @@ GRAPHS = {
     'length': {
         'xlabel': u"Diameter/Length",
         'ylabel': u"Probability of coin/needle balancing",
-        'title': u"Buffon's Coin Problem and Buffon's Needle Problem"
+        'title': u"Buffon’s Coin Problem and Buffon’s Needle Problem"
     },
     'gap_width': {
         'xlabel': u"Width of gap",
         'ylabel': u"Probability of coin/needle balancing",
-        'title': u"Buffon's Coin Problem and Buffon's Needle Problem"
+        'title': u"Buffon’s Coin Problem and Buffon’s Needle Problem"
     }
 }
 
@@ -46,12 +46,12 @@ COLORS = {
 }
 
 LABELS = {
-    'coin': u"Buffon's Coin Problem",
-    'coin_var': u"Variation of Buffon's Coin Problem",
-    'coin_var_sim': u"Variation of Buffon's Coin Problem (simulated)",
-    'needle': u"Buffon's Needle Problem",
-    'needle_var': u"Variation of Buffon's Needle Problem",
-    'needle_var_sim': u"Variation of Buffon's Needle Problem (simulated)"
+    'coin': u"Buffon’s Coin Problem",
+    'coin_var': u"Variation of Buffon’s Coin Problem",
+    'coin_var_sim': u"Variation of Buffon’s Coin Problem (simulated)",
+    'needle': u"Buffon’s Needle Problem",
+    'needle_var': u"Variation of Buffon’s Needle Problem",
+    'needle_var_sim': u"Variation of Buffon’s Needle Problem (simulated)"
 }
 
 @arg('problem', choices=list(SIMULATIONS.keys()), help='type of problem')
