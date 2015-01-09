@@ -13,9 +13,7 @@
 html {
   color: #222;
   font-size: 1em;
-  font-family:
-  'Segoe WP', 'Segoe UI', 'Helvetica Neue', Helvetica, Arial, freesans, clean, sans-serif, 'Segoe UI Emoji', 'Segoe UI Symbol';
-  font-weight: 300;
+  font-family: 'Segoe WP', 'Segoe UI', 'Helvetica Neue', Helvetica, Arial, freesans, clean, sans-serif, 'Segoe UI Emoji', 'Segoe UI Symbol';
   line-height: 1.4;
 }
 
@@ -91,28 +89,23 @@ p {
   text-align: center;
 }
 
-body.show_coin .coin,
-body.show_coin_phy .coin_phy,
-body.show_needle .needle,
-body.show_all .all,
-.show_0 .type_0,
-.show_1 .type_1 {
-  display: block;
-}
-
-body.show_all span.all {
-  display: inline;
-}
-
 .outer {
   width: 100%;
-  margin: 0 0 15px 0;
-  padding: 0 0 10px 0;
-  border-bottom: 1px solid #eee;
+  margin: 0;
+  padding: 10px 0;
+  border-top: 1px solid #eee;
 }
 
-footer.outer {
-  border-bottom: none;
+.outer.main {
+  border-top: 1px solid #333;
+}
+
+body > .outer:first-child {
+  border: 0;
+}
+
+h1 a {
+  color: #222;
 }
 
 .inner {
@@ -121,10 +114,17 @@ footer.outer {
   padding: 0;
 }
 
-.inner h2 {
+.inner h2, .inner h3 {
   margin: 0;
+  float: left;
+}
+
+.inner h2 {
   font-size: 1.5em;
-  font-weight: 300;
+}
+
+.inner input {
+  float: right;
 }
 
 .inner p {

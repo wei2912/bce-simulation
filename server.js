@@ -19,6 +19,8 @@ if (fs.existsSync(outputFolder)) {
 
 fs.mkdirSync(outputFolder);
 
+var resultsFile = fs.readFileSync(path.join(__dirname, 'public/results.html'), 'utf8');
+
 // Create a server with a host and port
 var server = new Hapi.Server({
   connections: {
@@ -72,9 +74,9 @@ function api(request, reply) {
 
   exec(args, function(err, stderr, stdout) {
     if (err || stderr) {
-      return reply((err || stderr).toString());
+      return reply(resultsFile.replace('{{results}}', (err || stderr).toString().replace('\n', '<br>')));
     }
-    reply(stdout);
+    reply(resultsFile.replace('{{results}}', stdout.replace('\n', '<br>')));
   });
 }
 
