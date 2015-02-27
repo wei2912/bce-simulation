@@ -8,8 +8,8 @@ This script runs a simulation of the experiments.
 # Use Agg if running Matplotlib from a server
 import os
 if os.environ.get('SERVER'):
-  import matplotlib
-  matplotlib.use('Agg')
+    import matplotlib
+    matplotlib.use('Agg')
 
 from argh import arg, wrap_errors, dispatch_commands
 from matplotlib import pyplot as plt
@@ -23,16 +23,23 @@ SIMULATIONS = {
     'needle_var': needle_var
 }
 
+TITLES = {
+    'coin': "Buffon’s Coin Problem",
+    'coin_var': "Buffon’s Coin Problem (Variation)",
+    'needle': "Buffon’s Needle Problem",
+    'needle_var': "Buffon’s Needle Problem (Variation)"
+}
+
 GRAPHS = {
     'length': {
-        'xlabel': u"Diameter/Length",
-        'ylabel': u"Probability of coin/needle balancing",
-        'title': u"Buffon’s Coin Problem and Buffon’s Needle Problem"
+        'xlabel': u"Length/Diameter",
+        'ylabel': u"Probability of needle/coin balancing",
+        'title': u"Buffon’s Needle and Coin Problems"
     },
     'gap_width': {
-        'xlabel': u"Width of gap",
-        'ylabel': u"Probability of coin/needle balancing",
-        'title': u"Buffon’s Coin Problem and Buffon’s Needle Problem"
+        'xlabel': u"Width of Gap",
+        'ylabel': u"Probability of needle/coin balancing",
+        'title': u"Buffon’s Needle and Coin Problems"
     }
 }
 
@@ -71,6 +78,11 @@ def run(problem, length, gap, trials=None):
     elif problem.startswith("needle"):
         data['length'] = length
     data['gap_width'] = gap
+
+    yield TITLES[problem]
+    yield "---"
+    yield "length of needle/diameter of coin: %f" % length
+    yield "width of gap: %f" % gap
 
     pred_prob = sim.predict_prob(**data)
     yield "predicted probability: %f" % pred_prob
