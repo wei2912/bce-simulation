@@ -74,7 +74,7 @@ function api(request, reply) {
 
   exec(args, function(err, stderr, stdout) {
     if (err || stderr) {
-      return reply(resultsFile.replace('{{results}}', (err || stderr).toString().replace('\n', '<br>')));
+      return reply(resultsFile.replace('{{results}}', (err || stderr).toString()));
     }
     reply(resultsFile.replace('{{results}}', stdout.replace('\n', '<br>')));
   });
