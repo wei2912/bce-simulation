@@ -65,9 +65,9 @@ def __transform_center(gap_width, x, y):
     split = gap_width/2
 
     if x > split:
-        x = gap_width - x
+        x -= gap_width
     if y > split:
-        y = gap_width - y
+        y -= gap_width
 
     return (x, y)
 
