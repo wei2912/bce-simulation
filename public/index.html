@@ -10,14 +10,14 @@
 <body class="show_coin">
   <div class="outer">
     <div class="inner">
-      <h1 class="center"><a href="https://github.com/wei2912/bce-simulation">bce-simulation</a></h1>
+      <h1 class="center"><a href="https://bce-simulation.herokuapp.com/">bce-simulation</a></h1>
       <p>
-        bce-simulation is a set of simulations written for a research project regarding Buffon’s Coin Experiment and a couple of its variants. It serves to verify theoretical findings through experimental methods.
+        bce-simulation is a set of simulations written for a research project regarding Buffon’s Coin and Needle problems and a couple of its variants. It serves to verify theoretical findings through experimental methods.
       </p>
     </div>
   </div>
 
-  <div class="outer">
+  <div class="outer main">
     <div class="inner">
       <h2>Graphs</h2>
     </div>
@@ -37,11 +37,11 @@
 
       <div class="inner">
         <p>
-          <strong>Increasing length</strong> generates a graph plotting diameter of coin/length of needle against probability of coin/needle touching/balancing on at least one of the lines.
+          <strong>Length</strong> generates a graph plotting diameter of coin/length of needle against probability of coin/needle crossing/balancing on at least one of the lines.
         </p>
 
         <p>
-          <strong>Increasing gap width</strong> generates a graph plotting width of gap against probability of coin/needle touching/balancing on at least one of the lines.
+          <strong>Gap width</strong> generates a graph plotting width of gap against probability of coin/needle crossing/balancing on at least one of the lines.
         </p>
       </div>
     </div>
@@ -71,7 +71,7 @@
     </div>
   </form>
 
-  <div class="outer">
+  <div class="outer main">
     <div class="inner">
       <h2>Program</h2>
     </div>
@@ -92,16 +92,20 @@
       </div>
 
       <div class="inner">
-        <p class="hidden coin">
-          The <strong>Coin Simulation</strong> generates a graph of Buffon’s Coin Experiment, showing the probability of a coin touching one of the lines of a square grid.
+        <p>
+          The <strong>Coin Simulation</strong> runs Buffon’s Coin problem and shows the probability of a coin crossing one of the lines of a square grid.
         </p>
 
-        <p class="hidden coin_phy">
-          The <strong>Coin Simulation (A variation)</strong> generates a graph of Buffon’s Coin Experiment with additional calculations: it detects if the coin can really balance with additional calculations, and shows the probability of the coin touching one of the lines of a square grid.
+        <p>
+          The <strong>Coin Simulation (Variation)</strong> runs our variation of Buffon’s Coin problem with additional calculations: it detects if the coin can really balance with additional calculations, and shows the probability of the coin balancing on one of the lines of a square grid.
         </p>
 
-        <p class="hidden needle">
-          The <strong>Needle Simulation</strong> generates a graph of Buffon’s Needle Experiment: it shows the probability of a needle touching one of the lines of two parallel lines.
+        <p>
+          The <strong>Needle Simulation</strong> runs Buffon’s Needle problem and shows the probability of a needle crossing one of the lines of two parallel lines.
+        </p>
+
+        <p>
+          The <strong>Needle Simulation (Variation)</strong> runs our variation of Buffon’s Needle problem with additional calculations: it detects if the needle can really balance with additional calculations, and shows the probability of a needle balancing one of the lines of two parallel lines.
         </p>
       </div>
     </div>
@@ -117,7 +121,7 @@
 
     <div class="outer">
       <div class="inner">
-        <h3>Width of gap between 2 lines</h3>
+        <h3>Width of gap between 2 lines/Length of square tiles</h3>
         <div>
           <input name="gap" type="number" value="1">
         </div>
@@ -146,10 +150,20 @@
     </div>
   </form>
 
-  <footer class="outer">
+  <footer class="outer main">
     <p class="inner">
-      Created by <a href="https://twitter.com/demoneaux">@demoneaux</a> and <a href="https://twitter.com/wei2912">@wei2912</a> | Code licensed under MIT License
+      Created by <a href="https://twitter.com/demoneaux">@demoneaux</a> and <a href="https://twitter.com/wei2912">@wei2912</a> | <a href="https://github.com/wei2912/bce-simulation">Code</a> licensed under <a href="https://github.com/wei2912/bce-simulation/blob/master/LICENSE">MIT License</a>
     </p>
   </footer>
+  <script>
+  if (location.protocol == 'http') {
+    location.protocol = 'https';
+  }
+
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-38386306-6', 'auto');
+  ga('send', 'pageview');
+  </script>
 </body>
 </html>
