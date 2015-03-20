@@ -2,7 +2,10 @@ language: python
 python:
   - "2.7"
 
-before_install: sudo apt-get update -qq
+# for container-based infrastructure:
+# http://blog.travis-ci.com/2014-12-17-faster-builds-with-container-based-infrastructure/
+sudo: false
+
 install: scripts/install.sh
 script: python test.py && npm test
 
